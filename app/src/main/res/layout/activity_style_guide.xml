@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StyleGuide"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/mediumBlack"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/heading_22_white_bold"
+            android:text="Heading text 22"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/body_14_white_regular"
+            android:text="Body 14 white regular"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/body_12_white_medium"
+            android:text="Body 12 white medium"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/body_12_white_regular"
+            android:text="Body 12 white regular"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/body_10_white_regular"
+            android:text="Body 10 white regular"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/body_10_lightgray_medium"
+            android:text="Body 10 light gray medium"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/body_14_green_medium"
+            android:text="Body 14 green medium"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/body_12_green_regular"
+            android:text="Body 12 green regular"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/body_14_blue_medium"
+            android:text="Body 14 blue medium"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/body_12_blue_regular"
+            android:text="Body 12 blue regular"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/body_14_orange_medium"
+            android:text="Body 14 orange medium"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/body_12_orange_regular"
+            android:text="Body 12 orange regular"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8sp"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_green"
+            android:textSize="18sp"
+            android:fontFamily="@font/medium"
+            android:textColor="@color/black"
+            android:textAllCaps="false"
+            android:text="Primary Button"
+            android:paddingTop="16sp"
+            android:paddingBottom="16sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/button_border_green"
+                android:textSize="12sp"
+                android:fontFamily="@font/regular"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:text="Border Button"
+                android:layout_marginRight="8sp"
+                android:paddingTop="16sp"
+                android:paddingBottom="16sp"
+               />
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="16sp"
+                android:textAllCaps="false"
+                android:paddingBottom="16sp"
+                android:textSize="12sp"
+                android:fontFamily="@font/regular"
+                android:textColor="@color/white"
+                android:text="Button"
+                android:background="@drawable/background_black"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="8sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/underlineText"
+            style="@style/body_10_white_regular"
+            android:text="This is an underline text"/>
+
+    </LinearLayout>
+
+</LinearLayout>
