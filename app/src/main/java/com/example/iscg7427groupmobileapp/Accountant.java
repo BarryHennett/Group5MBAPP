@@ -4,11 +4,11 @@ import java.util.HashMap;
 
 public class Accountant {
 
-    private HashMap<String, String> users;
-    private boolean active;
-    private String type;
-    private String phoneNumber;
     private String name;
+    private String phoneNumber;
+    private String type;
+    private boolean active;
+    private HashMap<String, String> users;
 
     public Accountant() {
         this.name = "Anonymous";
@@ -18,28 +18,12 @@ public class Accountant {
         this.users = new HashMap<>();
     }
 
-    public HashMap<String, String> getUsers() {
-        return users;
+    public String getName() {
+        return name;
     }
 
-    public void setUsers(HashMap<String, String> users) {
-        this.users = users;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPhoneNumber() {
@@ -50,11 +34,27 @@ public class Accountant {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getName() {
-        return name;
+    public String getType() {
+        return type;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public HashMap<String, String> getUsers() {
+        return users;
+    }
+
+    public void setUsers(HashMap<String, String> users) {
+        this.users = users;
     }
 }

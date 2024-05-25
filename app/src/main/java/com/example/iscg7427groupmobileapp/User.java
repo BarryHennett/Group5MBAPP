@@ -6,13 +6,13 @@ import java.util.UUID;
 
 public class User {
 
-    private HashMap<String, Transaction> transactions;
-    private boolean active;
-    private String industry;
-    private String occupation;
-    private String type;
-    private String phoneNumber;
     private String name;
+    private String phoneNumber;
+    private String type;
+    private String occupation;
+    private String industry;
+    private boolean active;
+    private HashMap<String, Transaction> transactions;
 
     public User() {
         this.name = "Anonymous";
@@ -24,44 +24,12 @@ public class User {
         this.transactions = new HashMap<>();
     }
 
-    public HashMap<String, Transaction> getTransactions() {
-        return transactions;
+    public String getName() {
+        return name;
     }
 
-    public void setTransactions(HashMap<String, Transaction> transactions) {
-        this.transactions = transactions;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public String getIndustry() {
-        return industry;
-    }
-
-    public void setIndustry(String industry) {
-        this.industry = industry;
-    }
-
-    public String getOccupation() {
-        return occupation;
-    }
-
-    public void setOccupation(String occupation) {
-        this.occupation = occupation;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String userType) {
-        this.type = userType;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPhoneNumber() {
@@ -72,12 +40,44 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getName() {
-        return name;
+    public String getType() {
+        return type;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getOccupation() {
+        return occupation;
+    }
+
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
+    }
+
+    public String getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(String industry) {
+        this.industry = industry;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public HashMap<String, Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(HashMap<String, Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     public String addNewTransaction(Transaction transaction) {
@@ -86,21 +86,15 @@ public class User {
         return key;
     }
 
-    public static class Transaction{
+    public static class Transaction {
 
-        private String description;
-        private Date date;
-        private double amount;
-        private String category;
         private String type;
-
+        private String category;
+        private double amount;
+        private Date date;
+        private String description;
 
         public Transaction() {
-            this.description = "";
-            this.date = new Date();
-            this.amount = 0;
-            this.category = "";
-            this.type = "";
         }
 
         public Transaction(String type, String category, double amount, Date date, String description) {
@@ -111,31 +105,12 @@ public class User {
             this.type = type;
         }
 
-
-
-
-        public String getDescription() {
-            return description;
+        public String getType() {
+            return type;
         }
 
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public Date getDate() {
-            return date;
-        }
-
-        public void setDate(Date date) {
-            this.date = date;
-        }
-
-        public double getAmount() {
-            return amount;
-        }
-
-        public void setAmount(double amount) {
-            this.amount = amount;
+        public void setType(String type) {
+            this.type = type;
         }
 
         public String getCategory() {
@@ -146,15 +121,28 @@ public class User {
             this.category = category;
         }
 
-        public String getType() {
-            return type;
+        public double getAmount() {
+            return amount;
         }
 
-        public void setType(String type) {
-            this.type = type;
+        public void setAmount(double amount) {
+            this.amount = amount;
         }
 
+        public Date getDate() {
+            return date;
+        }
+
+        public void setDate(Date date) {
+            this.date = date;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
     }
-
-
 }
