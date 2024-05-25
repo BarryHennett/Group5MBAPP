@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "815569169654",
+    "firebase_url": "https://group5-6aa2b-default-rtdb.firebaseio.com",
+    "project_id": "group5-6aa2b",
+    "storage_bucket": "group5-6aa2b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815569169654:android:808b13679aae3d154fd0d7",
+        "android_client_info": {
+          "package_name": "com.example.iscg7427groupmobileapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWTMkPvxnE23K01CbSE0B_Lnj2TFd8f24"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
