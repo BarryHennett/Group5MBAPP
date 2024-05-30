@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="heading_22_white_bold">
-        <item name="android:textSize">34sp</item>
+        <item name="android:textSize">24sp</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">@font/bold</item>
     </style>
@@ -30,13 +30,23 @@
         <item name="android:textColor">@color/lightGray</item>
         <item name="android:fontFamily">@font/medium</item>
     </style>
+    <style name="body_14_green_bold">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/green</item>
+        <item name="android:fontFamily">@font/bold</item>
+    </style>
     <style name="body_14_green_medium">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/green</item>
         <item name="android:fontFamily">@font/medium</item>
     </style>
+    <style name="body_12_green_medium">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/green</item>
+        <item name="android:fontFamily">@font/medium</item>
+    </style>
     <style name="body_12_green_regular">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/green</item>
         <item name="android:fontFamily">@font/regular</item>
     </style>

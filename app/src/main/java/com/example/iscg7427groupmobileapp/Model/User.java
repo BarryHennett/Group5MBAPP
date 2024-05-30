@@ -1,4 +1,4 @@
-package com.example.iscg7427groupmobileapp;
+package com.example.iscg7427groupmobileapp.Model;
 
 import java.util.Date;
 import java.util.HashMap;

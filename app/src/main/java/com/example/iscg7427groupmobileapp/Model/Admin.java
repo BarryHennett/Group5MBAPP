@@ -1,11 +1,11 @@
-package com.example.iscg7427groupmobileapp;
+package com.example.iscg7427groupmobileapp.Model;
 
-public class Administer {
+public class Admin {
 
     private String type;
 
-    public Administer() {
-        this.type = "Administer";
+    public Admin() {
+        this.type = "Admin";
     }
 
     public String getType() {
