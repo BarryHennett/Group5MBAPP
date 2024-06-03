@@ -118,8 +118,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_green"
-            android:textSize="18sp"
+            style="@style/primary_button"
             android:fontFamily="@font/medium"
             android:textColor="@color/black"
             android:textAllCaps="false"
@@ -136,28 +135,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/button_border_green"
-                android:textSize="12sp"
-                android:fontFamily="@font/regular"
-                android:textColor="@color/white"
-                android:textAllCaps="false"
+                style="@style/border_button"
                 android:text="Border Button"
                 android:layout_marginRight="8sp"
-                android:paddingTop="16sp"
-                android:paddingBottom="16sp"
                />
             <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingTop="16sp"
-                android:textAllCaps="false"
-                android:paddingBottom="16sp"
-                android:textSize="12sp"
-                android:fontFamily="@font/regular"
-                android:textColor="@color/white"
-                android:text="Button"
-                android:background="@drawable/background_black"/>
+                 style="@style/black_button"
+                android:text="Button"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

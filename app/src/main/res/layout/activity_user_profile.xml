@@ -7,12 +7,144 @@
     android:layout_height="match_parent"
     tools:context=".Activity.UserProfileActivity"
     android:orientation="vertical"
-    android:padding="16sp"
     android:background="@color/black">
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/heading_22_white_bold"
-        android:text="Profile"/>
+        android:padding="16sp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16sp"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profile"
+                style="@style/heading_22_white_bold"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="16sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_mdblack"
+            android:orientation="vertical"
+            android:padding="16sp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="User name"
+                    style="@style/body_10_lightgray_medium"/>
+                <EditText
+                    android:id="@+id/userNameEt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/body_12_white_regular"
+                    android:text="Tony Seddon"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="16sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email address"
+                    style="@style/body_10_lightgray_medium"/>
+                <EditText
+                    android:id="@+id/userEmailEt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/body_12_white_regular"
+                    android:text="tony.sed@gmail.com"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="16sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Password"
+                    style="@style/body_10_lightgray_medium"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <EditText
+                        android:id="@+id/editTextPassword"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/body_12_white_regular"
+                        android:text="********"
+                        android:inputType="textPassword"
+                        />
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                       />
+                    <ImageView
+                        android:id="@+id/showPassword"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/password_hide"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="16sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phone number"
+                    style="@style/body_10_lightgray_medium"/>
+                <EditText
+                    android:id="@+id/userPhoneEt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/body_12_white_regular"
+                    android:text="021 324 736"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="16sp" />
+
+            <Button
+                android:id="@+id/updateButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/primary_button"
+                android:text="Update"/>
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>
