@@ -53,7 +53,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.UserDashboardActivity"
+            android:name=".Activity.UserDashboardActivity_1"
             android:exported="false" />
     </application>
 
