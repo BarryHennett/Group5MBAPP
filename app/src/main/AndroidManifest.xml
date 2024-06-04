@@ -41,7 +41,7 @@
             android:name=".AllExpenses"
             android:exported="false" />
         <activity
-            android:name=".AllTransactions"
+            android:name=".UserAllTransactions"
             android:exported="false" />
 
         <activity
