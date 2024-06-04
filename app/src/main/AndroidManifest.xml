@@ -16,6 +16,21 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".TransactionDetails"
+            android:exported="false" />
+        <activity
+            android:name=".AccountantClientTransactions"
+            android:exported="false" />
+        <activity
+            android:name=".AllIncome"
+            android:exported="false" />
+        <activity
+            android:name=".AllExpenses"
+            android:exported="false" />
+        <activity
+            android:name=".UserDashboard"
+            android:exported="false" />
+        <activity
             android:name=".Activity.AdminUpdateUserActivity"
             android:exported="false" />
         <activity
