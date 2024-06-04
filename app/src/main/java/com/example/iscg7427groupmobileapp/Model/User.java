@@ -2,26 +2,48 @@ package com.example.iscg7427groupmobileapp.Model;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class User {
+    private String id;
 
     private String name;
+
+
+
     private String phoneNumber;
+    private String email;
     private String type;
+
     private String occupation;
     private String industry;
     private boolean active;
     private HashMap<String, Transaction> transactions;
+    private String password;
 
     public User() {
         this.name = "Anonymous";
+        this.email = "";
         this.phoneNumber = "";
         this.type = "User";
         this.occupation = "";
         this.industry = "";
         this.active = true;
+        this.password = "password";
         this.transactions = new HashMap<>();
+    }
+
+    public User(String name, String email, String phoneNumber, String type, String occupation, String industry, boolean active, HashMap<String, Transaction> transactions, String password) {
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.type = type;
+        this.occupation = occupation;
+        this.industry = industry;
+        this.active = active;
+        this.transactions = transactions;
+        this.password = password;
     }
 
     public String getName() {
@@ -30,6 +52,13 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhoneNumber() {
@@ -72,6 +101,14 @@ public class User {
         this.active = active;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public HashMap<String, Transaction> getTransactions() {
         return transactions;
     }
@@ -86,8 +123,25 @@ public class User {
         return key;
     }
 
-    public static class Transaction {
+    // Method to calculate total income, expenses, and net income
+    public double[] calculateTotals() {
+        double totalIncome = 0;
+        double totalExpenses = 0;
 
+        for (Map.Entry<String, Transaction> entry : transactions.entrySet()) {
+            Transaction transaction = entry.getValue();
+            if ("Income".equals(transaction.getType())) {
+                totalIncome += transaction.getAmount();
+            } else if ("Expense".equals(transaction.getType())) {
+                totalExpenses += transaction.getAmount();
+            }
+        }
+
+        double netIncome = totalIncome - totalExpenses;
+        return new double[]{totalIncome, totalExpenses, netIncome};
+    }
+
+    public static class Transaction {
         private String type;
         private String category;
         private double amount;

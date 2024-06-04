@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginBottom="16sp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -10,6 +11,7 @@
         android:padding="16sp"
         android:background="@drawable/background_mdblack">
         <TextView
+            android:id="@+id/clientNameTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sean Adam"
@@ -19,6 +21,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"/>
         <TextView
+            android:id="@+id/clientOccupationTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Freelance"
@@ -54,6 +57,7 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
                 <TextView
+                    android:id="@+id/toAllTransactions"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="View all"
@@ -63,7 +67,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/arrow_right"/>
-
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -93,6 +96,7 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
                 <TextView
+                    android:id="@+id/clientIncomeTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="$23,543"
@@ -127,6 +131,7 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
                 <TextView
+                    android:id="@+id/clientExpensesTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="$12,432"
@@ -162,6 +167,7 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
                 <TextView
+                    android:id="@+id/clientNetTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="$11,111"

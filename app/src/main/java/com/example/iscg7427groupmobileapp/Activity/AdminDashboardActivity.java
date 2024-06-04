@@ -1,26 +1,104 @@
 package com.example.iscg7427groupmobileapp.Activity;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.widget.EditText;
 
-import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.iscg7427groupmobileapp.Adapter.AdminUserAdapter;
 import com.example.iscg7427groupmobileapp.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AdminDashboardActivity extends AppCompatActivity {
+
+    private RecyclerView recyclerView;
+    private AdminUserAdapter adapter;
+    private DatabaseReference databaseReference;
+    private EditText searchEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_dashboard);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        searchEditText = findViewById(R.id.searchEditText);
+
+        databaseReference = FirebaseDatabase.getInstance("https://group5-6aa2b-default-rtdb.firebaseio.com/")
+                .getReference();
+
+        fetchUsersAndAccountants();
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (adapter != null) {
+                    adapter.filter(s.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Do nothing
+            }
+        });
+    }
+
+    private void fetchUsersAndAccountants() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<HashMap<String, String>> userAndAccountantList = new ArrayList<>();
+
+                for (DataSnapshot ds : snapshot.child("Accountants").getChildren()) {
+                    HashMap<String, String> userMap = new HashMap<>();
+                    userMap.put("key", ds.getKey());
+                    userMap.put("type","Accountant");
+                    userMap.put("name", ds.child("name").getValue().toString());
+                    userMap.put("active", ds.child("active").getValue().toString());
+
+                    userAndAccountantList.add(userMap);
+                }
+
+                for (DataSnapshot ds : snapshot.child("Users").getChildren()) {
+                    HashMap<String, String> userMap = new HashMap<>();
+                    userMap.put("key", ds.getKey());
+                    userMap.put("type","User");
+                    userMap.put("name", ds.child("name").getValue().toString());
+                    userMap.put("active", ds.child("active").getValue().toString());
+
+                    userAndAccountantList.add(userMap);
+                }
+
+                recyclerView = findViewById(R.id.AdminUserListRv);
+                recyclerView.setLayoutManager(new LinearLayoutManager(AdminDashboardActivity.this));
+                adapter = new AdminUserAdapter(userAndAccountantList, AdminDashboardActivity.this);
+                recyclerView.setAdapter(adapter);
+
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle possible errors
+            }
         });
     }
 }
