@@ -16,8 +16,17 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".Activity.UserAddIncomeActivity"
+            android:name=".Activity.UserIncomeDashboardActivity"
             android:exported="false" />
+        <activity
+            android:name=".Activity.UserAddIncomeActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Activity.AdminUpdateUserActivity"
             android:exported="false" />
@@ -38,13 +47,7 @@
             android:exported="false" />
         <activity
             android:name=".Activity.UserDashboardActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false" />
     </application>
 
 </manifest>
