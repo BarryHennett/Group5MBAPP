@@ -23,7 +23,6 @@ public class User {
     private String password;
 
     public User() {
-        this.id = "";
         this.name = "Anonymous";
         this.email = "";
         this.phoneNumber = "";
@@ -35,8 +34,7 @@ public class User {
         this.transactions = new HashMap<>();
     }
 
-    public User(String id, String name, String email, String phoneNumber, String type, String occupation, String industry, boolean active, HashMap<String, Transaction> transactions, String password) {
-        this.id = id;
+    public User(String name, String email, String phoneNumber, String type, String occupation, String industry, boolean active, HashMap<String, Transaction> transactions, String password) {
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -46,13 +44,6 @@ public class User {
         this.active = active;
         this.transactions = transactions;
         this.password = password;
-    }
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {

@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AccountantDashboardActivity.class);
+                intent.putExtra("uid", "GphAXVZANrdpjg22EmG8SMh4PGs2");
                 startActivity(intent);
 
             }

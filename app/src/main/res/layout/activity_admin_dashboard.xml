@@ -75,7 +75,10 @@
             android:background="@drawable/background_mdblack"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="16sp">
+            android:paddingTop="8sp"
+            android:paddingRight="16sp"
+            android:paddingBottom="8sp"
+            android:paddingLeft="16sp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -83,13 +86,17 @@
                 android:layout_marginEnd="4sp"
                 android:src="@drawable/search" />
 
-            <TextView
-                style="@style/body_12_white_medium"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/searchEditText"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="4sp"
-                android:text="Search" />
+                android:layout_weight="1"
+                android:hint="Search"
+                android:textColorHint="@color/white"
+                style="@style/body_12_white_medium"
+                android:layout_marginEnd="4sp"/>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="16sp"/>

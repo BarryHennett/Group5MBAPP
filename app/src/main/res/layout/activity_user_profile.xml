@@ -94,7 +94,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/body_12_white_regular"
-                        android:text="********"
+                        android:text="1232445"
                         android:inputType="textPassword"
                         />
                     <LinearLayout
@@ -133,9 +133,7 @@
                     />
 
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="16sp" />
+
 
             <Button
                 android:id="@+id/updateButton"
@@ -143,8 +141,20 @@
                 android:layout_height="wrap_content"
                 style="@style/primary_button"
                 android:text="Update"/>
-        </LinearLayout>
 
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp" />
+        <Button
+            android:layout_marginTop="16sp"
+            android:id="@+id/toSignOut"
+            android:background="@drawable/background_mdblack"
+            style="@style/border_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sign Out" />
     </LinearLayout>
 
 </LinearLayout>

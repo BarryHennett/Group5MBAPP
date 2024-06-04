@@ -31,10 +31,11 @@
                 android:text="Clients"
                 style="@style/heading_22_white_bold"/>
             <TextView
+                android:id="@+id/AccountClientNumber"
                 android:layout_marginStart="4sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="(15)"
+                android:text="(0)"
                 style="@style/heading_22_white_bold"/>
         </LinearLayout>
         <LinearLayout
@@ -68,7 +69,10 @@
         android:layout_width="wrap_content"
         android:layout_height="16sp"/>
     <LinearLayout
-        android:padding="16sp"
+        android:paddingTop="8sp"
+        android:paddingLeft="16sp"
+        android:paddingRight="16sp"
+        android:paddingBottom="8sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/background_mdblack"
@@ -79,12 +83,15 @@
             android:layout_height="wrap_content"
             android:src="@drawable/search"
             android:layout_marginEnd="4sp"/>
-        <TextView
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Search"
+            android:layout_weight="1"
+            android:hint="Search"
+            android:textColorHint="@color/white"
             style="@style/body_12_white_medium"
-            android:layout_marginEnd="4sp"/>
+           />
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
