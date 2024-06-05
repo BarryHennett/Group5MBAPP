@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logo_small">
+        </ImageView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="105dp"
+        android:paddingTop="50dp"
+        android:paddingBottom="50dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:orientation="vertical"
+        android:background="@drawable/background_mdblack_topradius">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome Back!"
+            style="@style/heading_22_white_bold">
+        </TextView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please log in to continue."
+            style="@style/body_12_white_regular">
+        </TextView>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Email"
+            android:textColorHint="@color/white"
+            android:padding="16dp"
+            style="@style/body_10_white_regular"
+            android:background="@drawable/background_black"
+            >
+        </EditText>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:padding="16dp"
+            android:textColorHint="@color/white"
+            android:inputType="textPassword"
+            style="@style/body_10_white_regular"
+            android:layout_marginBottom="6sp"
+            android:background="@drawable/background_black"
+            >
+        </EditText>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+<!--                android:src="@drawable/password_hide"-->
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="Forget your password?"
+            style="@style/body_10_lightgray_medium"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="16sp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Log in"
+            android:background="@drawable/button_green">
+        </Button>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="1sp"
+                android:layout_weight="1"
+                android:background="@color/lightGray"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Or log in with"
+                android:paddingStart="8sp"
+                android:paddingEnd="8sp"
+                style="@style/body_10_lightgray_medium">
+            </TextView>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="1sp"
+                android:layout_weight="1"
+                android:background="@color/lightGray"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingLeft="40dp"
+                android:paddingBottom="10dp"
+                android:paddingRight="40dp"
+                android:src="@drawable/google_icon"
+                android:background="@drawable/background_black">
+            </ImageView>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"></LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingLeft="40dp"
+                android:paddingBottom="10dp"
+                android:paddingRight="40dp"
+                android:src="@drawable/facebook_icon"
+                android:background="@drawable/background_black">
+            </ImageView>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"></LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingLeft="40dp"
+                android:paddingBottom="10dp"
+                android:paddingRight="40dp"
+                android:src="@drawable/twitter_icon"
+                android:background="@drawable/background_black">
+            </ImageView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Don't have an account? "
+            style="@style/body_12_white_regular">
+        </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign Up"
+                style="@style/body_12_green_regular">
+            </TextView>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
