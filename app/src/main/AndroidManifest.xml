@@ -16,6 +16,15 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".Activity.AccountantAddNewClient"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.AdminAddNewUser"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.SplashPage"
+            android:exported="false" />
+        <activity
             android:name=".Activity.UserExpenseDashboardActivity"
             android:exported="false" />
         <activity
@@ -27,7 +36,6 @@
         <activity
             android:name=".Activity.UserAddIncomeActivity"
             android:exported="false" />
-
         <activity
             android:name=".TransactionDetails"
             android:exported="false" />
@@ -43,7 +51,6 @@
         <activity
             android:name=".UserAllTransactions"
             android:exported="false" />
-
         <activity
             android:name=".Activity.AdminUpdateUserActivity"
             android:exported="false" />
@@ -61,10 +68,15 @@
             android:exported="false" />
         <activity
             android:name=".Activity.MainActivity"
-            android:exported="true">
+            android:exported="false"/>
+        <activity
+            android:name=".Activity.Login"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.SignUp"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

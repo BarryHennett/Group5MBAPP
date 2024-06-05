@@ -104,7 +104,7 @@
             android:layout_margin="16dp"
             android:background="@drawable/button_green"
             android:text="Send Invitation with Password"
-            style="@style/button_12_black_medium"/>
+            style="@style/primary_button"/>
 
     </LinearLayout>
 
