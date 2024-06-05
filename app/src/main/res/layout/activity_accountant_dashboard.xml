@@ -43,6 +43,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"/>
         <LinearLayout
+            android:id="@+id/toAccountantAddNewClient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -69,10 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="16sp"/>
     <LinearLayout
-        android:paddingTop="8sp"
-        android:paddingLeft="16sp"
-        android:paddingRight="16sp"
-        android:paddingBottom="8sp"
+        android:padding="16sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/background_mdblack"
@@ -84,6 +82,7 @@
             android:src="@drawable/search"
             android:layout_marginEnd="4sp"/>
         <EditText
+            android:background="@drawable/background_mdblack"
             android:id="@+id/searchEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

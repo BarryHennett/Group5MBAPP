@@ -1,5 +1,6 @@
 package com.example.iscg7427groupmobileapp.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
@@ -36,15 +37,24 @@ public class SignUp extends AppCompatActivity {
     Button btnSignUp;
     String name, email, password, role;
     int chooseRole = 0;
-
+    private TextView toLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        toLogin= findViewById(R.id.toLogin);
+        toLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignUp.this, Login.class);
+                startActivity(intent);
+            }
+        });
         setUpAttributes();
         clickSignUp();
         clickTvAccount();
         clickTvUser();
+
     }
 
     public void setUpAttributes() {

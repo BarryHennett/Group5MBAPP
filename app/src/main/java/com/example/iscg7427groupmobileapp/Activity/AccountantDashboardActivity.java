@@ -1,10 +1,13 @@
 package com.example.iscg7427groupmobileapp.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,19 +35,26 @@ public class AccountantDashboardActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private TextView accountClientNumber;
     private EditText searchEditText;
-
+    private LinearLayout toAccountantAddNewClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accountant_dashboard);
-
+        toAccountantAddNewClient = findViewById(R.id.toAccountantAddNewClient);
+        toAccountantAddNewClient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent  = new Intent(AccountantDashboardActivity.this, AccountantAddNewClient.class);
+                startActivity(intent);
+            }
+        });
         clientRv = findViewById(R.id.AccountantClientListRv);
         clientRv.setLayoutManager(new LinearLayoutManager(this));
 
         accountClientNumber = findViewById(R.id.AccountClientNumber);
         searchEditText = findViewById(R.id.searchEditText);
 
-        String uid = getIntent().getStringExtra("uid");
+        String uid = "GphAXVZANrdpjg22EmG8SMh4PGs2";
         if (uid == null || uid.isEmpty()) {
             Log.e("AccountantDashboard", "UID cannot be null or empty");
             finish(); // Close the activity as there's no valid UID

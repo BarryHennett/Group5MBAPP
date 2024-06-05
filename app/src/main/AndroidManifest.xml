@@ -17,13 +17,20 @@
         tools:targetApi="31">
         <activity
             android:name=".Activity.AccountantAddNewClient"
-            android:exported="false" />
+            android:exported="false" >
+
+        </activity>
         <activity
             android:name=".Activity.AdminAddNewUser"
             android:exported="false" />
         <activity
             android:name=".Activity.SplashPage"
-            android:exported="false" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Activity.UserExpenseDashboardActivity"
             android:exported="false" />
@@ -53,16 +60,22 @@
             android:exported="false" />
         <activity
             android:name=".Activity.AdminUpdateUserActivity"
-            android:exported="false" />
+            android:exported="false" >
+
+        </activity>
         <activity
             android:name=".Activity.AdminDashboardActivity"
-            android:exported="false" />
+            android:exported="false" >
+
+        </activity>
         <activity
             android:name=".Activity.AccountantDashboardActivity"
             android:exported="false" />
         <activity
             android:name=".Activity.UserProfileActivity"
-            android:exported="false" />
+            android:exported="false" >
+
+        </activity>
         <activity
             android:name=".StyleGuide"
             android:exported="false" />
@@ -74,11 +87,8 @@
             android:exported="false" />
         <activity
             android:name=".Activity.SignUp"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="false" >
+
         </activity>
         <activity
             android:name=".Activity.UserDashboardActivity_1"

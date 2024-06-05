@@ -1,10 +1,14 @@
 package com.example.iscg7427groupmobileapp.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,11 +32,20 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private AdminUserAdapter adapter;
     private DatabaseReference databaseReference;
     private EditText searchEditText;
-
+    private LinearLayout toAddUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
+
+        toAddUser = findViewById(R.id.toAddUser);
+        toAddUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent  = new Intent(AdminDashboardActivity.this, AdminAddNewUser.class);
+                startActivity(intent);
+            }
+        });
 
         searchEditText = findViewById(R.id.searchEditText);
 

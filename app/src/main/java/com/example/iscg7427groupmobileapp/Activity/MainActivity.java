@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.window.SplashScreen;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,6 +46,13 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("uid", "GphAXVZANrdpjg22EmG8SMh4PGs2");
                 startActivity(intent);
 
+            }
+        });
+        toUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, UserAddIncomeActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -1,5 +1,6 @@
 package com.example.iscg7427groupmobileapp.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,11 +25,18 @@ public class Login extends AppCompatActivity {
     EditText etEmail, etPassword;
     Button btnLogin;
     TextView createAccount;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        createAccount = findViewById(R.id.createAccount);
+        createAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Login.this, SignUp.class);
+                startActivity(intent);
+            }
+        });
         setUpAttributes();
         clickBtnLogin();
     }

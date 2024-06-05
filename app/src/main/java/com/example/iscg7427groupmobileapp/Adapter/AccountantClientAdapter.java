@@ -56,6 +56,8 @@ public class AccountantClientAdapter extends RecyclerView.Adapter<AccountantClie
         holder.clientIncomeTv.setText(String.format("$%.2f", income));
         holder.clientExpensesTv.setText(String.format("$%.2f", expense));
         holder.clientNetTv.setText(String.format("$%.2f", income - expense));
+
+
     }
 
     @Override
