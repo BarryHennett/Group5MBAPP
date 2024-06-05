@@ -109,7 +109,7 @@ public class AccountantDashboardActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
 
                 // Set the number of clients
-                accountClientNumber.setText(String.format("Clients(%d)", adapter.getItemCount()));
+                accountClientNumber.setText(String.format("(%d)", adapter.getItemCount()));
             }
 
             @Override
