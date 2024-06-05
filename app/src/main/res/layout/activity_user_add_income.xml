@@ -3,17 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/black"
     android:orientation="vertical"
     tools:context=".Activity.UserAddIncomeActivity">
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16sp">
+        android:paddingTop="16sp"
+        android:paddingBottom="80sp"
+        android:paddingStart="16sp"
+        android:paddingEnd="16sp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,6 +29,7 @@
             android:orientation="horizontal">
 
             <ImageButton
+                android:id="@+id/user_add_income_btn_return"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8sp"
@@ -34,7 +42,6 @@
                 android:src="@drawable/arrow_left" />
 
             <TextView
-                android:id="@+id/user_add_income_txt_title"
                 style="@style/heading_22_white_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,7 +59,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:orientation="vertical">
 
                 <TextView
@@ -113,6 +119,7 @@
                     android:text="Total income (NZD)*" />
 
                 <EditText
+                    android:id="@+id/user_add_income_edt_income"
                     style="@style/body_12_white_regular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -136,6 +143,7 @@
                     android:text="Income Description" />
 
                 <EditText
+                    android:id="@+id/user_add_income_edt_description"
                     style="@style/body_12_white_regular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -164,13 +172,15 @@
                     android:gravity="center"
                     android:orientation="horizontal">
 
+                    <!--
+
                     <TextView
                         style="@style/body_10_lightgray_medium"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16sp"
-                        android:text="pdf" />
+                        android:text="pdf" />-->
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -203,11 +213,20 @@
                 android:id="@+id/user_add_income_image"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:src="@drawable/twitter_icon" />
+                android:layout_marginBottom="16sp"
+                />
+
+            <Button android:id="@+id/user_add_income_btn_save"
+                style="@style/primary_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add new income" />
 
         </LinearLayout>
 
     </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
