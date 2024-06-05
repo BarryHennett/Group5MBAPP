@@ -6,7 +6,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,16 +32,23 @@ import java.util.List;
 
 public class UserDashboardActivity_1 extends AppCompatActivity {
 
+    ImageButton btnIncome, btnExpense;
+    TextView txtName, txtBalance, txtIncome, txtExpense;
+    Spinner spinner;
+    RecyclerView recyclerView;
+    BarChart barChart;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_dashboard_1);
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        init();
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new RecyclerAdapterTransaction());
 
-        Spinner spinner = findViewById(R.id.spinner);
         String[] options = {"Option 1", "Option 2", "Option 3"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, options);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -68,7 +78,6 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
         });
 
         //grouped barchart
-        BarChart barChart = findViewById(R.id.chart);
         XAxis xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // 设置 X 轴位置在底部
         xAxis.setDrawGridLines(false); // 不绘制网格线
@@ -160,6 +169,20 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
         };
 
         nav.setOnItemSelectedListener(listener);
+
+    }
+
+    private void init(){
+
+        btnIncome = findViewById(R.id.user_dashboard_btn_income);
+        btnExpense = findViewById(R.id.user_dashboard_btn_expense);
+        txtName = findViewById(R.id.user_dashboard_txt_name);
+        txtBalance = findViewById(R.id.user_dashboard_txt_balance);
+        txtIncome = findViewById(R.id.user_dashboard_txt_income);
+        txtExpense= findViewById(R.id.user_dashboard_txt_expense);
+        spinner = findViewById(R.id.spinner);
+        recyclerView = findViewById(R.id.recyclerView);
+        barChart = findViewById(R.id.chart);
 
     }
 
