@@ -68,23 +68,29 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 ArrayList<HashMap<String, String>> userAndAccountantList = new ArrayList<>();
 
                 for (DataSnapshot ds : snapshot.child("Accountants").getChildren()) {
-                    HashMap<String, String> userMap = new HashMap<>();
-                    userMap.put("key", ds.getKey());
-                    userMap.put("type","Accountant");
-                    userMap.put("name", ds.child("name").getValue().toString());
-                    userMap.put("active", ds.child("active").getValue().toString());
+                    Boolean isActive = ds.child("active").getValue(Boolean.class);
+                    if (isActive != null && isActive) {
+                        HashMap<String, String> userMap = new HashMap<>();
+                        userMap.put("key", ds.getKey());
+                        userMap.put("type", "Accountant");
+                        userMap.put("name", getValueOrDefault(ds.child("name")));
+                        userMap.put("active", isActive.toString());
 
-                    userAndAccountantList.add(userMap);
+                        userAndAccountantList.add(userMap);
+                    }
                 }
 
                 for (DataSnapshot ds : snapshot.child("Users").getChildren()) {
-                    HashMap<String, String> userMap = new HashMap<>();
-                    userMap.put("key", ds.getKey());
-                    userMap.put("type","User");
-                    userMap.put("name", ds.child("name").getValue().toString());
-                    userMap.put("active", ds.child("active").getValue().toString());
+                    Boolean isActive = ds.child("active").getValue(Boolean.class);
+                    if (isActive != null && isActive) {
+                        HashMap<String, String> userMap = new HashMap<>();
+                        userMap.put("key", ds.getKey());
+                        userMap.put("type", "User");
+                        userMap.put("name", getValueOrDefault(ds.child("name")));
+                        userMap.put("active", isActive.toString());
 
-                    userAndAccountantList.add(userMap);
+                        userAndAccountantList.add(userMap);
+                    }
                 }
 
                 recyclerView = findViewById(R.id.AdminUserListRv);
@@ -98,7 +104,15 @@ public class AdminDashboardActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Handle possible errors
+                Log.e("AdminDashboard", "Error fetching data", error.toException());
             }
         });
+    }
+
+    private String getValueOrDefault(DataSnapshot snapshot) {
+        if (snapshot.exists()) {
+            return snapshot.getValue() != null ? snapshot.getValue().toString() : "";
+        }
+        return "";
     }
 }
