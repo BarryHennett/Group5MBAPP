@@ -69,7 +69,7 @@ public class UserAddIncomeActivity extends AppCompatActivity {
         // same as above
         btnChangeRecipt.setOnClickListener(this::selectImage);
         // spinner for category
-        String[] options = {"Option 1", "Option 2", "Option 3"};
+        String[] options = {"Last 3 Month", "Last 6 Month", "Last Year"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, options);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -78,10 +78,10 @@ public class UserAddIncomeActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 String selectedItem = parent.getItemAtPosition(position).toString();
-                if (selectedItem.equals("Option 1")) {
-                    Toast.makeText(UserAddIncomeActivity.this, "Option 1 selected", Toast.LENGTH_SHORT).show();
-                } else if (selectedItem.equals("Option 2")) {
-                    Toast.makeText(UserAddIncomeActivity.this, "Option 2 selected", Toast.LENGTH_SHORT).show();
+                if (selectedItem.equals("Last 3 Month")) {
+                    Toast.makeText(UserAddIncomeActivity.this, "Last 3 Month", Toast.LENGTH_SHORT).show();
+                } else if (selectedItem.equals("Last 6 Month")) {
+                    Toast.makeText(UserAddIncomeActivity.this, "Last 6 Month", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(UserAddIncomeActivity.this, "Option 3 selected", Toast.LENGTH_SHORT).show();
                 }
@@ -116,7 +116,7 @@ public class UserAddIncomeActivity extends AppCompatActivity {
             }
             // save to realtime database
 // hardcode for test
-            String uid = "ziWsT2nePuTMV4zNh2iGDDvLYIy1";
+            String uid = "jba712jsas";
             DatabaseReference mRef = database.getReference("Users").child(uid);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

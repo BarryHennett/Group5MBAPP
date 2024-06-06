@@ -108,7 +108,7 @@ public class UserAddExpenseActivity extends AppCompatActivity {
             }
             // save to realtime database
 // hardcode for test
-            String uid = "ziWsT2nePuTMV4zNh2iGDDvLYIy1";
+            String uid = "jba712jsas";
             DatabaseReference mRef = database.getReference("Users").child(uid);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -122,7 +122,7 @@ public class UserAddExpenseActivity extends AppCompatActivity {
                     if (imageView.getDrawable() != null) {
                         createAttachmentImage(transactionKey);
                     }
-                    finish();
+                //    finish();
                 }
 
                 @Override

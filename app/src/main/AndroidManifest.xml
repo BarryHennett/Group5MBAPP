@@ -21,12 +21,21 @@
         <activity
             android:name=".Activity.UserAddExpenseActivity"
             android:exported="false" />
+
         <activity
             android:name=".Activity.UserIncomeDashboardActivity"
-            android:exported="false" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
         <activity
             android:name=".Activity.UserAddIncomeActivity"
-            android:exported="true" />
+            android:exported="false" />
 
 
         <activity
@@ -65,13 +74,9 @@
             android:exported="false"/>
         <activity
             android:name=".Activity.UserDashboardActivity_1"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+
     </application>
 
 </manifest>
