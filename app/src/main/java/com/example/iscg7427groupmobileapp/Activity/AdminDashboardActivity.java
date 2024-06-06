@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,21 +32,21 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private EditText searchEditText;
     private LinearLayout toAddUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
 
         toAddUser = findViewById(R.id.toAddUser);
-        toAddUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent  = new Intent(AdminDashboardActivity.this, AdminAddNewUser.class);
-                startActivity(intent);
-            }
+        toAddUser.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminDashboardActivity.this, AdminAddNewUser.class);
+            startActivity(intent);
         });
 
         searchEditText = findViewById(R.id.searchEditText);
+        recyclerView = findViewById(R.id.AdminUserListRv);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         databaseReference = FirebaseDatabase.getInstance("https://group5-6aa2b-default-rtdb.firebaseio.com/")
                 .getReference();
@@ -82,10 +81,10 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
                 for (DataSnapshot ds : snapshot.child("Accountants").getChildren()) {
                     Boolean isActive = ds.child("active").getValue(Boolean.class);
-                    if (isActive != null && isActive) {
+                    if (isActive != null) {
                         HashMap<String, String> userMap = new HashMap<>();
                         userMap.put("key", ds.getKey());
-                        userMap.put("type", "Accountant");
+                        userMap.put("type", "Accountants");
                         userMap.put("name", getValueOrDefault(ds.child("name")));
                         userMap.put("active", isActive.toString());
 
@@ -95,10 +94,10 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
                 for (DataSnapshot ds : snapshot.child("Users").getChildren()) {
                     Boolean isActive = ds.child("active").getValue(Boolean.class);
-                    if (isActive != null && isActive) {
+                    if (isActive != null) {
                         HashMap<String, String> userMap = new HashMap<>();
                         userMap.put("key", ds.getKey());
-                        userMap.put("type", "User");
+                        userMap.put("type", "Users");
                         userMap.put("name", getValueOrDefault(ds.child("name")));
                         userMap.put("active", isActive.toString());
 
@@ -106,17 +105,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
                     }
                 }
 
-                recyclerView = findViewById(R.id.AdminUserListRv);
-                recyclerView.setLayoutManager(new LinearLayoutManager(AdminDashboardActivity.this));
                 adapter = new AdminUserAdapter(userAndAccountantList, AdminDashboardActivity.this);
                 recyclerView.setAdapter(adapter);
-
-                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle possible errors
                 Log.e("AdminDashboard", "Error fetching data", error.toException());
             }
         });

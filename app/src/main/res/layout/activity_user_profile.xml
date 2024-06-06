@@ -48,7 +48,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/body_12_white_regular"
-                    android:text="Tony Seddon"
+                    android:text=""
                     />
             </LinearLayout>
             <LinearLayout
@@ -68,7 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/body_12_white_regular"
-                    android:text="tony.sed@gmail.com"
+                    android:text=""
                     />
 
             </LinearLayout>
@@ -94,7 +94,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/body_12_white_regular"
-                        android:text="1232445"
+                        android:text=""
                         android:inputType="textPassword"
                         />
                     <LinearLayout
@@ -129,7 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/body_12_white_regular"
-                    android:text="021 324 736"
+                    android:text=""
                     />
 
             </LinearLayout>

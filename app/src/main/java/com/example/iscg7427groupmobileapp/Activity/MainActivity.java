@@ -2,6 +2,7 @@ package com.example.iscg7427groupmobileapp.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.TextView;
 import android.window.SplashScreen;
@@ -51,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
         toUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, UserAddIncomeActivity.class);
+                Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
+                intent.putExtra("uid", "jba712jsas");
                 startActivity(intent);
             }
         });

@@ -38,7 +38,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="16sp"
             android:paddingBottom="16sp"
             android:gravity="center_vertical"
             >
@@ -52,12 +51,12 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"/>
             <LinearLayout
+                android:id="@+id/toAllTransactions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
                 <TextView
-                    android:id="@+id/toAllTransactions"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="View all"
