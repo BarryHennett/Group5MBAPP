@@ -1,5 +1,6 @@
 package com.example.iscg7427groupmobileapp.Activity;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
 import com.example.iscg7427groupmobileapp.RecyclerAdapterTransaction;
 import com.github.mikephil.charting.charts.BarChart;
@@ -26,8 +28,16 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class UserDashboardActivity_1 extends AppCompatActivity {
@@ -38,6 +48,8 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
     RecyclerView recyclerView;
     BarChart barChart;
 
+    String uid;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +57,48 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
         setContentView(R.layout.activity_user_dashboard_1);
 
         init();
+
+
+/*
+        DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users").child("jba712jsas");
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                User user = dataSnapshot.getValue(User.class);
+                User.Transaction transaction = new User.Transaction("Expense", "category", 200, new Date(), "description");
+                String transactionKey = user.addNewTransaction(transaction);
+                mRef.setValue(user);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });*/
+
+        retrieveUserData(new OnDataListener() {
+            @Override
+            public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
+                double income = 0;
+                double expense = 0;
+                for (User.Transaction transaction : transactions.values()) {
+                    if (transaction.getType().equals("Income")) {
+                        income += transaction.getAmount();
+                    } else {
+                        expense += transaction.getAmount();
+                    }
+                }
+                txtIncome.setText(String.valueOf(income));
+                txtExpense.setText(String.valueOf(expense));
+                txtBalance.setText(String.valueOf(income - expense));
+               Toast.makeText(UserDashboardActivity_1.this, Double.toString(income), Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserDashboardActivity_1.this, Double.toString(income - expense), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new RecyclerAdapterTransaction());
@@ -59,14 +113,11 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
                 // 执行相应操作
-                if(selectedItem.equals("Option 1")){
+                if (selectedItem.equals("Option 1")) {
                     Toast.makeText(UserDashboardActivity_1.this, "Option 1 selected", Toast.LENGTH_SHORT).show();
-                }
-
-                else if(selectedItem.equals("Option 2")){
+                } else if (selectedItem.equals("Option 2")) {
                     Toast.makeText(UserDashboardActivity_1.this, "Option 2 selected", Toast.LENGTH_SHORT).show();
-                }
-                else{
+                } else {
                     Toast.makeText(UserDashboardActivity_1.this, "Option 3 selected", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -136,35 +187,27 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
         NavigationBarView.OnItemSelectedListener listener = new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if(item.getItemId() == R.id.item_home){
+                if (item.getItemId() == R.id.item_home) {
 
                     // type code here!
                     Toast.makeText(UserDashboardActivity_1.this, "Item 1 Clicked", Toast.LENGTH_SHORT).show();
                     return true;
-                }
-
-                else if (item.getItemId() == R.id.item_income){
+                } else if (item.getItemId() == R.id.item_income) {
 
                     //type code here!
                     Toast.makeText(UserDashboardActivity_1.this, "Item 2 Clicked", Toast.LENGTH_SHORT).show();
                     return true;
-                }
+                } else if (item.getItemId() == R.id.item_expenses) {
 
-                    else if (item.getItemId() == R.id.item_expenses){
+                    //type code here!
+                    Toast.makeText(UserDashboardActivity_1.this, "Item 3 Clicked", Toast.LENGTH_SHORT).show();
+                    return true;
+                } else if (item.getItemId() == R.id.item_profile) {
 
-                        //type code here!
-                        Toast.makeText(UserDashboardActivity_1.this, "Item 3 Clicked", Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
-
-                    else if (item.getItemId() == R.id.item_profile){
-
-                        //type code here!
-                        Toast.makeText(UserDashboardActivity_1.this, "Item 4 Clicked", Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
-
-                else return false;
+                    //type code here!
+                    Toast.makeText(UserDashboardActivity_1.this, "Item 4 Clicked", Toast.LENGTH_SHORT).show();
+                    return true;
+                } else return false;
             }
         };
 
@@ -172,18 +215,45 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
 
     }
 
-    private void init(){
+    private void init() {
 
         btnIncome = findViewById(R.id.user_dashboard_btn_income);
         btnExpense = findViewById(R.id.user_dashboard_btn_expense);
         txtName = findViewById(R.id.user_dashboard_txt_name);
         txtBalance = findViewById(R.id.user_dashboard_txt_balance);
         txtIncome = findViewById(R.id.user_dashboard_txt_income);
-        txtExpense= findViewById(R.id.user_dashboard_txt_expense);
-        spinner = findViewById(R.id.spinner);
-        recyclerView = findViewById(R.id.recyclerView);
-        barChart = findViewById(R.id.chart);
+        txtExpense = findViewById(R.id.user_dashboard_txt_expense);
+        spinner = findViewById(R.id.user_dashboard_spinner);
+        recyclerView = findViewById(R.id.user_dashboard_rec);
+        barChart = findViewById(R.id.user_dashboard_chart);
 
     }
 
+
+    private void retrieveUserData(OnDataListener listener) {
+
+       // uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        uid = "jba712jsas";
+        DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                User user = dataSnapshot.getValue(User.class);
+                HashMap<String, User.Transaction> transactions = user.getTransactions();
+                listener.onDateRetrieved(transactions);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
     }
+
+    public interface OnDataListener {
+        void onDateRetrieved(HashMap<String, User.Transaction> transactions);
+    }
+
+}

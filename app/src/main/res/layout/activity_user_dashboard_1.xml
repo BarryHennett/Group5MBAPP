@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/black"
     android:orientation="vertical"
     tools:context=".Activity.UserDashboardActivity_1">
 
     <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <!-- outer linear layout -->
         <LinearLayout
@@ -23,6 +23,8 @@
             android:paddingTop="16sp"
             android:paddingRight="16sp"
             android:paddingBottom="16sp">
+
+
 
             <TextView
                 android:id="@+id/user_dashboard_txt_name"
@@ -262,8 +264,7 @@
             </LinearLayout>
 
         </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
