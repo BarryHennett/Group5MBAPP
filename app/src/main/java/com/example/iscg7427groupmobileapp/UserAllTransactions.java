@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.iscg7427groupmobileapp.Adapter.TransactionAdapter;
+import com.example.iscg7427groupmobileapp.Model.User;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
@@ -20,16 +22,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserAllTransactions extends AppCompatActivity {
 
+    String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private RecyclerView recyclerView;
     private TransactionAdapter transactionAdapter;
-    private List<Transaction> transactionList;
+    private HashMap<String, User.Transaction> transactionMap;
     private DatabaseReference databaseReference;
 
     @Override
@@ -45,8 +47,8 @@ public class UserAllTransactions extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.useralltrarecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        transactionList = new ArrayList<>();
-        transactionAdapter = new TransactionAdapter(this, transactionList);
+        transactionMap = new HashMap<>();
+        transactionAdapter = new TransactionAdapter(transactionMap, this);
         recyclerView.setAdapter(transactionAdapter);
 
         databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group5-6aa2b-default-rtdb.firebaseio.com/");
@@ -56,20 +58,20 @@ public class UserAllTransactions extends AppCompatActivity {
     private void loadTransactions() {
         databaseReference.child("Users").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                transactionList.clear();
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                transactionMap.clear();
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                    for (DataSnapshot transactionSnapshot : userSnapshot.getChildren()) {
+                    DataSnapshot transactionsSnapshot = userSnapshot.child("transactions");
+                    for (DataSnapshot transactionSnapshot : transactionsSnapshot.getChildren()) {
                         try {
-                            Transaction transaction = transactionSnapshot.getValue(Transaction.class);
+                            User.Transaction transaction = transactionSnapshot.getValue(User.Transaction.class);
                             if (transaction != null) {
-                                transactionList.add(transaction);
+                                transaction.setDate(parseFirebaseDate(transactionSnapshot.child("date")));
+                                transactionMap.put(transactionSnapshot.getKey(), transaction);
                             } else {
-                                // Log a warning if the transaction is null
                                 System.out.println("Warning: transaction is null for snapshot: " + transactionSnapshot);
                             }
                         } catch (DatabaseException e) {
-                            // Log the exception and the problematic snapshot
                             System.err.println("Error converting transaction: " + e.getMessage());
                             System.err.println("Problematic snapshot: " + transactionSnapshot);
                         }
@@ -79,44 +81,14 @@ public class UserAllTransactions extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(UserAllTransactions.this, "Failed to load transactions", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-
-    public static class Transaction {
-        private String id;
-        private String description;
-        private double amount;
-        private long timestamp;
-
-        public Transaction(String id, String description, double amount, long timestamp) {
-            this.id = id;
-            this.description = description;
-            this.amount = amount;
-            this.timestamp = timestamp;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public double getAmount() {
-            return amount;
-        }
-
-        public long getTimestamp() {
-            return timestamp;
-        }
-
-        public String getFormattedDate() {
-            return DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date(timestamp));
-        }
+    private Date parseFirebaseDate(DataSnapshot dateSnapshot) {
+        long time = dateSnapshot.child("time").getValue(Long.class);
+        return new Date(time);
     }
 }

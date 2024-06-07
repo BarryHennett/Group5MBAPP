@@ -20,7 +20,7 @@ public class AccountantAddNewClient extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_accountant_add_new_client);
-        toAccountantDashboard = findViewById(R.id.toAccountantDashboard);
+        //toAccountantDashboard = findViewById(R.id.toAccountantDashboard);
         toAccountantDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

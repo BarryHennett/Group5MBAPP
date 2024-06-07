@@ -148,9 +148,6 @@ public class User {
         private Date date;
         private String description;
 
-        public Transaction() {
-        }
-
         public Transaction(String type, String category, double amount, Date date, String description) {
             this.description = description;
             this.date = date;
