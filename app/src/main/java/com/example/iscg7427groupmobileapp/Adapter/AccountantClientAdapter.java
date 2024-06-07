@@ -2,7 +2,6 @@ package com.example.iscg7427groupmobileapp.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,8 +79,7 @@ public class AccountantClientAdapter extends RecyclerView.Adapter<AccountantClie
             public void onClick(View v) {
                 if (client != null) {
                     Intent intent = new Intent(context, UserAllTransactions.class);
-                    //intent.putExtra("uid", userKey);
-                    intent.putExtra("uid", "jba712jsas");
+                    intent.putExtra("uid", userKey); // Use the actual user ID
                     context.startActivity(intent);
                 } else {
                     Toast.makeText(context, "Invalid User ID", Toast.LENGTH_SHORT).show();

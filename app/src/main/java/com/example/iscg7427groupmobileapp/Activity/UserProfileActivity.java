@@ -8,15 +8,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.iscg7427groupmobileapp.R;
 import com.example.iscg7427groupmobileapp.Model.User;
+import com.example.iscg7427groupmobileapp.Model.Accountant;
+import com.example.iscg7427groupmobileapp.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,14 +29,15 @@ import com.google.firebase.database.ValueEventListener;
 
 public class UserProfileActivity extends AppCompatActivity {
 
-    private EditText editTextPassword, editTextUserName, editTextEmail, editTextPhone;
+    private EditText editTextPassword, editTextUserName, editTextPhone;
     private ImageView showPassword;
+    private TextView editTextEmail;
     private Button updateButton, signOutButton;
     private boolean isPasswordVisible = false;
     private DatabaseReference userRef;
-    private String userId;
     private FirebaseAuth auth;
-
+    private boolean isUserFound = false; // To track if user is found
+    private BottomNavigationView bottomNavigation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,14 +51,24 @@ public class UserProfileActivity extends AppCompatActivity {
         showPassword = findViewById(R.id.showPassword);
         updateButton = findViewById(R.id.updateButton);
         signOutButton = findViewById(R.id.toSignOut);
+        bottomNavigation = findViewById(R.id.bottom_navigation);
 
         auth = FirebaseAuth.getInstance();
 
-        userId = getIntent().getStringExtra("uid");
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            FirebaseDatabase database = FirebaseDatabase.getInstance("https://group5-6aa2b-default-rtdb.firebaseio.com/");
 
-        if (userId != null && !userId.isEmpty()) {
-            userRef = FirebaseDatabase.getInstance("https://group5-6aa2b-default-rtdb.firebaseio.com/")
-                    .getReference("Users").child(userId);
+            // Check "Users" path first
+            userRef = database.getReference("Users").child(userId);
+            fetchUserDetails(userRef, "Users");
+
+            // If not found in "Users", check "Accountants" path
+            if (!isUserFound) {
+                userRef = database.getReference("Accountants").child(userId);
+                fetchUserDetails(userRef, "Accountants");
+            }
 
             showPassword.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -87,24 +102,36 @@ public class UserProfileActivity extends AppCompatActivity {
                     signOut();
                 }
             });
-
-            fetchUserDetails();
         } else {
-            Toast.makeText(this, "No user ID provided", Toast.LENGTH_SHORT).show();
-            finish(); // Close the activity if no user ID is provided
+            Toast.makeText(this, "No user is currently logged in", Toast.LENGTH_SHORT).show();
+            finish(); // Close the activity if no user is logged in
         }
     }
 
-    private void fetchUserDetails() {
-        userRef.addValueEventListener(new ValueEventListener() {
+    private void fetchUserDetails(DatabaseReference ref, String userType) {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User user = snapshot.getValue(User.class);
-                if (user != null) {
-                    editTextUserName.setText(user.getName());
-                    editTextEmail.setText(user.getEmail());
-                    editTextPassword.setText(user.getPassword());
-                    editTextPhone.setText(user.getPhoneNumber());
+                if (userType.equals("Users")) {
+                    User user = snapshot.getValue(User.class);
+                    if (user != null) {
+                        isUserFound = true;
+                        editTextUserName.setText(user.getName());
+                        editTextEmail.setText(user.getEmail());
+                        editTextPassword.setText(user.getPassword());
+                        editTextPhone.setText(user.getPhoneNumber());
+                        bottomNavigation.setVisibility(View.VISIBLE);
+                    }
+                } else if (userType.equals("Accountants")) {
+                    Accountant accountant = snapshot.getValue(Accountant.class);
+                    if (accountant != null) {
+                        isUserFound = true;
+                        editTextUserName.setText(accountant.getName());
+                        editTextEmail.setText(accountant.getEmail());
+                        editTextPassword.setText(accountant.getPassword());
+                        editTextPhone.setText(accountant.getPhoneNumber());
+                        bottomNavigation.setVisibility(View.GONE);
+                    }
                 }
             }
 
@@ -129,18 +156,30 @@ public class UserProfileActivity extends AppCompatActivity {
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User user = snapshot.getValue(User.class);
-                if (user != null) {
-                    // Update the fields
-                    user.setName(userName);
-                    user.setEmail(email);
-                    user.setPassword(password);
-                    user.setPhoneNumber(phone);
-
-                    // Save the updated user
-                    userRef.setValue(user)
-                            .addOnSuccessListener(aVoid -> Toast.makeText(UserProfileActivity.this, "User details updated successfully", Toast.LENGTH_SHORT).show())
-                            .addOnFailureListener(e -> Toast.makeText(UserProfileActivity.this, "Failed to update user", Toast.LENGTH_SHORT).show());
+                if (snapshot.exists()) {
+                    if (snapshot.hasChild("type") && snapshot.child("type").getValue().equals("Accountants")) {
+                        Accountant accountant = snapshot.getValue(Accountant.class);
+                        if (accountant != null) {
+                            accountant.setName(userName);
+                            accountant.setEmail(email);
+                            accountant.setPassword(password);
+                            accountant.setPhoneNumber(phone);
+                            userRef.setValue(accountant)
+                                    .addOnSuccessListener(aVoid -> Toast.makeText(UserProfileActivity.this, "User details updated successfully", Toast.LENGTH_SHORT).show())
+                                    .addOnFailureListener(e -> Toast.makeText(UserProfileActivity.this, "Failed to update user", Toast.LENGTH_SHORT).show());
+                        }
+                    } else {
+                        User user = snapshot.getValue(User.class);
+                        if (user != null) {
+                            user.setName(userName);
+                            user.setEmail(email);
+                            user.setPassword(password);
+                            user.setPhoneNumber(phone);
+                            userRef.setValue(user)
+                                    .addOnSuccessListener(aVoid -> Toast.makeText(UserProfileActivity.this, "User details updated successfully", Toast.LENGTH_SHORT).show())
+                                    .addOnFailureListener(e -> Toast.makeText(UserProfileActivity.this, "Failed to update user", Toast.LENGTH_SHORT).show());
+                        }
+                    }
                 }
             }
 
