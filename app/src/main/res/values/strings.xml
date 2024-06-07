@@ -2,5 +2,6 @@
     <string name="app_name">ISCG7427GroupMobileApp</string>
     <string name="view_receipt"><![CDATA[<u>View receipt</u>]]></string>
     <string name="change_receipt"><![CDATA[<u>Change receipt</u>]]></string>
+    <string name="default_web_client_id">815569169654-lq33hb0ktiooqndock6a6d1k5q57ailu.apps.googleusercontent.com</string>
 
 </resources>

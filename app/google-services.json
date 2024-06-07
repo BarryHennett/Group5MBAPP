@@ -13,7 +13,12 @@
           "package_name": "com.example.iscg7427groupmobileapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "815569169654-lq33hb0ktiooqndock6a6d1k5q57ailu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAWTMkPvxnE23K01CbSE0B_Lnj2TFd8f24"
@@ -21,7 +26,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "815569169654-lq33hb0ktiooqndock6a6d1k5q57ailu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

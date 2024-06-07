@@ -23,6 +23,7 @@ import com.example.iscg7427groupmobileapp.Adapter.TransactionAdapter;
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
 import com.example.iscg7427groupmobileapp.RecyclerAdapterTransaction;
+import com.example.iscg7427groupmobileapp.UserAllTransactions;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -52,7 +53,7 @@ import java.util.stream.Collectors;
 public class UserDashboardActivity_1 extends AppCompatActivity {
 
     ImageButton btnIncome, btnExpense;
-    TextView txtName, txtBalance, txtIncome, txtExpense;
+    TextView txtName, txtBalance, txtIncome, txtExpense, txtViewAll;
     Spinner spinner;
     RecyclerView recyclerView;
     BarChart barChart;
@@ -218,6 +219,14 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        txtViewAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserDashboardActivity_1.this, UserAllTransactions.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void init() {
@@ -232,6 +241,7 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
         recyclerView = findViewById(R.id.user_dashboard_rec);
         barChart = findViewById(R.id.user_dashboard_chart);
         nav = findViewById(R.id.bottom_navigation);
+        txtViewAll = findViewById(R.id.user_dashboard_txt_view_all);
     }
 
 
