@@ -54,6 +54,7 @@
             style="@style/body_10_lightgray_medium"/>
 
         <EditText
+            android:id="@+id/etUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tony Seddon"
@@ -68,6 +69,7 @@
             style="@style/body_10_lightgray_medium"/>
 
         <EditText
+            android:id="@+id/etUserType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Accountant"
@@ -82,6 +84,7 @@
             style="@style/body_10_lightgray_medium"/>
 
         <EditText
+            android:id="@+id/etEmailAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="tony.sed@gmail.com"
@@ -96,6 +99,7 @@
             style="@style/body_10_lightgray_medium"/>
 
         <EditText
+            android:id="@+id/etPhoneNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="021 222 342"
@@ -104,11 +108,11 @@
             android:layout_width="wrap_content"
             android:layout_height="16sp" />
         <Button
+            android:id="@+id/btnInvitation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Send Invitation with Password"
             style="@style/primary_button"/>
-
     </LinearLayout>
 
 </LinearLayout>

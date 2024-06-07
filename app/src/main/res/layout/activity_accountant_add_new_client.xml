@@ -53,6 +53,7 @@
             style="@style/body_10_lightgray_medium"/>
 
         <EditText
+            android:id="@+id/etUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tony Seddon"
@@ -68,6 +69,7 @@
             style="@style/body_10_lightgray_medium"/>
 
         <EditText
+            android:id="@+id/etOccupation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bookkeeper"
@@ -83,6 +85,7 @@
             style="@style/body_10_lightgray_medium"/>
 
         <EditText
+            android:id="@+id/etIndustry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bar &amp; Restaurant"
@@ -98,6 +101,7 @@
             style="@style/body_10_lightgray_medium"/>
 
         <EditText
+            android:id="@+id/etEmailAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="tony.sed@gmail.com"
@@ -113,6 +117,7 @@
             style="@style/body_10_lightgray_medium"/>
 
         <EditText
+            android:id="@+id/etPhoneNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="021 222 342"
@@ -122,6 +127,7 @@
             android:layout_height="16sp" />
 
         <Button
+            android:id="@+id/btnInvite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Invite Client"

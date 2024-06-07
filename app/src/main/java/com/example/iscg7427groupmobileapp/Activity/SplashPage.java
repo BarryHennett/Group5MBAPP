@@ -14,7 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.iscg7427groupmobileapp.R;
 
 public class SplashPage extends AppCompatActivity {
-    private TextView toLogin, toSignup;
+    TextView toLogin, toSignUp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,12 +24,12 @@ public class SplashPage extends AppCompatActivity {
         toLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SplashPage.this, Login.class);
-                startActivity(intent);
+                Intent intent1 = new Intent(SplashPage.this, Login.class);
+                startActivity(intent1);
             }
         });
-        toSignup = findViewById(R.id.toSignUp);
-        toSignup.setOnClickListener(new View.OnClickListener() {
+        toSignUp = findViewById(R.id.toSignUp);
+        toSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SplashPage.this, SignUp.class);
