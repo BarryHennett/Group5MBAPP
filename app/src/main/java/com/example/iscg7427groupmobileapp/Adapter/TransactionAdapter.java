@@ -1,6 +1,7 @@
 package com.example.iscg7427groupmobileapp.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
+import com.example.iscg7427groupmobileapp.TransactionDetails;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -66,7 +68,10 @@ public class TransactionAdapter extends RecyclerView.Adapter{
         }
         // deal with on click event
         viewHolder.itemView.setOnClickListener(v -> {
-            // do something
+
+            Intent intent = new Intent(context, TransactionDetails.class);
+            intent.putExtra("transactionKey", transactionKey);
+            context.startActivity(intent);
         });
     }
     @Override
