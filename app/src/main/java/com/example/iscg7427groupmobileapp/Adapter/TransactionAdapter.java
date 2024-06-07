@@ -2,6 +2,7 @@ package com.example.iscg7427groupmobileapp.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
                 intent.putExtra("transactionId", transactionId);
                 intent.putExtra("uid", uid);
                 context.startActivity(intent);
+
+                // Log that the transaction has been sent
+                Log.d("TransactionAdapter", "Transaction sent: transactionId=" + transactionId + ", uid=" + uid);
             } else {
                 Toast.makeText(context, "Transaction ID or User ID is missing", Toast.LENGTH_SHORT).show();
             }

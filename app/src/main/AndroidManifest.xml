@@ -67,13 +67,16 @@
             android:name=".Activity.MainActivity"
             android:exported="false"/>
         <activity
-            android:name=".Activity.Login"
-            android:exported="false" />
-        <activity
             android:name=".Activity.SignUp"
+
             android:exported="false" />
         <activity
             android:name=".Activity.SplashPage"
+
+            android:exported="false" />
+        <activity
+            android:name=".Activity.Login"
+
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
