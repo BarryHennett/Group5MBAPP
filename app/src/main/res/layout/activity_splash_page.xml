@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical"
+    tools:context=".Activity.SplashPage">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:src="@drawable/logo_big" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="32sp"
+        android:paddingBottom="70sp"
+        android:paddingLeft="16sp"
+        android:paddingRight="16sp"
+        android:background="@drawable/background_mdblack_topradius"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/heading_22_white_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24sp"
+            android:text="Empower Your Finances,
+            Simplify Your Life" />
+
+        <!--        sign up and login button-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/toSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/primary_button"
+                android:gravity="center"
+                android:text="Sign Up"
+                />
+
+            <TextView
+                android:id="@+id/toLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8sp"
+                style="@style/border_button"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:text="Log in"
+         />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

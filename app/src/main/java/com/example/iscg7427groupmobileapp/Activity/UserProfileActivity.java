@@ -1,5 +1,6 @@
 package com.example.iscg7427groupmobileapp.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -13,10 +14,9 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
+import com.example.iscg7427groupmobileapp.Model.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,10 +27,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private EditText editTextPassword, editTextUserName, editTextEmail, editTextPhone;
     private ImageView showPassword;
-    private Button updateButton;
+    private Button updateButton, signOutButton;
     private boolean isPasswordVisible = false;
     private DatabaseReference userRef;
     private String userId;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +45,13 @@ public class UserProfileActivity extends AppCompatActivity {
         editTextPhone = findViewById(R.id.userPhoneEt);
         showPassword = findViewById(R.id.showPassword);
         updateButton = findViewById(R.id.updateButton);
+        signOutButton = findViewById(R.id.toSignOut);
 
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            userId = currentUser.getUid();
+        auth = FirebaseAuth.getInstance();
+
+        userId = getIntent().getStringExtra("uid");
+
+        if (userId != null && !userId.isEmpty()) {
             userRef = FirebaseDatabase.getInstance("https://group5-6aa2b-default-rtdb.firebaseio.com/")
                     .getReference("Users").child(userId);
 
@@ -77,10 +81,17 @@ public class UserProfileActivity extends AppCompatActivity {
                 }
             });
 
+            signOutButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    signOut();
+                }
+            });
+
             fetchUserDetails();
         } else {
-            Toast.makeText(this, "No user is logged in", Toast.LENGTH_SHORT).show();
-            finish(); // Close the activity if no user is logged in
+            Toast.makeText(this, "No user ID provided", Toast.LENGTH_SHORT).show();
+            finish(); // Close the activity if no user ID is provided
         }
     }
 
@@ -138,5 +149,12 @@ public class UserProfileActivity extends AppCompatActivity {
                 Toast.makeText(UserProfileActivity.this, "Failed to update user", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void signOut() {
+        auth.signOut();
+        Intent intent = new Intent(UserProfileActivity.this, SplashPage.class);
+        startActivity(intent);
+        finish();
     }
 }

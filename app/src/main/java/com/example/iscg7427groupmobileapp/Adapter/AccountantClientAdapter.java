@@ -1,20 +1,26 @@
 package com.example.iscg7427groupmobileapp.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
+import com.example.iscg7427groupmobileapp.UserAllTransactions;
 
-import java.util.ArrayList;
+import java.text.NumberFormat;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Locale;
 
 public class AccountantClientAdapter extends RecyclerView.Adapter<AccountantClientAdapter.AccountClientViewHolder> {
     private HashMap<String, User> userList;
@@ -51,11 +57,37 @@ public class AccountantClientAdapter extends RecyclerView.Adapter<AccountantClie
                 expense += transactionMap.get(key).getAmount();
             }
         }
+        double net = income - expense;
+
+        // Format the numbers as currency
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+        holder.clientIncomeTv.setText(currencyFormat.format(income));
+        holder.clientExpensesTv.setText(currencyFormat.format(expense));
+        holder.clientNetTv.setText(currencyFormat.format(net));
+
+        // Set the text color for net value
+        if (net < 0) {
+            holder.clientNetTv.setTextColor(ContextCompat.getColor(context, R.color.orange));
+        } else {
+            holder.clientNetTv.setTextColor(ContextCompat.getColor(context, R.color.blue));
+        }
+
         holder.clientNameTv.setText(client.getName());
         holder.clientOccupationTv.setText(client.getOccupation());
-        holder.clientIncomeTv.setText(String.format("$%.2f", income));
-        holder.clientExpensesTv.setText(String.format("$%.2f", expense));
-        holder.clientNetTv.setText(String.format("$%.2f", income - expense));
+
+        holder.toUserAllTransactions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (client != null) {
+                    Intent intent = new Intent(context, UserAllTransactions.class);
+                    //intent.putExtra("uid", userKey);
+                    intent.putExtra("uid", "jba712jsas");
+                    context.startActivity(intent);
+                } else {
+                    Toast.makeText(context, "Invalid User ID", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -65,7 +97,7 @@ public class AccountantClientAdapter extends RecyclerView.Adapter<AccountantClie
 
     public class AccountClientViewHolder extends RecyclerView.ViewHolder {
         TextView clientNameTv, clientOccupationTv, clientIncomeTv, clientExpensesTv, clientNetTv;
-
+        LinearLayout toUserAllTransactions;
         public AccountClientViewHolder(@NonNull View itemView) {
             super(itemView);
             clientNameTv = itemView.findViewById(R.id.clientNameTv);
@@ -73,6 +105,7 @@ public class AccountantClientAdapter extends RecyclerView.Adapter<AccountantClie
             clientIncomeTv = itemView.findViewById(R.id.clientIncomeTv);
             clientExpensesTv = itemView.findViewById(R.id.clientExpensesTv);
             clientNetTv = itemView.findViewById(R.id.clientNetTv);
+            toUserAllTransactions = itemView.findViewById(R.id.toAllTransactions);
         }
     }
 

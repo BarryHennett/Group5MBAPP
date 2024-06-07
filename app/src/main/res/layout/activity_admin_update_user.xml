@@ -17,15 +17,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="16sp"
+            android:layout_marginTop="32sp"
             android:gravity="center_vertical">
 
-            <ImageView
+            <LinearLayout
                 android:id="@+id/toAdminDashboard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/arrow_left"
-                android:layout_marginEnd="16sp"/>
+                android:layout_width="24sp"
+                android:layout_height="24sp"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_left">
+                </ImageView>
+            </LinearLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -92,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:text="Email address"
                     style="@style/body_10_lightgray_medium"/>
-                <EditText
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/body_12_white_regular"
@@ -126,12 +131,28 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="16sp" />
-            <TextView
-                android:id="@+id/sendNewPasswordBtn"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Send New Password"
-                style="@style/body_10_lightgray_medium"/>
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/sendNewPasswordBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Send New Password"
+                    style="@style/body_10_lightgray_medium"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/deactivateButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Deactivate"
+                    style="@style/body_10_lightgray_medium"/>
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="16sp" />

@@ -30,7 +30,7 @@ public class User {
         this.occupation = "";
         this.industry = "";
         this.active = true;
-        this.password = "password";
+        this.password = "";
         this.transactions = new HashMap<>();
     }
 

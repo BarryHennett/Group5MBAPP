@@ -35,6 +35,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(platform("com.google.firebase:firebase-bom:32.3.1")) // this is used for logging by Google
+    implementation("com.google.android.gms:play-services-auth:20.7.0") // this is also used for google, Google Play services library
     // firebase authentication
     implementation(libs.firebase.auth)
     // firebase realtime database
