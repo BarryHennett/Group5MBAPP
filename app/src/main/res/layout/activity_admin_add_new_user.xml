@@ -4,33 +4,25 @@
     android:layout_height="match_parent"
     android:background="@color/black"
     android:orientation="vertical">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16sp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:layout_marginTop="32sp"
+        android:layout_marginTop="27dp"
+        android:layout_marginLeft="16dp"
         android:orientation="horizontal">
-        <LinearLayout
-            android:id="@+id/toAdminDashboard"
-            android:layout_width="24sp"
-            android:layout_height="24sp"
-            android:gravity="center">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/arrow_left">
-            </ImageView>
-        </LinearLayout>
 
+        <ImageView
+            android:layout_width="7.7dp"
+            android:layout_height="13.4dp"
+            android:src="@drawable/arrow_left">
+        </ImageView>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
             android:text="Add a new user"
             style="@style/heading_22_white_bold">
         </TextView>
@@ -39,10 +31,9 @@
 
 
     <LinearLayout
-        android:layout_marginTop="16sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:layout_margin="16dp"
         android:orientation="vertical"
         android:background="@drawable/background_mdblack"
         >
@@ -50,67 +41,72 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:text="User name"
             style="@style/body_10_lightgray_medium"/>
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:text="Tony Seddon"
             style="@style/body_12_white_regular"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="16sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:text="User type"
             style="@style/body_10_lightgray_medium"/>
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:text="Accountant"
             style="@style/body_12_white_regular"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="16sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:text="Email address"
             style="@style/body_10_lightgray_medium"/>
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:text="tony.sed@gmail.com"
             style="@style/body_12_white_regular"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="16sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:text="Phone number"
             style="@style/body_10_lightgray_medium"/>
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:text="021 222 342"
             style="@style/body_12_white_regular"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="16sp" />
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Send Invitation with Password"
-            style="@style/primary_button"/>
+            android:layout_margin="16dp"
+            android:background="@drawable/button_green"
+            android:text="Send Invitation with Password"/>
+            <!--
+            style="@style/button_12_black_medium"/>-->
 
     </LinearLayout>
-
-</LinearLayout>
 
 </LinearLayout>
