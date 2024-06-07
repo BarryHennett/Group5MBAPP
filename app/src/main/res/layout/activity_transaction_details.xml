@@ -23,6 +23,7 @@
             android:orientation="horizontal">
 
             <ImageButton
+                android:id="@+id/backbuttondetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8sp"
@@ -62,12 +63,12 @@
                     android:layout_height="wrap_content"
                     android:text="Expense category*" />
 
-                <Spinner
-                    android:id="@+id/user_add_income_spinner"
-                    style="@style/CustomSpinnerItem"
+                <TextView
+                    android:id="@+id/expensecategory"
+                    style="@style/body_10_lightgray_medium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:spinnerMode="dropdown" />
+                    android:text="Expense category" />
 
             </LinearLayout>
 
@@ -86,15 +87,12 @@
                     android:layout_height="wrap_content"
                     android:text="Expense date*" />
 
-                <EditText
-                    android:id="@+id/user_add_income_edt_date"
+                <TextView
+                    android:id="@+id/expensedate"
                     style="@style/body_12_white_regular"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="false"
-                    android:hint="Type date here"
-                    android:textColorHint="@color/white" />
+                    android:text="Expense date" />
             </LinearLayout>
 
             <LinearLayout
@@ -112,12 +110,12 @@
                     android:layout_height="wrap_content"
                     android:text="Total cost (NZD)*" />
 
-                <EditText
+                <TextView
+                    android:id="@+id/expensecost"
                     style="@style/body_12_white_regular"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Type cost here"
-                    android:textColorHint="@color/white" />
+                    android:text="Total cost (NZD)*" />
             </LinearLayout>
 
             <LinearLayout
@@ -135,12 +133,32 @@
                     android:layout_height="wrap_content"
                     android:text="Expense Description" />
 
-                <EditText
+                <TextView
+                    android:id="@+id/expensedesc"
                     style="@style/body_12_white_regular"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Type description here"
-                    android:textColorHint="@color/white" />
+                    android:text="Expense Description" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/body_10_lightgray_medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Expense Type" />
+
+                <TextView
+                    android:id="@+id/expensetype"
+                    style="@style/body_12_white_regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Expense Type" />
+
             </LinearLayout>
 
             <LinearLayout

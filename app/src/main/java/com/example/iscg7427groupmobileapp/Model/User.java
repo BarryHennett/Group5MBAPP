@@ -148,12 +148,16 @@ public class User {
         private Date date;
         private String description;
 
+        public Transaction() {
+            // Required empty constructor for Firebase
+        }
+
         public Transaction(String type, String category, double amount, Date date, String description) {
-            this.description = description;
-            this.date = date;
-            this.amount = amount;
-            this.category = category;
             this.type = type;
+            this.category = category;
+            this.amount = amount;
+            this.date = date;
+            this.description = description;
         }
 
         public String getType() {

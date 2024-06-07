@@ -11,12 +11,8 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -195,7 +191,7 @@ public class UserExpenseDashboardActivity extends AppCompatActivity {
                 }
 
                 recyclerView.setLayoutManager(new LinearLayoutManager(UserExpenseDashboardActivity.this));
-                recyclerView.setAdapter(new TransactionAdapter(recentTransactions, UserExpenseDashboardActivity.this));
+                recyclerView.setAdapter(new TransactionAdapter(recentTransactions, UserExpenseDashboardActivity.this, uid));
 
 
             };

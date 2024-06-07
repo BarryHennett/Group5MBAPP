@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,67 +16,65 @@ import com.example.iscg7427groupmobileapp.R;
 import com.example.iscg7427groupmobileapp.TransactionDetails;
 
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.Map;
 
-public class TransactionAdapter extends RecyclerView.Adapter{
-    private HashMap<String, User.Transaction> transactionMap;
-    private Context context;
-    public TransactionAdapter(HashMap<String, User.Transaction> transactionMap, Context context) {
+public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHolderTransaction> {
+
+    private final Map<String, User.Transaction> transactionMap;
+    private final Context context;
+    private final String uid;
+
+    public TransactionAdapter(Map<String, User.Transaction> transactionMap, Context context, String uid) {
         this.transactionMap = transactionMap;
         this.context = context;
+        this.uid = uid;
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        if (context == null) {
-            context = parent.getContext();
-        }
-
-        View view = LayoutInflater.from(context).inflate(R.layout.recycler_transaction, parent, false);
+    public ViewHolderTransaction onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflate the layout for each item in the RecyclerView
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_transaction, parent, false);
         return new ViewHolderTransaction(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ViewHolderTransaction viewHolder = (ViewHolderTransaction) holder;
-        // user keySet as a index to manipulate the recycler view
-        String transactionKey = transactionMap.keySet().toArray()[position].toString();
+    public void onBindViewHolder(@NonNull ViewHolderTransaction holder, int position) {
+        // Get the transaction ID at the current position
+        String transactionId = transactionMap.keySet().toArray()[position].toString();
 
-        String category = Objects.requireNonNull(transactionMap.get(transactionKey)).getCategory();
-        double amount = Objects.requireNonNull(transactionMap.get(transactionKey)).getAmount();
+        // Get the transaction object using the transaction ID
+        User.Transaction transaction = transactionMap.get(transactionId);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
-        String date = sdf.format(Objects.requireNonNull(transactionMap.get(transactionKey)).getDate());
+        // Extract relevant information from the transaction
+        String category = transaction.getCategory();
+        double amount = transaction.getAmount();
+        String date = new SimpleDateFormat("MM-dd").format(transaction.getDate());
+        String type = transaction.getType();
 
+        // Bind data to ViewHolder views
+        holder.txtCategory.setText(category);
+        holder.txtAmount.setText(type.equals("Income") ? "$" + amount : "- $" + amount);
+        holder.txtDate.setText(date);
+        holder.txtAmount.setTextColor(context.getResources().getColor(type.equals("Income") ? R.color.blue : R.color.orange));
 
-        viewHolder.txtAmount.setText(Double.toString(amount));
-        viewHolder.txtCategory.setText(category);
-        viewHolder.txtDate.setText(date);
-
-        // get the type of the transaction
-        String type = transactionMap.get(transactionKey).getType();
-        // set color
-        if (type.equals("Income")) {
-            viewHolder.txtAmount.setText("$" + amount);
-            viewHolder.txtAmount.setTextColor(context.getResources().getColor(R.color.blue));
-
-        } else {
-            viewHolder.txtAmount.setText("- $" + amount);
-            viewHolder.txtAmount.setTextColor(context.getResources().getColor(R.color.orange));
-        }
-        // deal with on click event
-        viewHolder.itemView.setOnClickListener(v -> {
-
-            Intent intent = new Intent(context, TransactionDetails.class);
-            intent.putExtra("transactionKey", transactionKey);
-            context.startActivity(intent);
+        // Set OnClickListener to handle item click
+        holder.itemView.setOnClickListener(v -> {
+            if (transactionId != null && uid != null) {
+                // When item is clicked, open TransactionDetails activity and pass transaction ID
+                Intent intent = new Intent(context, TransactionDetails.class);
+                intent.putExtra("transactionId", transactionId);
+                intent.putExtra("uid", uid);
+                context.startActivity(intent);
+            } else {
+                Toast.makeText(context, "Transaction ID or User ID is missing", Toast.LENGTH_SHORT).show();
+            }
         });
     }
+
     @Override
     public int getItemCount() {
+        // Return the size of your dataset (invoked by the layout manager)
         return transactionMap.size();
     }
 
@@ -84,6 +83,7 @@ public class TransactionAdapter extends RecyclerView.Adapter{
 
         public ViewHolderTransaction(@NonNull View itemView) {
             super(itemView);
+            // Initialize ViewHolder views
             txtCategory = itemView.findViewById(R.id.rv_transaction_category);
             txtDate = itemView.findViewById(R.id.rv_transaction_date);
             txtAmount = itemView.findViewById(R.id.rv_transaction_amount);
