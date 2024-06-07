@@ -9,23 +9,31 @@ public class Accountant {
     private String type;
     private boolean active;
     private HashMap<String, String> users;
+    private String email;
+    private String password;
 
     public Accountant() {
         this.id = "";
-        this.name = "Anonymous";
+        this.name = "";
         this.phoneNumber = "";
         this.type = "Accountant";
         this.active = true;
         this.users = new HashMap<>();
+        this.email = "";
+        this.password= "";
     }
-    public Accountant(String id, String name, String phoneNumber, String type, boolean active, HashMap<String, String> users) {
+
+    public Accountant(String id, String name, String phoneNumber, String type, boolean active, HashMap<String, String> users, String email, String password) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.type = type;
         this.active = active;
         this.users = users;
+        this.email = email;
+        this.password = password;
     }
+
     public String getId() {
         return id;
     }
@@ -72,5 +80,60 @@ public class Accountant {
 
     public void setUsers(HashMap<String, String> users) {
         this.users = users;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "Accountant{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", type='" + type + '\'' +
+                ", active=" + active +
+                ", users=" + users +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+
+    public static class User{
+        private String key;
+
+        public User(String key) {
+            this.key = key;
+        }
+
+        public User(){}
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public String toString() {
+            return "User{" +
+                    "key='" + key + '\'' +
+                    '}';
+        }
     }
 }
