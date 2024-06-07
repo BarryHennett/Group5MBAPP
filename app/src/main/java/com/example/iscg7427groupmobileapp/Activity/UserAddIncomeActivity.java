@@ -126,6 +126,4 @@ public class UserAddIncomeActivity extends AppCompatActivity {
 
         datePickerDialog.show();
     }
-
-
-    }
+}

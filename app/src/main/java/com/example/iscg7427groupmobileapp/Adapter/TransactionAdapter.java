@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.iscg7427groupmobileapp.R;
 import com.example.iscg7427groupmobileapp.UserAllTransactions;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder> {
@@ -37,6 +35,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         UserAllTransactions.Transaction transaction = transactionList.get(position);
         holder.description.setText(transaction.getDescription());
         holder.amount.setText(String.format("$ %.2f", transaction.getAmount()));
+        holder.timestamp.setText(transaction.getFormattedDate());
     }
 
     @Override

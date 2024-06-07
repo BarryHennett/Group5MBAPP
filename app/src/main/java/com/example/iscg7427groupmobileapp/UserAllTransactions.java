@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.iscg7427groupmobileapp.Adapter.TransactionAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -47,19 +49,30 @@ public class UserAllTransactions extends AppCompatActivity {
         transactionAdapter = new TransactionAdapter(this, transactionList);
         recyclerView.setAdapter(transactionAdapter);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
+        databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group5-6aa2b-default-rtdb.firebaseio.com/");
         loadTransactions();
     }
 
     private void loadTransactions() {
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 transactionList.clear();
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                     for (DataSnapshot transactionSnapshot : userSnapshot.getChildren()) {
-                        Transaction transaction = transactionSnapshot.getValue(Transaction.class);
-                        transactionList.add(transaction);
+                        try {
+                            Transaction transaction = transactionSnapshot.getValue(Transaction.class);
+                            if (transaction != null) {
+                                transactionList.add(transaction);
+                            } else {
+                                // Log a warning if the transaction is null
+                                System.out.println("Warning: transaction is null for snapshot: " + transactionSnapshot);
+                            }
+                        } catch (DatabaseException e) {
+                            // Log the exception and the problematic snapshot
+                            System.err.println("Error converting transaction: " + e.getMessage());
+                            System.err.println("Problematic snapshot: " + transactionSnapshot);
+                        }
                     }
                 }
                 transactionAdapter.notifyDataSetChanged();
@@ -72,15 +85,12 @@ public class UserAllTransactions extends AppCompatActivity {
         });
     }
 
+
     public static class Transaction {
         private String id;
         private String description;
         private double amount;
         private long timestamp;
-
-        public Transaction() {
-            // Default constructor required for calls to DataSnapshot.getValue(Transaction.class)
-        }
 
         public Transaction(String id, String description, double amount, long timestamp) {
             this.id = id;
@@ -103,6 +113,10 @@ public class UserAllTransactions extends AppCompatActivity {
 
         public long getTimestamp() {
             return timestamp;
+        }
+
+        public String getFormattedDate() {
+            return DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date(timestamp));
         }
     }
 }
