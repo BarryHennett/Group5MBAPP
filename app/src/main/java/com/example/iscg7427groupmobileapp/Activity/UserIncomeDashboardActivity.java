@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.iscg7427groupmobileapp.Adapter.TransactionAdapter;
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
+import com.example.iscg7427groupmobileapp.UserAllTransactions;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -65,7 +66,7 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_income_dashboard);
 
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         init();
 
@@ -211,6 +212,11 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
 
             }
         } );
+
+        txtViewAll.setOnClickListener(v -> {
+            Intent intent = new Intent(UserIncomeDashboardActivity.this, UserAllTransactions.class);
+            startActivity(intent);
+        });
     }
 
     private void init() {
