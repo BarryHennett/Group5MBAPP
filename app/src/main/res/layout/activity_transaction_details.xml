@@ -17,30 +17,28 @@
         android:padding="16sp">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="16sp"
+            android:gravity="center_vertical">
 
-            <ImageButton
-                android:id="@+id/backbuttondetails"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8sp"
-                android:background="@android:color/transparent"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                android:padding="0dp"
-                android:src="@drawable/arrow_left" />
-
+            <LinearLayout
+                android:id="@+id/toAdminDashboard"
+                android:layout_width="24sp"
+                android:layout_height="24sp"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_left">
+                </ImageView>
+            </LinearLayout>
             <TextView
-                android:id="@+id/user_add_income_txt_title"
-                style="@style/heading_22_white_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Transaction Details" />
+                android:text="Transaction detail"
+                style="@style/heading_22_white_bold"/>
         </LinearLayout>
 
         <LinearLayout
@@ -63,12 +61,12 @@
                     android:layout_height="wrap_content"
                     android:text="Expense category*" />
 
-                <TextView
-                    android:id="@+id/expensecategory"
-                    style="@style/body_10_lightgray_medium"
+                <Spinner
+                    android:id="@+id/user_add_income_spinner"
+                    style="@style/CustomSpinnerItem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=" category" />
+                    android:spinnerMode="dropdown" />
 
             </LinearLayout>
 
@@ -87,12 +85,15 @@
                     android:layout_height="wrap_content"
                     android:text="Expense date*" />
 
-                <TextView
-                    android:id="@+id/expensedate"
+                <EditText
+                    android:id="@+id/user_add_income_edt_date"
                     style="@style/body_12_white_regular"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2024-05-05" />
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:hint="Type date here"
+                    android:textColorHint="@color/white" />
             </LinearLayout>
 
             <LinearLayout
@@ -110,12 +111,12 @@
                     android:layout_height="wrap_content"
                     android:text="Total cost (NZD)*" />
 
-                <TextView
-                    android:id="@+id/expensecost"
+                <EditText
                     style="@style/body_12_white_regular"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1234" />
+                    android:hint="Type cost here"
+                    android:textColorHint="@color/white" />
             </LinearLayout>
 
             <LinearLayout
@@ -133,35 +134,12 @@
                     android:layout_height="wrap_content"
                     android:text="Expense Description" />
 
-                <TextView
-                    android:id="@+id/expensedesc"
+                <EditText
                     style="@style/body_12_white_regular"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Expense Description" />
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="16sp" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    style="@style/body_10_lightgray_medium"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Expense Type" />
-
-                <TextView
-                    android:id="@+id/expensetype"
-                    style="@style/body_12_white_regular"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Expense Type" />
-
+                    android:hint="Type description here"
+                    android:textColorHint="@color/white" />
             </LinearLayout>
 
             <LinearLayout

@@ -4,31 +4,30 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.iscg7427groupmobileapp.Adapter.TransactionAdapter;
-import com.example.iscg7427groupmobileapp.Model.User;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.List;
 
 public class UserAllTransactions extends AppCompatActivity {
 
-    String uid;
     private RecyclerView recyclerView;
     private TransactionAdapter transactionAdapter;
-    private LinkedHashMap<String, User.Transaction> transactionMap;
+    private List<Transaction> transactionList;
     private DatabaseReference databaseReference;
 
     @Override
@@ -36,55 +35,74 @@ public class UserAllTransactions extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user_all_transactions);
-        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         recyclerView = findViewById(R.id.useralltrarecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        transactionMap = new LinkedHashMap<>();
-        transactionAdapter = new TransactionAdapter(transactionMap, this, uid);
+        transactionList = new ArrayList<>();
+        //transactionAdapter = new TransactionAdapter(this, transactionList);
         recyclerView.setAdapter(transactionAdapter);
 
-        databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://group5-6aa2b-default-rtdb.firebaseio.com/");
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
         loadTransactions();
     }
 
     private void loadTransactions() {
-        // Reference to the current user's transactions
-        databaseReference.child("Users").child(uid).child("transactions").addValueEventListener(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                transactionMap.clear();
-                // Iterate through each transaction snapshot
-                for (DataSnapshot transactionSnapshot : snapshot.getChildren()) {
-                    try {
-                        // Convert the transaction snapshot to a User.Transaction object
-                        User.Transaction transaction = transactionSnapshot.getValue(User.Transaction.class);
-                        if (transaction != null) {
-                            // Parse and set the transaction date
-                            transaction.setDate(parseFirebaseDate(transactionSnapshot.child("date")));
-                            // Add the transaction to the transactionMap
-                            transactionMap.put(transactionSnapshot.getKey(), transaction);
-                        } else {
-                            System.out.println("Warning: transaction is null for snapshot: " + transactionSnapshot);
-                        }
-                    } catch (DatabaseException e) {
-                        System.err.println("Error converting transaction: " + e.getMessage());
-                        System.err.println("Problematic snapshot: " + transactionSnapshot);
+            public void onDataChange(DataSnapshot snapshot) {
+                transactionList.clear();
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    for (DataSnapshot transactionSnapshot : userSnapshot.getChildren()) {
+                        Transaction transaction = transactionSnapshot.getValue(Transaction.class);
+                        transactionList.add(transaction);
                     }
                 }
-                // Notify the adapter that the data set has changed
                 transactionAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled(DatabaseError error) {
                 Toast.makeText(UserAllTransactions.this, "Failed to load transactions", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private Date parseFirebaseDate(DataSnapshot dateSnapshot) {
-        long time = dateSnapshot.child("time").getValue(Long.class);
-        return new Date(time);
+    public static class Transaction {
+        private String id;
+        private String description;
+        private double amount;
+        private long timestamp;
+
+        public Transaction() {
+            // Default constructor required for calls to DataSnapshot.getValue(Transaction.class)
+        }
+
+        public Transaction(String id, String description, double amount, long timestamp) {
+            this.id = id;
+            this.description = description;
+            this.amount = amount;
+            this.timestamp = timestamp;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public double getAmount() {
+            return amount;
+        }
+
+        public long getTimestamp() {
+            return timestamp;
+        }
     }
 }

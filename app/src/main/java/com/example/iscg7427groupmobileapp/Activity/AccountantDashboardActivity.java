@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.example.iscg7427groupmobileapp.Adapter.AccountantClientAdapter;
 import com.example.iscg7427groupmobileapp.Model.Accountant;
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,17 +38,23 @@ public class AccountantDashboardActivity extends AppCompatActivity {
     private TextView accountClientNumber;
     private EditText searchEditText;
     private LinearLayout toAccountantAddNewClient;
+     private ImageView toProfile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accountant_dashboard);
+
         toAccountantAddNewClient = findViewById(R.id.toAccountantAddNewClient);
-        toAccountantAddNewClient.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent  = new Intent(AccountantDashboardActivity.this, AccountantAddNewClient.class);
-                startActivity(intent);
-            }
+        toAccountantAddNewClient.setOnClickListener(v -> {
+            Intent intent = new Intent(AccountantDashboardActivity.this, AccountantAddNewClient.class);
+            startActivity(intent);
+        });
+
+        toProfile = findViewById(R.id.toProfile);
+        toProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(AccountantDashboardActivity.this, UserProfileActivity.class);
+            startActivity(intent);
         });
         clientRv = findViewById(R.id.AccountantClientListRv);
         clientRv.setLayoutManager(new LinearLayoutManager(this));
@@ -54,7 +62,8 @@ public class AccountantDashboardActivity extends AppCompatActivity {
         accountClientNumber = findViewById(R.id.AccountClientNumber);
         searchEditText = findViewById(R.id.searchEditText);
 
-        String uid = "GphAXVZANrdpjg22EmG8SMh4PGs2";
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        String uid = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : null;
         if (uid == null || uid.isEmpty()) {
             Log.e("AccountantDashboard", "UID cannot be null or empty");
             finish(); // Close the activity as there's no valid UID
@@ -74,7 +83,9 @@ public class AccountantDashboardActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                adapter.filter(s.toString());
+                if (adapter != null) {
+                    adapter.filter(s.toString());
+                }
             }
 
             @Override
