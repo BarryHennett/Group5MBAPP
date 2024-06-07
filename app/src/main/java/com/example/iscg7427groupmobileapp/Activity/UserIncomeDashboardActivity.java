@@ -17,8 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.iscg7427groupmobileapp.Adapter.TransactionAdapter;
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
 import com.github.mikephil.charting.charts.PieChart;
@@ -40,8 +42,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -79,8 +83,14 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
                     return true;
                 } else if (item.getItemId() == R.id.item_income) {
 
+                    Intent intent = new Intent(UserIncomeDashboardActivity.this, UserIncomeDashboardActivity.class);
+                    startActivity(intent);
+
                     return true;
                 } else if (item.getItemId() == R.id.item_expenses) {
+
+                    Intent intent = new Intent(UserIncomeDashboardActivity.this, UserExpenseDashboardActivity.class);
+                    startActivity(intent);
 
                     return true;
                 } else if (item.getItemId() == R.id.item_profile) {
@@ -98,7 +108,6 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -109,54 +118,61 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
                         @Override
                         public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
                             calculateIncome(transactions, new onIncomeCalculate() {
-
-
                                 @Override
-                                public void getIncome(double threeMonthSalary, double threeMonthBonus, double threeMonthInvestment, double threeMonthFreelance, double threeMonthOthers, double sixMonthSalary, double sixMonthBonus, double sixMonthInvestment, double sixMonthFreelance, double sixMonthOthers, double oneYearSalary, double oneYearBonus, double oneYearInvestment, double oneYearFreelance, double oneYearOthers) {
-                                    populatePieChart("Last 3 Month", threeMonthSalary, threeMonthBonus, threeMonthInvestment, threeMonthFreelance, threeMonthOthers, sixMonthSalary, sixMonthBonus, sixMonthInvestment, sixMonthFreelance, sixMonthOthers, oneYearSalary, oneYearBonus, oneYearInvestment, oneYearFreelance, oneYearOthers);
+                                public void getIncome(double threeMonthSalary, double threeMonthBonus, double threeMonthInvestment,
+                                                      double threeMonthFreelance, double threeMonthOthers, double sixMonthSalary,
+                                                      double sixMonthBonus, double sixMonthInvestment, double sixMonthFreelance,
+                                                      double sixMonthOthers, double oneYearSalary, double oneYearBonus,
+                                                      double oneYearInvestment, double oneYearFreelance, double oneYearOthers) {
+                                    populatePieChart("Last 3 Month", threeMonthSalary, threeMonthBonus, threeMonthInvestment,
+                                            threeMonthFreelance, threeMonthOthers, sixMonthSalary, sixMonthBonus, sixMonthInvestment,
+                                            sixMonthFreelance, sixMonthOthers, oneYearSalary, oneYearBonus, oneYearInvestment,
+                                            oneYearFreelance, oneYearOthers);
                                 }
                             });
                         }
                     });
-
-                }else if(selectedItem.equals("Last 6 Month")){
+                } else if (selectedItem.equals("Last 6 Month")) {
                     retrieveUserData(new OnTransactionListener() {
                         @Override
                         public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
-
                             calculateIncome(transactions, new onIncomeCalculate() {
-
-
                                 @Override
-                                public void getIncome(double threeMonthSalary, double threeMonthBonus, double threeMonthInvestment, double threeMonthFreelance, double threeMonthOthers, double sixMonthSalary, double sixMonthBonus, double sixMonthInvestment, double sixMonthFreelance, double sixMonthOthers, double oneYearSalary, double oneYearBonus, double oneYearInvestment, double oneYearFreelance, double oneYearOthers) {
-                                    populatePieChart("Last 6 Month", threeMonthSalary, threeMonthBonus, threeMonthInvestment, threeMonthFreelance, threeMonthOthers, sixMonthSalary, sixMonthBonus, sixMonthInvestment, sixMonthFreelance, sixMonthOthers, oneYearSalary, oneYearBonus, oneYearInvestment, oneYearFreelance, oneYearOthers);
+                                public void getIncome(double threeMonthSalary, double threeMonthBonus, double threeMonthInvestment,
+                                                      double threeMonthFreelance, double threeMonthOthers, double sixMonthSalary,
+                                                      double sixMonthBonus, double sixMonthInvestment, double sixMonthFreelance,
+                                                      double sixMonthOthers, double oneYearSalary, double oneYearBonus,
+                                                      double oneYearInvestment, double oneYearFreelance, double oneYearOthers) {
+                                    populatePieChart("Last 6 Month", threeMonthSalary, threeMonthBonus, threeMonthInvestment,
+                                            threeMonthFreelance, threeMonthOthers, sixMonthSalary, sixMonthBonus, sixMonthInvestment,
+                                            sixMonthFreelance, sixMonthOthers, oneYearSalary, oneYearBonus, oneYearInvestment,
+                                            oneYearFreelance, oneYearOthers);
                                 }
                             });
-
                         }
                     });
-
-                }else{
-
+                } else {
                     retrieveUserData(new OnTransactionListener() {
                         @Override
                         public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
-
                             calculateIncome(transactions, new onIncomeCalculate() {
-
-
                                         @Override
-                                        public void getIncome(double threeMonthSalary, double threeMonthBonus, double threeMonthInvestment, double threeMonthFreelance, double threeMonthOthers, double sixMonthSalary, double sixMonthBonus, double sixMonthInvestment, double sixMonthFreelance, double sixMonthOthers, double oneYearSalary, double oneYearBonus, double oneYearInvestment, double oneYearFreelance, double oneYearOthers) {
-                                            populatePieChart("Last Year", threeMonthSalary, threeMonthBonus, threeMonthInvestment, threeMonthFreelance, threeMonthOthers, sixMonthSalary, sixMonthBonus, sixMonthInvestment, sixMonthFreelance, sixMonthOthers, oneYearSalary, oneYearBonus, oneYearInvestment, oneYearFreelance, oneYearOthers);
-
+                                        public void getIncome(double threeMonthSalary, double threeMonthBonus,
+                                                              double threeMonthInvestment, double threeMonthFreelance,
+                                                              double threeMonthOthers, double sixMonthSalary, double sixMonthBonus,
+                                                              double sixMonthInvestment, double sixMonthFreelance, double sixMonthOthers,
+                                                              double oneYearSalary, double oneYearBonus, double oneYearInvestment,
+                                                              double oneYearFreelance, double oneYearOthers) {
+                                            populatePieChart("Last Year", threeMonthSalary, threeMonthBonus, threeMonthInvestment,
+                                                    threeMonthFreelance, threeMonthOthers, sixMonthSalary, sixMonthBonus,
+                                                    sixMonthInvestment, sixMonthFreelance, sixMonthOthers, oneYearSalary, oneYearBonus,
+                                                    oneYearInvestment, oneYearFreelance, oneYearOthers);
                                         }
                                     }
                             );
                         }
                     });
-
                 }
-
             }
 
             @Override
@@ -165,6 +181,28 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
             }
         });
 
+        retrieveUserData(new OnTransactionListener() {
+            @Override
+            public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
+
+                // sort 10 recent transactions by date in recyclerview
+                List<Map.Entry<String, User.Transaction>> list = new ArrayList<>(transactions.entrySet());
+                list.sort(Comparator.comparing(o -> o.getValue().getDate(), Comparator.reverseOrder()));
+                LinkedHashMap<String, User.Transaction> recentTransactions = new LinkedHashMap<>();
+                int count = 0;
+                for (Map.Entry<String, User.Transaction> entry : list) {
+                    recentTransactions.put(entry.getKey(), entry.getValue());
+                    count++;
+                    if (count >= 10) {
+                        break;
+                    }
+                }
+
+                recyclerView.setLayoutManager(new LinearLayoutManager(UserIncomeDashboardActivity.this));
+                recyclerView.setAdapter(new TransactionAdapter(recentTransactions, UserIncomeDashboardActivity.this));
+
+            }
+        } );
     }
 
     private void init() {
@@ -196,7 +234,6 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
                         incomeTransactions.put(entry.getKey(), transaction);
                     }
                 }
-
                 listener.onDateRetrieved(incomeTransactions);
             }
 
@@ -214,26 +251,25 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
                                   double sixMonthSalary, double sixMonthBonus, double sixMonthInvestment, double sixMonthFreelance, double sixMonthOthers,
                                   double oneYearSalary, double oneYearBonus, double oneYearInvestment, double oneYearFreelance, double oneYearOthers) {
 
-        // Define the colors for each entry
-        List<Integer> colors = new ArrayList<>();
 
+        List<Integer> colors = new ArrayList<>();
         colors.add(Color.parseColor("#5E7153"));
         colors.add(Color.parseColor("#F2A943"));
         colors.add(Color.parseColor("#F5BDA8"));
         colors.add(Color.parseColor("#3551A4"));
         colors.add(Color.parseColor("#CDBCDB"));
 
-
-        pieChart.setUsePercentValues(false); // 不显示百分比
-        pieChart.getDescription().setEnabled(false); // 隐藏描述
-        pieChart.setDrawEntryLabels(false); // 不绘制条目标签
-        pieChart.setDrawCenterText(true); // 启用绘制中心文本
-        pieChart.setCenterText("Hello"); // 设置中心文本内容
-        pieChart.setCenterTextColor(Color.WHITE); // 设置中心文本颜色
-        pieChart.setCenterTextSize(18f); // 设置中心文本大小
-        pieChart.setDrawHoleEnabled(true); // 绘制中心空白区域
-        pieChart.setHoleColor(Color.TRANSPARENT); // 设置中心空白区域颜色为透明
-        pieChart.setTransparentCircleRadius(50f); // 设置中心圆形的半径
+        pieChart.setUsePercentValues(false);
+        pieChart.getDescription().setEnabled(false);
+        pieChart.setDrawEntryLabels(false);
+        pieChart.setDrawCenterText(true);
+        pieChart.setCenterText("Total Expense");
+        pieChart.setCenterTextColor(Color.WHITE);
+        pieChart.setCenterTextSize(20f);
+        pieChart.setHoleRadius(60f);
+        pieChart.setDrawHoleEnabled(true);
+        pieChart.setHoleColor(Color.TRANSPARENT);
+        pieChart.setTransparentCircleRadius(100f);
 
 // 设置图例
         Legend legend = pieChart.getLegend();
@@ -242,32 +278,60 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER); // 设置图例水平居中
         legend.setOrientation(Legend.LegendOrientation.HORIZONTAL); // 设置图例水平方向
         legend.setDrawInside(false); // 图例绘制在外围
-        legend.setXEntrySpace(7f); // 设置图例条目之间的间距
+        legend.setXEntrySpace(10f); // 设置图例条目之间的间距
         legend.setYEntrySpace(5f);
-        legend.setTextSize(30f); // 设置图例文本大小
+        legend.setTextSize(10f); // 设置图例文本大小
+        legend.setTextColor(Color.WHITE); // 设置图例文本颜色
         legend.setWordWrapEnabled(true);
 
-
-
-        if(type.equals("Last 3 Month")){
+        if (type.equals("Last 3 Month")) {
 
             List<PieEntry> entries = new ArrayList<>();
-
-            entries.add(new PieEntry((float)threeMonthSalary, "Salary"));
-            entries.add(new PieEntry((float)threeMonthBonus, "Bonus"));
-            entries.add(new PieEntry((float)threeMonthInvestment, "Investment"));
-            entries.add(new PieEntry((float)threeMonthFreelance, "Freelance"));
-            entries.add(new PieEntry((float)threeMonthOthers, "Others"));
-            PieDataSet dataSet = new PieDataSet(entries, "Percentage");
+            entries.add(new PieEntry((float) threeMonthSalary, "Salary"));
+            entries.add(new PieEntry((float) threeMonthBonus, "Bonus"));
+            entries.add(new PieEntry((float) threeMonthInvestment, "Investment"));
+            entries.add(new PieEntry((float) threeMonthFreelance, "Freelance"));
+            entries.add(new PieEntry((float) threeMonthOthers, "Others"));
+            PieDataSet dataSet = new PieDataSet(entries, "");
             PieData data = new PieData(dataSet);
             dataSet.setColors(colors);
             data.setDrawValues(false); // 不显示值
-
             pieChart.setData(data);
+            pieChart.setCenterText(Double.toString(threeMonthSalary + threeMonthBonus + threeMonthInvestment +
+                    threeMonthFreelance + threeMonthOthers));
             pieChart.invalidate();
+        } else if (type.equals("Last 6 Month")) {
+            List<PieEntry> entries = new ArrayList<>();
+            entries.add(new PieEntry((float) sixMonthSalary, "Salary"));
+            entries.add(new PieEntry((float) sixMonthBonus, "Bonus"));
+            entries.add(new PieEntry((float) sixMonthInvestment, "Investment"));
+            entries.add(new PieEntry((float) sixMonthFreelance, "Freelance"));
+            entries.add(new PieEntry((float) sixMonthOthers, "Others"));
+            PieDataSet dataSet = new PieDataSet(entries, "");
+            PieData data = new PieData(dataSet);
+            dataSet.setColors(colors);
+            data.setDrawValues(false); // 不显示值
+            pieChart.setData(data);
+            pieChart.setCenterText(Double.toString(sixMonthSalary + sixMonthBonus + sixMonthInvestment +
+                    sixMonthFreelance + sixMonthOthers));
+            pieChart.invalidate();
+        } else if (type.equals("Last Year")) {
+            List<PieEntry> entries = new ArrayList<>();
+            entries.add(new PieEntry((float) oneYearSalary, "Salary"));
+            entries.add(new PieEntry((float) oneYearBonus, "Bonus"));
+            entries.add(new PieEntry((float) oneYearInvestment, "Investment"));
+            entries.add(new PieEntry((float) oneYearFreelance, "Freelance"));
+            entries.add(new PieEntry((float) oneYearOthers, "Others"));
+            PieDataSet dataSet = new PieDataSet(entries, "");
+            PieData data = new PieData(dataSet);
+            dataSet.setColors(colors);
+            data.setDrawValues(false); // 不显示值
+            pieChart.setData(data);
+            pieChart.setCenterText(Double.toString(oneYearSalary + oneYearBonus + oneYearInvestment +
+                    oneYearFreelance + oneYearOthers));
+            pieChart.invalidate();
+
         }
-
-
     }
 
     private void calculateIncome(HashMap<String, User.Transaction> incomeTransactions, onIncomeCalculate listener) {
@@ -297,8 +361,8 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
 
 
         for (User.Transaction transaction : incomeTransactions.values()) {
-            if (transaction.getDate().after(threeMonthAgo) && transaction.getDate().before(currentDate)) {
 
+            if (transaction.getDate().after(threeMonthAgo) && transaction.getDate().before(currentDate)) {
                 if (transaction.getCategory().equals("Salary")) {
                     threeMonthSalary += transaction.getAmount();
                 } else if (transaction.getCategory().equals("Bonus")) {
@@ -310,13 +374,12 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
                 } else {
                     threeMonthOthers += transaction.getAmount();
                 }
-
             }
-            }
+        }
 
         for (User.Transaction transaction : incomeTransactions.values()) {
-            if (transaction.getDate().after(sixMonthAgo) && transaction.getDate().before(currentDate)) {
 
+            if (transaction.getDate().after(sixMonthAgo) && transaction.getDate().before(currentDate)) {
                 if (transaction.getCategory().equals("Salary")) {
                     sixMonthSalary += transaction.getAmount();
                 } else if (transaction.getCategory().equals("Bonus")) {
@@ -329,12 +392,11 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
                     sixMonthOthers += transaction.getAmount();
                 }
             }
-
         }
 
         for (User.Transaction transaction : incomeTransactions.values()) {
-            if (transaction.getDate().after(oneYearAgo) && transaction.getDate().before(currentDate)) {
 
+            if (transaction.getDate().after(oneYearAgo) && transaction.getDate().before(currentDate)) {
                 if (transaction.getCategory().equals("Salary")) {
                     oneYearSalary += transaction.getAmount();
                 } else if (transaction.getCategory().equals("Bonus")) {
@@ -346,7 +408,6 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
                 } else {
                     oneYearOthers += transaction.getAmount();
                 }
-
             }
 
             listener.getIncome(threeMonthSalary, threeMonthBonus, threeMonthInvestment, threeMonthFreelance, threeMonthOthers,
@@ -356,13 +417,14 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
     }
 
     public interface onIncomeCalculate {
-
-        void getIncome(double threeMonthSalary, double threeMonthBonus, double threeMonthInvestment, double threeMonthFreelance, double threeMonthOthers,
-                       double sixMonthSalary, double sixMonthBonus, double sixMonthInvestment, double sixMonthFreelance, double sixMonthOthers,
-                       double oneYearSalary, double oneYearBonus, double oneYearInvestment, double oneYearFreelance, double oneYearOthers);
+        void getIncome(double threeMonthSalary, double threeMonthBonus, double threeMonthInvestment, double threeMonthFreelance,
+                       double threeMonthOthers, double sixMonthSalary, double sixMonthBonus, double sixMonthInvestment,
+                       double sixMonthFreelance, double sixMonthOthers, double oneYearSalary, double oneYearBonus,
+                       double oneYearInvestment, double oneYearFreelance, double oneYearOthers);
     }
 
     public static Date getDateBeforeOrAfter(Date date, int field, int amount) {
+
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(field, amount);

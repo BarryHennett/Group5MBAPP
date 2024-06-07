@@ -1,6 +1,7 @@
 package com.example.iscg7427groupmobileapp.Activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -174,11 +175,18 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.item_home) {
 
+
                     return true;
                 } else if (item.getItemId() == R.id.item_income) {
 
+                    Intent intent = new Intent(UserDashboardActivity_1.this, UserIncomeDashboardActivity.class);
+                    startActivity(intent);
+
                     return true;
                 } else if (item.getItemId() == R.id.item_expenses) {
+
+                    Intent intent = new Intent(UserDashboardActivity_1.this, UserExpenseDashboardActivity.class);
+                    startActivity(intent);
 
                     return true;
                 } else if (item.getItemId() == R.id.item_profile) {
@@ -188,6 +196,23 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
             }
         };
         nav.setOnItemSelectedListener(listener);
+
+        btnIncome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserDashboardActivity_1.this, UserIncomeDashboardActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+        btnExpense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserDashboardActivity_1.this, UserExpenseDashboardActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void init() {

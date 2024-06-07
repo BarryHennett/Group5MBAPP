@@ -206,8 +206,7 @@
                     android:id="@+id/user_add_expense_image"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:layout_marginBottom="16sp"
-                    android:src="@drawable/twitter_icon" />
+                    android:layout_marginBottom="16sp" />
 
                 <Button
                     android:id="@+id/user_add_expense_btn_save"

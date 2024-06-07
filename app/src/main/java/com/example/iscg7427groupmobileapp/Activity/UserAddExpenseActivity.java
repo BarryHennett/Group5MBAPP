@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,6 +25,7 @@ import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,6 +49,7 @@ public class UserAddExpenseActivity extends AppCompatActivity {
     ImageView imageView;
     Spinner spinner;
     EditText edt_date, edt_cost, edt_description;
+    NavigationBarView nav;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final int PICK_IMAGE_REQUEST = 1;
 
@@ -61,7 +64,7 @@ public class UserAddExpenseActivity extends AppCompatActivity {
         // same as above
         btnChangeRecipt.setOnClickListener(this::selectImage);
         // spinner for category
-        String[] options = {"Option 1", "Option 2", "Option 3"};
+        String[] options = {"Transportation", "Housing", "Dining", "Entertainment", "Others"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, options);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -135,6 +138,34 @@ public class UserAddExpenseActivity extends AppCompatActivity {
         btnReturn.setOnClickListener(v -> {
             finish();
         });
+
+        // set bottom navigation bar
+        NavigationBarView.OnItemSelectedListener listener = new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.item_home) {
+
+
+                    return true;
+                } else if (item.getItemId() == R.id.item_income) {
+
+                    Intent intent = new Intent(UserAddExpenseActivity.this, UserIncomeDashboardActivity.class);
+                    startActivity(intent);
+
+                    return true;
+                } else if (item.getItemId() == R.id.item_expenses) {
+
+                    Intent intent = new Intent(UserAddExpenseActivity.this, UserExpenseDashboardActivity.class);
+                    startActivity(intent);
+
+                    return true;
+                } else if (item.getItemId() == R.id.item_profile) {
+
+                    return true;
+                } else return false;
+            }
+        };
+        nav.setOnItemSelectedListener(listener);
     }
 
     private void init() {
@@ -149,6 +180,7 @@ public class UserAddExpenseActivity extends AppCompatActivity {
         edt_date = findViewById(R.id.user_add_expense_edt_date);
         edt_description = findViewById(R.id.user_add_expense_edt_description);
         edt_cost = findViewById(R.id.user_add_expense_edt_cost);
+        nav = findViewById(R.id.bottom_navigation);
     }
 
     public void selectImage(View view) {
