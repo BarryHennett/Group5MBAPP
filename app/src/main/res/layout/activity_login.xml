@@ -10,16 +10,16 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:padding="16sp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_margin="10dp"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/logo_small"/>
+            android:src="@drawable/logo_small"></ImageView>
     </LinearLayout>
 
     <LinearLayout
@@ -27,61 +27,56 @@
         android:layout_height="wrap_content"
         android:background="@drawable/background_mdblack_topradius"
         android:orientation="vertical"
-        android:paddingLeft="16sp"
-        android:paddingTop="32sp"
-        android:paddingRight="16sp"
-        android:paddingBottom="32sp">
+        android:paddingLeft="16dp"
+        android:paddingTop="50dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="50dp">
 
         <TextView
             style="@style/heading_22_white_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome Back!"/>
+            android:text="Welcome Back!"></TextView>
 
         <TextView
-            android:layout_marginTop="6sp"
             style="@style/body_12_white_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Please log in to continue."/>
+            android:text="Please log in to continue."></TextView>
 
         <EditText
             android:id="@+id/etEmail"
             style="@style/body_10_white_regular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24sp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/background_black"
             android:hint="Email"
             android:padding="16dp"
-            android:textColorHint="@color/white"/>
+            android:textColorHint="@color/white"></EditText>
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="8sp" />
+            android:layout_height="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:padding="16sp"
-            android:layout_marginBottom="6sp"
-            android:background="@drawable/background_black"
-            >
+            android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/etPassword"
-                android:background="@drawable/background_black"
                 style="@style/body_10_white_regular"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="6sp"
+                android:background="@drawable/background_black"
                 android:hint="Password"
                 android:inputType="textPassword"
-                android:textColorHint="@color/white"/>
+                android:padding="16dp"
+                android:textColorHint="@color/white"></EditText>
 
-            <ImageView
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/password_hide"/>
@@ -92,34 +87,34 @@
             style="@style/body_10_lightgray_medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="end"
+            android:gravity="right"
             android:text="Forget your password?" />
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="24sp" />
+            android:layout_height="16sp" />
 
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/primary_button"
-            android:text="Log in"/>
+            android:background="@drawable/button_green"
+            android:text="Log in"></Button>
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="24sp" />
+            android:layout_height="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:layout_marginBottom="24sp">
+            android:orientation="horizontal">
+
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="1dp"
+                android:layout_height="1sp"
                 android:layout_weight="1"
                 android:background="@color/lightGray" />
 
@@ -127,67 +122,69 @@
                 style="@style/body_10_lightgray_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="16sp"
-                android:paddingEnd="16sp"
-                android:text="Or log in with" />
+                android:paddingStart="8sp"
+                android:paddingEnd="8sp"
+                android:text="Or log in with"></TextView>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="1dp"
+                android:layout_height="1sp"
                 android:layout_weight="1"
                 android:background="@color/lightGray" />
+
         </LinearLayout>
 
-
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="24sp">
+            android:orientation="horizontal">
 
-            <ImageView
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/btnGoogle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_black"
-                android:paddingLeft="40dp"
-                android:paddingTop="10dp"
-                android:paddingRight="40dp"
-                android:paddingBottom="10dp"
-                android:src="@drawable/google_icon"/>
+                android:src="@drawable/google_icon"></com.google.android.gms.common.SignInButton>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1"></LinearLayout>
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/background_black"
                 android:paddingLeft="40dp"
                 android:paddingTop="10dp"
                 android:paddingRight="40dp"
                 android:paddingBottom="10dp"
-                android:src="@drawable/facebook_icon"/>
+                android:src="@drawable/facebook_icon"></ImageView>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1"></LinearLayout>
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/background_black"
                 android:paddingLeft="40dp"
                 android:paddingTop="10dp"
                 android:paddingRight="40dp"
                 android:paddingBottom="10dp"
-                android:src="@drawable/twitter_icon"/>
+                android:src="@drawable/twitter_icon"></ImageView>
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -200,14 +197,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Don't have an account? "/>
+                android:text="Don't have an account? "></TextView>
 
             <TextView
                 android:id="@+id/createAccount"
                 style="@style/body_12_green_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign Up"/>
+                android:text="Sign Up"></TextView>
         </LinearLayout>
 
     </LinearLayout>
