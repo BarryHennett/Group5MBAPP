@@ -29,6 +29,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -59,6 +60,8 @@ public class UserExpenseDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_expense_dashboard);
 
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         init();
         btn_add.setOnClickListener(v -> {
             Intent intent = new Intent(UserExpenseDashboardActivity.this, UserAddExpenseActivity.class);
@@ -74,6 +77,8 @@ public class UserExpenseDashboardActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.item_home) {
 
+                    Intent intent = new Intent(UserExpenseDashboardActivity.this, UserDashboardActivity_1.class);
+                    startActivity(intent);
                     return true;
                 } else if (item.getItemId() == R.id.item_income) {
 
@@ -89,6 +94,8 @@ public class UserExpenseDashboardActivity extends AppCompatActivity {
                     return true;
                 } else if (item.getItemId() == R.id.item_profile) {
 
+                    Intent intent = new Intent(UserExpenseDashboardActivity.this, UserProfileActivity.class);
+                    startActivity(intent);
                     return true;
                 } else return false;
             }
@@ -204,9 +211,6 @@ public class UserExpenseDashboardActivity extends AppCompatActivity {
 
     private void retrieveUserData(OnTransactionListener listener) {
 
-        // uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        // hardcode uid for testing
-        uid = "jba712jsas";
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

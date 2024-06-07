@@ -64,6 +64,8 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_dashboard_1);
 
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         init();
 
         // initialize page
@@ -191,6 +193,9 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
                     return true;
                 } else if (item.getItemId() == R.id.item_profile) {
 
+                    Intent intent = new Intent(UserDashboardActivity_1.this, UserProfileActivity.class);
+                    startActivity(intent);
+
                     return true;
                 } else return false;
             }
@@ -232,9 +237,6 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
 
     private void retrieveUserData(OnTransactionListener listener) {
 
-        // uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        // hardcode uid for testing
-        uid = "jba712jsas";
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

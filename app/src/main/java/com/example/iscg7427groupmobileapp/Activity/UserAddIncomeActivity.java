@@ -33,6 +33,7 @@ import com.example.iscg7427groupmobileapp.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -60,11 +61,15 @@ public class UserAddIncomeActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final int PICK_IMAGE_REQUEST = 1;
 
+    String uid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_add_income);
+
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         init();
         // Open the photo collections to select a photo
@@ -118,8 +123,6 @@ public class UserAddIncomeActivity extends AppCompatActivity {
                 return;
             }
             // save to realtime database
-// hardcode for test
-            String uid = "jba712jsas";
             DatabaseReference mRef = database.getReference("Users").child(uid);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -152,8 +155,8 @@ public class UserAddIncomeActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.item_home) {
-
-
+                    Intent intent = new Intent(UserAddIncomeActivity.this, UserDashboardActivity_1.class);
+                    startActivity(intent);
                     return true;
                 } else if (item.getItemId() == R.id.item_income) {
 
@@ -168,7 +171,8 @@ public class UserAddIncomeActivity extends AppCompatActivity {
 
                     return true;
                 } else if (item.getItemId() == R.id.item_profile) {
-
+                    Intent intent = new Intent(UserAddIncomeActivity.this, UserProfileActivity.class);
+                    startActivity(intent);
                     return true;
                 } else return false;
             }

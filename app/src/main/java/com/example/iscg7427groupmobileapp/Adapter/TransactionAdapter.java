@@ -57,8 +57,11 @@ public class TransactionAdapter extends RecyclerView.Adapter{
         String type = transactionMap.get(transactionKey).getType();
         // set color
         if (type.equals("Income")) {
+            viewHolder.txtAmount.setText("$" + amount);
             viewHolder.txtAmount.setTextColor(context.getResources().getColor(R.color.blue));
+
         } else {
+            viewHolder.txtAmount.setText("- $" + amount);
             viewHolder.txtAmount.setTextColor(context.getResources().getColor(R.color.orange));
         }
         // deal with on click event
