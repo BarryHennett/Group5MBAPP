@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class AdminUpdateUserActivity extends AppCompatActivity {
     private EditText userNameEt, userPhoneEt;
-    private TextView userTypeTv, deactivateBtn, updateUserBtn, userEmailtv;
+    private TextView userTypeTv, userEmailEt, deactivateBtn, updateUserBtn;
     private DatabaseReference databaseReference;
     private String userId, userType;
 
@@ -49,7 +51,6 @@ public class AdminUpdateUserActivity extends AppCompatActivity {
 
         userId = getIntent().getStringExtra("userId");
         userType = getIntent().getStringExtra("userType");
-
         if (userId == null || userId.isEmpty() || userType == null || userType.isEmpty()) {
             Toast.makeText(this, "Invalid User ID or Type", Toast.LENGTH_SHORT).show();
             finish();
@@ -59,12 +60,11 @@ public class AdminUpdateUserActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance("https://group5-6aa2b-default-rtdb.firebaseio.com/").getReference(userType).child(userId);
 
         userNameEt = findViewById(R.id.userNameEt);
+        userEmailEt = findViewById(R.id.userEmailEt);
         userPhoneEt = findViewById(R.id.userPhoneEt);
-        userEmailtv = findViewById(R.id.userEmailEt);
         userTypeTv = findViewById(R.id.userTypeTv);
         updateUserBtn = findViewById(R.id.userUpdateBtn);
         deactivateBtn = findViewById(R.id.deactivateButton);
-        updateUnderlinedTextView(deactivateBtn, "Deactivate");
 
         fetchUserDetails();
 
@@ -81,9 +81,10 @@ public class AdminUpdateUserActivity extends AppCompatActivity {
 
     private void updateUserDetails(String userId) {
         String name = userNameEt.getText().toString();
+        String email = userEmailEt.getText().toString();
         String phone = userPhoneEt.getText().toString();
 
-        if (name.isEmpty() || phone.isEmpty()) {
+        if (name.isEmpty() || email.isEmpty() || phone.isEmpty()) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -95,6 +96,7 @@ public class AdminUpdateUserActivity extends AppCompatActivity {
                 if (user != null) {
                     // Update the fields
                     user.setName(name);
+                    user.setEmail(email);
                     user.setPhoneNumber(phone);
 
                     // Save the updated fields
@@ -118,14 +120,23 @@ public class AdminUpdateUserActivity extends AppCompatActivity {
                 User user = snapshot.getValue(User.class);
                 if (user != null) {
                     userNameEt.setText(user.getName());
+                    userEmailEt.setText(user.getEmail());
                     userPhoneEt.setText(user.getPhoneNumber());
                     userTypeTv.setText(user.getType());
-                    userEmailtv.setText(user.getEmail());
 
                     if (user.isActive()) {
                         deactivateBtn.setText("Deactivate");
                     } else {
                         deactivateBtn.setText("Activate");
+                    }
+                }
+
+                // Fetch the email from Firebase Authentication for the currently logged-in user
+                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                if (firebaseUser != null) {
+                    String currentUserId = firebaseUser.getUid();
+                    if (currentUserId.equals(userId)) {
+                        userEmailEt.setText(firebaseUser.getEmail());
                     }
                 }
             }

@@ -46,7 +46,7 @@ public class SignUp extends AppCompatActivity {
     int chooseRole = 0;
     private FirebaseAuth mAuth;
     private GoogleSignInClient googleSignInClient;
-
+    private TextView toLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +56,11 @@ public class SignUp extends AppCompatActivity {
         clickBtnSignUp();
         clickTvAccount();
         clickTvUser();
-
+        toLogin = findViewById(R.id.toLogin);
+        toLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(SignUp.this, Login.class);
+            startActivity(intent);
+        });
         btnGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +112,6 @@ public class SignUp extends AppCompatActivity {
                 if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(SignUp.this, "Please fill in the form", Toast.LENGTH_SHORT).show();
                 } else {
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
                     FirebaseAuth mAuth = FirebaseAuth.getInstance();
                     mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener() {
                         @Override
@@ -117,14 +120,18 @@ public class SignUp extends AppCompatActivity {
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 if (user != null) {
                                     String uid = user.getUid();
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
                                     if (chooseRole == 0) {
                                         Accountant accountant = new Accountant();
                                         accountant.setName(name);
+                                        accountant.setEmail(email);
+                                        accountant.setPassword(password);
                                         database.getReference("Accountants").child(uid).setValue(accountant);
                                         Toast.makeText(SignUp.this, "Accountant created successfully", Toast.LENGTH_SHORT).show();
                                     } else {
                                         User newUser = new User();
                                         newUser.setName(name);
+                                        newUser.setEmail(email);
                                         newUser.setPassword(password);
                                         database.getReference().child("Users").child(uid).setValue(newUser);
                                         Toast.makeText(SignUp.this, "User created successfully", Toast.LENGTH_SHORT).show();

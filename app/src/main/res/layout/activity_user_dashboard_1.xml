@@ -17,14 +17,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:orientation="vertical"
-            android:paddingLeft="16sp"
-            android:paddingTop="16sp"
-            android:paddingRight="16sp"
-            android:paddingBottom="16sp">
-
-
+            android:padding="16sp">
 
             <TextView
                 android:id="@+id/user_dashboard_txt_name"
@@ -42,6 +36,7 @@
                 android:orientation="horizontal">
                 <!-- first card -->
                 <LinearLayout
+                    android:gravity="center_vertical"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -71,7 +66,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16sp"
-                    android:layout_marginLeft="20dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -82,7 +76,10 @@
                         android:background="@drawable/background_mdblack"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:padding="16sp">
+                        android:paddingTop="10sp"
+                        android:paddingBottom="10sp"
+                        android:paddingLeft="16sp"
+                        android:paddingRight="16sp">
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -98,10 +95,9 @@
 
                             <TextView
                                 android:id="@+id/user_dashboard_txt_income"
-                                style="@style/body_12_blue_regular"
+                                style="@style/body_14_blue_medium"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
                                 android:text="$ 1890" />
                         </LinearLayout>
 
@@ -126,7 +122,10 @@
                         android:background="@drawable/background_mdblack"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:padding="16sp">
+                        android:paddingTop="10sp"
+                        android:paddingBottom="10sp"
+                        android:paddingLeft="16sp"
+                        android:paddingRight="16sp">
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -142,10 +141,9 @@
 
                             <TextView
                                 android:id="@+id/user_dashboard_txt_expense"
-                                style="@style/body_12_orange_regular"
+                                style="@style/body_14_orange_medium"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
                                 android:text="$14430" />
                         </LinearLayout>
 
@@ -177,10 +175,11 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16sp" >
 
                     <TextView
-                        style="@style/body_12_white_medium"
+                        style="@style/body_12_white_regular"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -220,7 +219,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        style="@style/body_12_white_medium"
+                        style="@style/body_12_white_regular"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -249,12 +248,13 @@
                     </LinearLayout>
 
                 </LinearLayout>
-
-                <com.google.android.material.divider.MaterialDivider
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="16sp"/>
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@color/white" />
+                    android:background="@color/darkGray"
+                    android:layout_height="1sp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/user_dashboard_rec"

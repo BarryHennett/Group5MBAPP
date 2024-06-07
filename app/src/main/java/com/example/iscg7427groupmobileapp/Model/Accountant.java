@@ -9,7 +9,8 @@ public class Accountant {
     private String type;
     private boolean active;
     private HashMap<String, String> users;
-
+    private String email;
+    private String password;
     public Accountant() {
         this.id = "";
         this.name = "Anonymous";
@@ -17,14 +18,35 @@ public class Accountant {
         this.type = "Accountant";
         this.active = true;
         this.users = new HashMap<>();
+        this.email = "";
+        this.password= "";
     }
-    public Accountant(String id, String name, String phoneNumber, String type, boolean active, HashMap<String, String> users) {
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Accountant(String id, String password, String name, String email, String phoneNumber, String type, boolean active, HashMap<String, String> users) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.type = type;
         this.active = active;
         this.users = users;
+        this.email = email;
+        this.password = password;
     }
     public String getId() {
         return id;

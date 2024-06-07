@@ -44,7 +44,7 @@ public class UserAllTransactions extends AppCompatActivity {
         recyclerView = findViewById(R.id.useralltrarecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         transactionList = new ArrayList<>();
-        transactionAdapter = new TransactionAdapter(this, transactionList);
+        //transactionAdapter = new TransactionAdapter(this, transactionList);
         recyclerView.setAdapter(transactionAdapter);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Users");

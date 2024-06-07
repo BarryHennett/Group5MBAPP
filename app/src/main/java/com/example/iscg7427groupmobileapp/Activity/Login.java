@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.iscg7427groupmobileapp.AllIncome;
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -51,7 +52,11 @@ public class Login extends AppCompatActivity {
         setUpAttributes();
         setUpGoogleSignIn();
         clickBtnLogin();
-
+        createAccount = findViewById(R.id.createAccount);
+        createAccount.setOnClickListener(v -> {
+            Intent intent = new Intent(Login.this, SignUp.class);
+            startActivity(intent);
+        });
         btnGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

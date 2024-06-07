@@ -108,8 +108,8 @@ public class UserExpenseDashboardActivity extends AppCompatActivity {
 
         // set spinner
         String[] options = {"Last 3 Month", "Last 6 Month", "Last Year"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, options);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner, options);
+        adapter.setDropDownViewResource(R.layout.spinner;
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 

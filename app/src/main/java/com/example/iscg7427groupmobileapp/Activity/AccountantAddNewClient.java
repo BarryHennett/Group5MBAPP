@@ -1,8 +1,10 @@
 package com.example.iscg7427groupmobileapp.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -23,11 +25,16 @@ public class AccountantAddNewClient extends AppCompatActivity {
     EditText etUserName,etOccupation,etIndustry,etEmailAddress,etPhoneNumber;
     Button btnInvite;
     String uid;
-
+    private LinearLayout toAccountant;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accountant_add_new_client);
+        toAccountant = findViewById(R.id.toAccountant);
+        toAccountant.setOnClickListener(v -> {
+            Intent intent = new Intent(AccountantAddNewClient.this, AccountantDashboardActivity.class);
+            startActivity(intent);
+        });
         setUpAttributes();
         clickBtnInvite();
     }

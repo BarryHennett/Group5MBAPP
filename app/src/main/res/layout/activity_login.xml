@@ -11,6 +11,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:padding="16sp"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_margin="10dp"
@@ -19,7 +20,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/logo_small"></ImageView>
+            android:src="@drawable/logo_small"/>
     </LinearLayout>
 
     <LinearLayout
@@ -36,13 +37,13 @@
             style="@style/heading_22_white_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome Back!"></TextView>
+            android:text="Welcome Back!"/>
 
         <TextView
             style="@style/body_12_white_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Please log in to continue."></TextView>
+            android:text="Please log in to continue."/>
 
         <EditText
             android:id="@+id/etEmail"
@@ -53,7 +54,7 @@
             android:background="@drawable/background_black"
             android:hint="Email"
             android:padding="16dp"
-            android:textColorHint="@color/white"></EditText>
+            android:textColorHint="@color/white"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -62,21 +63,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/background_black"
+            >
 
             <EditText
                 android:id="@+id/etPassword"
                 style="@style/body_10_white_regular"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6sp"
                 android:background="@drawable/background_black"
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:padding="16dp"
-                android:textColorHint="@color/white"></EditText>
+                android:textColorHint="@color/white"/>
 
-            <Button
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/password_hide"/>
@@ -88,7 +92,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="Forget your password?" />
+            android:text="Forget your password?"
+            android:layout_marginTop="6sp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -98,8 +103,8 @@
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_green"
-            android:text="Log in"></Button>
+            style="@style/primary_button"
+            android:text="Log in"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -124,7 +129,7 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="8sp"
                 android:paddingEnd="8sp"
-                android:text="Or log in with"></TextView>
+                android:text="Or log in with"/>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -148,12 +153,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_black"
-                android:src="@drawable/google_icon"></com.google.android.gms.common.SignInButton>
+                android:src="@drawable/google_icon"/>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"></LinearLayout>
+                android:layout_weight="1"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -163,12 +168,12 @@
                 android:paddingTop="10dp"
                 android:paddingRight="40dp"
                 android:paddingBottom="10dp"
-                android:src="@drawable/facebook_icon"></ImageView>
+                android:src="@drawable/facebook_icon"/>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"></LinearLayout>
+                android:layout_weight="1"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -178,7 +183,7 @@
                 android:paddingTop="10dp"
                 android:paddingRight="40dp"
                 android:paddingBottom="10dp"
-                android:src="@drawable/twitter_icon"></ImageView>
+                android:src="@drawable/twitter_icon"/>
 
         </LinearLayout>
 
@@ -197,14 +202,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Don't have an account? "></TextView>
+                android:text="Don't have an account? "/>
 
             <TextView
                 android:id="@+id/createAccount"
                 style="@style/body_12_green_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign Up"></TextView>
+                android:text="Sign Up"/>
         </LinearLayout>
 
     </LinearLayout>
