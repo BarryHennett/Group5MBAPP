@@ -3,6 +3,7 @@ package com.example.iscg7427groupmobileapp.Activity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -11,6 +12,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.iscg7427groupmobileapp.Model.Accountant;
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,7 +20,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class AdminAddNewUser extends AppCompatActivity {
 
-    EditText etUserName,etUserType,etEmailAddress,etPhoneNumber;
+    EditText etUserName,etEmailAddress,etPhoneNumber;
+    TextView etUserType;
     Button btnInvitation;
 
     @Override
@@ -52,14 +55,14 @@ public class AdminAddNewUser extends AppCompatActivity {
                         Toast.makeText(this, "The user is created successfully", Toast.LENGTH_SHORT).show();
                         String key = mAuth.getCurrentUser().getUid();
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        User user = new User();
-                        user.setName(userName);
-                        user.setType(userType);
-                        user.setEmail(emailAddress);
+                        Accountant accounant = new Accountant();
+                        accounant.setName(userName);
+                        accounant.setType(userType);
+                        accounant.setEmail(emailAddress);
                         String phone = phoneNumber.replace(" ", "");;
-                        user.setPassword(phone);
-                        user.setPhoneNumber(phoneNumber);
-                        database.getReference().child("Users").child(key).setValue(user);
+                        accounant.setPassword(phone);
+                        accounant.setPhoneNumber(phoneNumber);
+                        database.getReference().child("Accountants").child(key).setValue(accounant);
                     }else{
                         Toast.makeText(this, "Failed to create user", Toast.LENGTH_SHORT).show();
                     }

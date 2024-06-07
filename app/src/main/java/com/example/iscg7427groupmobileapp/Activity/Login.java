@@ -2,15 +2,18 @@ package com.example.iscg7427groupmobileapp.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
@@ -40,7 +43,8 @@ public class Login extends AppCompatActivity {
     Button btnLogin;
     TextView createAccount;
     SignInButton btnGoogle;
-
+    ImageView ivEye;
+    Boolean passwordVisible = false;
     private FirebaseAuth mAuth;
     private GoogleSignInClient googleSignInClient;
 
@@ -51,6 +55,8 @@ public class Login extends AppCompatActivity {
         setUpAttributes();
         setUpGoogleSignIn();
         clickBtnLogin();
+        clickSignUp();
+        clickEyes();
 
         btnGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +77,7 @@ public class Login extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         createAccount = findViewById(R.id.createAccount);
         btnGoogle = findViewById(R.id.btnGoogle);
+        ivEye = findViewById(R.id.ivEye);
         mAuth = FirebaseAuth.getInstance();
     }
 
@@ -85,46 +92,61 @@ public class Login extends AppCompatActivity {
                     Toast.makeText(Login.this, "Please fill in the form", Toast.LENGTH_SHORT).show();
                 } else {
                     mAuth = FirebaseAuth.getInstance();
-                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener(){
+                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener() {
                         @Override
                         public void onComplete(@NonNull Task task) {
-                            String uid = mAuth.getCurrentUser().getUid();
-                            DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
-                            if (task.isSuccessful()){
-                                mRef.addListenerForSingleValueEvent(new ValueEventListener(){
+                            if (task.isSuccessful()) {
+                                String uid = mAuth.getCurrentUser().getUid();
+                                DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
 
+                                // Check Administers
+                                mRef.child("Administers").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        String type= "";
-                                        for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                                            if(dataSnapshot.child(uid).exists()){
-                                                type = dataSnapshot.child(uid).child("type").getValue(String.class);
-                                                break;
-                                            }
-                                        }
-                                        switch (type){
-                                            case "Administer":
-                                                Intent intent = new Intent(Login.this, AdminDashboardActivity.class);
-                                                startActivity(intent);
-                                                break;
-                                            case "User":
-                                                Intent intent1 = new Intent(Login.this, UserDashboardActivity_1.class);
-                                                startActivity(intent1);
-                                                break;
-                                            case "Accountant":
-                                                Intent intent2 = new Intent(Login.this, AccountantDashboardActivity.class);
-                                                startActivity(intent2);
-                                                break;
-                                            default:
-                                                break;
+                                        if (snapshot.exists()) {
+                                            checkUserStatus(snapshot, "Administer");
+                                        } else {
+                                            // Check Users
+                                            mRef.child("Users").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    if (snapshot.exists()) {
+                                                        checkUserStatus(snapshot, "User");
+                                                    } else {
+                                                        // Check Accountants
+                                                        mRef.child("Accountants").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                if (snapshot.exists()) {
+                                                                    checkUserStatus(snapshot, "Accountant");
+                                                                } else {
+                                                                    Toast.makeText(Login.this, "User not found.", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError error) {
+                                                                Toast.makeText(Login.this, "Database error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {
+                                                    Toast.makeText(Login.this, "Database error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
                                         }
                                     }
 
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError error) {
-
+                                        Toast.makeText(Login.this, "Database error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 });
+                            } else {
+                                Toast.makeText(Login.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -132,6 +154,34 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+
+    private void checkUserStatus(DataSnapshot snapshot, String userType) {
+        Boolean active = snapshot.child("active").getValue(Boolean.class);
+        String type = snapshot.child("type").getValue(String.class);
+
+        if (Boolean.TRUE.equals(active)) {
+            switch (type) {
+                case "Administer":
+                    Intent adminIntent = new Intent(Login.this, AdminDashboardActivity.class);
+                    startActivity(adminIntent);
+                    break;
+                case "User":
+                    Intent userIntent = new Intent(Login.this, UserDashboardActivity_1.class);
+                    startActivity(userIntent);
+                    break;
+                case "Accountant":
+                    Intent accountantIntent = new Intent(Login.this, AccountantDashboardActivity.class);
+                    startActivity(accountantIntent);
+                    break;
+                default:
+                    Toast.makeText(Login.this, "Unknown user type.", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        } else {
+            Toast.makeText(Login.this, "Account inactive. Please contact the administrator.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     // setUpGoogleSignIn method configure the google sign in
     private void setUpGoogleSignIn() {
@@ -187,10 +237,18 @@ public class Login extends AppCompatActivity {
                                     Intent intent = new Intent(Login.this, UserDashboardActivity_1.class);
                                     startActivity(intent);
                                 } else {
-                                    Toast.makeText(Login.this, "User not found. Please register first.", Toast.LENGTH_SHORT).show();
-                                    mAuth.signOut();
-                                    Intent intent = new Intent(Login.this, SignUp.class);
-                                    startActivity(intent);
+                                    user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(Login.this, "User not found. Please register first.", Toast.LENGTH_SHORT).show();
+                                                Intent intent = new Intent(Login.this, SignUp.class);
+                                                startActivity(intent);
+                                            } else {
+                                                Toast.makeText(Login.this, "Error deleting user: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
                                 }
                             }
 
@@ -203,6 +261,38 @@ public class Login extends AppCompatActivity {
                 } else {
                     Toast.makeText(Login.this, "ERROR: Couldn't log in with Google", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+    }
+
+    public void clickSignUp(){
+        createAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Login.this, SignUp.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void clickEyes(){
+        ivEye.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!passwordVisible){
+                    etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    ivEye.setImageResource(R.drawable.password_show);
+                }else{
+                    etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    ivEye.setImageResource(R.drawable.password_hide);
+                }
+                etPassword.setTransformationMethod(passwordVisible ?
+                        android.text.method.PasswordTransformationMethod.getInstance() :
+                        android.text.method.HideReturnsTransformationMethod.getInstance());
+                // Move the cursor to the end of the text
+                etPassword.setSelection(etPassword.length());
+                // Toggle the passwordVisible boolean
+                passwordVisible = !passwordVisible;
             }
         });
     }

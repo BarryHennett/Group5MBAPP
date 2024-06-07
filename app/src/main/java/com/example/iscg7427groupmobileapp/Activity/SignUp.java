@@ -2,10 +2,12 @@ package com.example.iscg7427groupmobileapp.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,15 +36,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 public class SignUp extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "SignUpActivity";
-
+    ImageView imEye;
     EditText etName, etEmail, etPassword;
     Button btnSignUp;
-    TextView tvAccount, tvUser;
+    TextView tvAccount, tvUser, toLogin;
     SignInButton btnGoogle;
+    Boolean passwordVis = false;
     int chooseRole = 0;
     private FirebaseAuth mAuth;
     private GoogleSignInClient googleSignInClient;
@@ -56,6 +61,8 @@ public class SignUp extends AppCompatActivity {
         clickBtnSignUp();
         clickTvAccount();
         clickTvUser();
+        clickLogin();
+        clickEyes();
 
         btnGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +80,8 @@ public class SignUp extends AppCompatActivity {
         tvUser = findViewById(R.id.tvUser);
         tvAccount = findViewById(R.id.tvAccount);
         btnGoogle = findViewById(R.id.btnGoogle);
+        toLogin = findViewById(R.id.toLogin);
+        imEye = findViewById(R.id.ivEye);
         mAuth = FirebaseAuth.getInstance();
     }
 
@@ -120,14 +129,21 @@ public class SignUp extends AppCompatActivity {
                                     if (chooseRole == 0) {
                                         Accountant accountant = new Accountant();
                                         accountant.setName(name);
+                                        accountant.setEmail(email);
+                                        accountant.setPassword(password);
                                         database.getReference("Accountants").child(uid).setValue(accountant);
                                         Toast.makeText(SignUp.this, "Accountant created successfully", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(SignUp.this, Login.class);
+                                        startActivity(intent);
                                     } else {
                                         User newUser = new User();
                                         newUser.setName(name);
+                                        newUser.setEmail(email);
                                         newUser.setPassword(password);
                                         database.getReference().child("Users").child(uid).setValue(newUser);
                                         Toast.makeText(SignUp.this, "User created successfully", Toast.LENGTH_SHORT).show();
+                                        Intent intent1 = new Intent(SignUp.this, Login.class);
+                                        startActivity(intent1);
                                     }
                                 }
                             } else {
@@ -209,6 +225,38 @@ public class SignUp extends AppCompatActivity {
                 } else {
                     Toast.makeText(SignUp.this, "ERROR: Couldn't log in with Google", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+    }
+
+    public void clickLogin(){
+        toLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignUp.this, Login.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void clickEyes(){
+        imEye.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!passwordVis){
+                    etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    imEye.setImageResource(R.drawable.password_show);
+                }else{
+                    etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    imEye.setImageResource(R.drawable.password_hide);
+                }
+                etPassword.setTransformationMethod(passwordVis ?
+                        android.text.method.PasswordTransformationMethod.getInstance() :
+                        android.text.method.HideReturnsTransformationMethod.getInstance());
+                // Move the cursor to the end of the text
+                etPassword.setSelection(etPassword.length());
+                // Toggle the passwordVisible boolean
+                passwordVis = !passwordVis;
             }
         });
     }
