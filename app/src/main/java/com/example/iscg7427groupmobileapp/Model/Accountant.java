@@ -111,29 +111,4 @@ public class Accountant {
                 ", password='" + password + '\'' +
                 '}';
     }
-
-    public static class User{
-        private String key;
-
-        public User(String key) {
-            this.key = key;
-        }
-
-        public User(){}
-
-        public String getKey() {
-            return key;
-        }
-
-        public void setKey(String key) {
-            this.key = key;
-        }
-
-        @Override
-        public String toString() {
-            return "User{" +
-                    "key='" + key + '\'' +
-                    '}';
-        }
-    }
 }

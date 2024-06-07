@@ -82,9 +82,10 @@ public class AccountantAddNewClient extends AppCompatActivity {
                                     if (accountant != null) {
                                         if (accountant.getUsers() == null) {
                                             accountant.setUsers(new HashMap<>());
+                                        }else {
+                                            accountant.getUsers().put(name, key); // Using name as value, you can adjust accordingly
+                                            accountantRef.setValue(accountant);
                                         }
-                                        accountant.getUsers().put(key, name); // Using name as value, you can adjust accordingly
-                                        accountantRef.setValue(accountant);
                                     }
                                 }
 
@@ -112,8 +113,7 @@ public class AccountantAddNewClient extends AppCompatActivity {
                     }
                 });
                 Toast.makeText(this, "Invitation sent successfully", Toast.LENGTH_SHORT).show();
-
-                // Intent to another page
+                finish();
             }
         });
     }
