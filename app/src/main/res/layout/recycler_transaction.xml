@@ -12,8 +12,8 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/transactionname"
-            style="@style/body_12_orange_regular"
+            android:id="@+id/rv_transaction_category"
+            style="@style/body_12_white_regular"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -21,8 +21,8 @@
             android:text="Subscription" />
 
         <TextView
-            android:id="@+id/transactiondate"
-            style="@style/body_12_orange_regular"
+            android:id="@+id/rv_transaction_date"
+            style="@style/body_12_white_regular"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -30,7 +30,7 @@
             android:text="12 Mar" />
 
         <TextView
-            android:id="@+id/transactionamount"
+            android:id="@+id/rv_transaction_amount"
             style="@style/body_12_orange_regular"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
