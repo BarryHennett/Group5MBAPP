@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,8 +37,9 @@ public class UserProfileActivity extends AppCompatActivity {
     private boolean isPasswordVisible = false;
     private DatabaseReference userRef;
     private FirebaseAuth auth;
-    private boolean isUserFound = false; // To track if user is found
     private BottomNavigationView bottomNavigation;
+    private LinearLayout userProfile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,23 +54,17 @@ public class UserProfileActivity extends AppCompatActivity {
         updateButton = findViewById(R.id.updateButton);
         signOutButton = findViewById(R.id.toSignOut);
         bottomNavigation = findViewById(R.id.bottom_navigation);
-
+        userProfile = findViewById(R.id.userProfile);
         auth = FirebaseAuth.getInstance();
-
+        bottomNavigation.setVisibility(View.GONE);
+        userProfile.setVisibility(View.GONE);
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
             String userId = currentUser.getUid();
             FirebaseDatabase database = FirebaseDatabase.getInstance("https://group5-6aa2b-default-rtdb.firebaseio.com/");
 
-            // Check "Users" path first
-            userRef = database.getReference("Users").child(userId);
-            fetchUserDetails(userRef, "Users");
-
-            // If not found in "Users", check "Accountants" path
-            if (!isUserFound) {
-                userRef = database.getReference("Accountants").child(userId);
-                fetchUserDetails(userRef, "Accountants");
-            }
+            // Check all user types and update UI based on the result
+            checkUserType(database, userId);
 
             showPassword.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -108,30 +104,56 @@ public class UserProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void fetchUserDetails(DatabaseReference ref, String userType) {
-        ref.addValueEventListener(new ValueEventListener() {
+    private void checkUserType(FirebaseDatabase database, String userId) {
+        DatabaseReference userRef = database.getReference("Users").child(userId);
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (userType.equals("Users")) {
+                if (snapshot.exists()) {
                     User user = snapshot.getValue(User.class);
                     if (user != null) {
-                        isUserFound = true;
-                        editTextUserName.setText(user.getName());
-                        editTextEmail.setText(user.getEmail());
-                        editTextPassword.setText(user.getPassword());
-                        editTextPhone.setText(user.getPhoneNumber());
-                        bottomNavigation.setVisibility(View.VISIBLE);
+                        updateUIForUser(user);
                     }
-                } else if (userType.equals("Accountants")) {
-                    Accountant accountant = snapshot.getValue(Accountant.class);
-                    if (accountant != null) {
-                        isUserFound = true;
-                        editTextUserName.setText(accountant.getName());
-                        editTextEmail.setText(accountant.getEmail());
-                        editTextPassword.setText(accountant.getPassword());
-                        editTextPhone.setText(accountant.getPhoneNumber());
-                        bottomNavigation.setVisibility(View.GONE);
-                    }
+                } else {
+                    DatabaseReference accountantRef = database.getReference("Accountants").child(userId);
+                    accountantRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                Accountant accountant = snapshot.getValue(Accountant.class);
+                                if (accountant != null) {
+                                    updateUIForAccountant(accountant);
+                                }
+                            } else {
+                                DatabaseReference adminRef = database.getReference("Administers").child(userId);
+                                adminRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if (snapshot.exists()) {
+                                            User admin = snapshot.getValue(User.class); // Assuming the structure is similar to User
+                                            if (admin != null) {
+                                                updateUIForAdmin(admin);
+                                            }
+                                        } else {
+                                            Toast.makeText(UserProfileActivity.this, "User not found in any category", Toast.LENGTH_SHORT).show();
+                                            userProfile.setVisibility(View.GONE);
+                                            bottomNavigation.setVisibility(View.GONE);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                        Toast.makeText(UserProfileActivity.this, "Failed to load user data", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Toast.makeText(UserProfileActivity.this, "Failed to load user data", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
 
@@ -142,13 +164,39 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
+    private void updateUIForUser(User user) {
+        editTextUserName.setText(user.getName());
+        editTextEmail.setText(user.getEmail());
+        editTextPassword.setText(user.getPassword());
+        editTextPhone.setText(user.getPhoneNumber());
+        bottomNavigation.setVisibility(View.VISIBLE);
+        userProfile.setVisibility(View.VISIBLE);
+    }
+
+    private void updateUIForAccountant(Accountant accountant) {
+        editTextUserName.setText(accountant.getName());
+        editTextEmail.setText(accountant.getEmail());
+        editTextPassword.setText(accountant.getPassword());
+        editTextPhone.setText(accountant.getPhoneNumber());
+        bottomNavigation.setVisibility(View.GONE);
+        userProfile.setVisibility(View.VISIBLE);
+    }
+
+    private void updateUIForAdmin(User admin) {
+        editTextUserName.setText(admin.getName());
+        editTextEmail.setText(admin.getEmail());
+        editTextPassword.setText(admin.getPassword());
+        editTextPhone.setText(admin.getPhoneNumber());
+        bottomNavigation.setVisibility(View.GONE);
+        userProfile.setVisibility(View.GONE);
+    }
+
     private void updateUserDetails() {
         String userName = editTextUserName.getText().toString();
-        String email = editTextEmail.getText().toString();
         String password = editTextPassword.getText().toString();
         String phone = editTextPhone.getText().toString();
 
-        if (userName.isEmpty() || email.isEmpty() || password.isEmpty() || phone.isEmpty()) {
+        if (userName.isEmpty() || password.isEmpty() || phone.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -161,7 +209,6 @@ public class UserProfileActivity extends AppCompatActivity {
                         Accountant accountant = snapshot.getValue(Accountant.class);
                         if (accountant != null) {
                             accountant.setName(userName);
-                            accountant.setEmail(email);
                             accountant.setPassword(password);
                             accountant.setPhoneNumber(phone);
                             userRef.setValue(accountant)
@@ -172,7 +219,6 @@ public class UserProfileActivity extends AppCompatActivity {
                         User user = snapshot.getValue(User.class);
                         if (user != null) {
                             user.setName(userName);
-                            user.setEmail(email);
                             user.setPassword(password);
                             user.setPhoneNumber(phone);
                             userRef.setValue(user)
