@@ -103,8 +103,8 @@
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_green"
-            android:text="Log in"></Button>
+            style="@style/primary_button"
+            android:text="Log in"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -129,7 +129,7 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="8sp"
                 android:paddingEnd="8sp"
-                android:text="Or log in with"></TextView>
+                android:text="Or log in with"/>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -153,12 +153,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_black"
-                android:src="@drawable/google_icon"></com.google.android.gms.common.SignInButton>
+                android:src="@drawable/google_icon"/>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"></LinearLayout>
+                android:layout_weight="1"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -168,12 +168,12 @@
                 android:paddingTop="10dp"
                 android:paddingRight="40dp"
                 android:paddingBottom="10dp"
-                android:src="@drawable/facebook_icon"></ImageView>
+                android:src="@drawable/facebook_icon"/>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"></LinearLayout>
+                android:layout_weight="1"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -183,7 +183,7 @@
                 android:paddingTop="10dp"
                 android:paddingRight="40dp"
                 android:paddingBottom="10dp"
-                android:src="@drawable/twitter_icon"></ImageView>
+                android:src="@drawable/twitter_icon"/>
 
         </LinearLayout>
 
