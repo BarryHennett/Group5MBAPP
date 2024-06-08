@@ -72,7 +72,7 @@ public class UserExpenseDashboardActivity extends AppCompatActivity {
 
         txtViewAll.setOnClickListener(v -> {
 
-            Intent intent = new Intent(UserExpenseDashboardActivity.this, UserAllTransactions.class);
+            Intent intent = new Intent(UserExpenseDashboardActivity.this, AllExpenses.class);
             startActivity(intent);
 
         });
@@ -224,7 +224,7 @@ public class UserExpenseDashboardActivity extends AppCompatActivity {
     private void retrieveUserData(OnTransactionListener listener) {
 
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 

@@ -178,7 +178,7 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
         } );
 
         txtViewAll.setOnClickListener(v -> {
-            Intent intent = new Intent(UserIncomeDashboardActivity.this, UserAllTransactions.class);
+            Intent intent = new Intent(UserIncomeDashboardActivity.this, AllIncome.class);
             startActivity(intent);
         });
     }
@@ -233,7 +233,7 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
     private void retrieveUserData(OnTransactionListener listener) {
 
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 

@@ -116,7 +116,7 @@ public class TransactionDetails extends AppCompatActivity {
                         mRef.setValue(transaction);
 
                         if (imageView.getDrawable() != null) {
-                            createAttachmentImage(transactionId);
+                            createAttachmentImage();
                         }
 
                         Toast.makeText(TransactionDetails.this, "Transaction Saved", Toast.LENGTH_SHORT).show();
@@ -215,7 +215,7 @@ public class TransactionDetails extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void createAttachmentImage(String transactionKey) {
+    private void createAttachmentImage() {
 
         // Get the data from an ImageView as bytes
         imageView.setDrawingCacheEnabled(true);
@@ -230,6 +230,7 @@ public class TransactionDetails extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle unsuccessful uploads
+                Toast.makeText(TransactionDetails.this, "Receipt Upload Failed", Toast.LENGTH_SHORT).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
