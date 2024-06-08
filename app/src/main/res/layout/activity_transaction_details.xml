@@ -1,226 +1,229 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/black"
-    tools:context=".TransactionDetails"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".Activity.TransactionDetails">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16sp">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="16sp"
-            android:gravity="center_vertical">
-
-            <LinearLayout
-                android:id="@+id/toAdminDashboard"
-                android:layout_width="24sp"
-                android:layout_height="24sp"
-                android:gravity="center">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_left">
-                </ImageView>
-            </LinearLayout>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Transaction detail"
-                style="@style/heading_22_white_bold"/>
-        </LinearLayout>
-
-        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16sp"
-            android:background="@drawable/background_mdblack"
             android:orientation="vertical"
-            android:padding="16sp">
+            android:paddingStart="16sp"
+            android:paddingTop="16sp"
+            android:paddingEnd="16sp"
+            android:paddingBottom="80sp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                android:orientation="vertical">
+                <ImageButton
+                    android:id="@+id/transaction_detail_btn_return"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8sp"
+                    android:background="@android:color/transparent"
+                    android:insetLeft="0dp"
+                    android:insetTop="0dp"
+                    android:insetRight="0dp"
+                    android:insetBottom="0dp"
+                    android:padding="0dp"
+                    android:src="@drawable/arrow_left" />
 
                 <TextView
-                    style="@style/body_10_lightgray_medium"
-                    android:layout_width="match_parent"
+                    style="@style/heading_22_white_bold"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Expense category*" />
-
-                <TextView
-                    android:id="@+id/expensecategory"
-                    style="@style/body_10_white_regular"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Expense category*" />
-
+                    android:text="Transaction Detail" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="16sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    style="@style/body_10_lightgray_medium"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Expense date*" />
-
-                <TextView
-                    android:id="@+id/expensedate"
-                    style="@style/body_10_lightgray_medium"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="YYYY/MM/DD" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="16sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    style="@style/body_10_lightgray_medium"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Total cost (NZD)*" />
-
-                <TextView
-                    android:id="@+id/expensecost"
-                    style="@style/body_10_lightgray_medium"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Total cost (NZD)*" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="16sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    style="@style/body_10_lightgray_medium"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Expense Description" />
-
-                <TextView
-                    android:id="@+id/expensedesc"
-                    style="@style/body_10_lightgray_medium"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Expense Description" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="16sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    style="@style/body_10_lightgray_medium"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Expense Type" />
-
-                <TextView
-                    android:id="@+id/expensetype"
-                    style="@style/body_10_lightgray_medium"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Expense type" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="16sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    style="@style/body_10_lightgray_medium"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Attachment" />
+                android:layout_marginTop="16sp"
+                android:background="@drawable/background_mdblack"
+                android:orientation="vertical"
+                android:padding="16sp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
                     <TextView
                         style="@style/body_10_lightgray_medium"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="16sp"
-                        android:text="pdf" />
+                        android:text="Category" />
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/transaction_detail_txt_category"
+                        style="@style/body_12_white_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColorHint="@color/white" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="16sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/body_10_lightgray_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Date*" />
+
+                    <EditText
+                        android:id="@+id/transaction_detail_edt_date"
+                        style="@style/body_12_white_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:hint="Type date here"
+                        android:textColorHint="@color/white" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="16sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/body_10_lightgray_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Total amount (NZD)*" />
+
+                    <EditText
+                        android:id="@+id/transaction_detail_edt_amount"
+                        style="@style/body_12_white_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Type income here"
+                        android:textColorHint="@color/white" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="16sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/body_10_lightgray_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Description" />
+
+                    <EditText
+                        android:id="@+id/transaction_detail_edt_description"
+                        style="@style/body_12_white_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Type description here"
+                        android:textColorHint="@color/white" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="16sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/body_10_lightgray_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Attachment" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
-                        <Button
-                            android:id="@+id/user_add_income_view_receipt"
-                            style="@style/body_10_white_regular"
-                            android:layout_width="wrap_content"
+                        <!--
+                        <TextView
+                            style="@style/body_10_lightgray_medium"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:background="@android:color/transparent"
-                            android:textAllCaps="false" />
+                            android:layout_marginEnd="16sp"
+                            android:text="pdf" />-->
 
-                        <Button
-                            android:id="@+id/user_add_income_change_receipt"
-                            style="@style/body_10_white_regular"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@android:color/transparent"
-                            android:textAllCaps="false" />
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/transaction_detail_btn_view_receipt"
+                                style="@style/body_10_white_regular"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                android:textAllCaps="false" />
+
+                            <Button
+                                android:id="@+id/transaction_detail_btn_change_receipt"
+                                style="@style/body_10_white_regular"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                android:textAllCaps="false" />
+                        </LinearLayout>
                     </LinearLayout>
+
                 </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/transaction_detail_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginBottom="16sp" />
+
+                <Button
+                    android:id="@+id/transaction_detail_btn_save"
+                    style="@style/primary_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Update" />
+
             </LinearLayout>
-
-            <ImageView
-                android:id="@+id/user_add_income_image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
         </LinearLayout>
-    </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -231,4 +234,5 @@
         app:itemTextColor="@drawable/nav_item_colors"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/navigation" />
-</LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

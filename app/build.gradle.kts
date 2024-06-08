@@ -67,4 +67,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    // implementation ui storage
+    implementation ("com.firebaseui:firebase-ui-storage:7.2.0")
+    // add a photo view library
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+
+
 }

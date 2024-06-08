@@ -87,11 +87,11 @@ public class UserAddIncomeActivity extends AppCompatActivity {
 
                 String selectedItem = parent.getItemAtPosition(position).toString();
                 if (selectedItem.equals("Last 3 Month")) {
-                    Toast.makeText(UserAddIncomeActivity.this, "Last 3 Month", Toast.LENGTH_SHORT).show();
+
                 } else if (selectedItem.equals("Last 6 Month")) {
-                    Toast.makeText(UserAddIncomeActivity.this, "Last 6 Month", Toast.LENGTH_SHORT).show();
+
                 } else {
-                    Toast.makeText(UserAddIncomeActivity.this, "Option 3 selected", Toast.LENGTH_SHORT).show();
+
                 }
             }
 
@@ -136,6 +136,7 @@ public class UserAddIncomeActivity extends AppCompatActivity {
                     if (imageView.getDrawable() != null) {
                         createAttachmentImage(transactionKey);
                     }
+                    Toast.makeText(UserAddIncomeActivity.this, "Income Added", Toast.LENGTH_SHORT).show();
                     finish();
                 }
 

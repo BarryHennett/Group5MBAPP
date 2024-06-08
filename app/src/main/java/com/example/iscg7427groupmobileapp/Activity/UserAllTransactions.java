@@ -1,4 +1,4 @@
-package com.example.iscg7427groupmobileapp;
+package com.example.iscg7427groupmobileapp.Activity;
 
 import android.os.Bundle;
 import android.widget.Toast;
@@ -12,15 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.iscg7427groupmobileapp.Adapter.TransactionAdapter;
+import com.example.iscg7427groupmobileapp.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class UserAllTransactions extends AppCompatActivity {

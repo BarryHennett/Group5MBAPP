@@ -34,19 +34,19 @@
             android:name=".Activity.UserAddIncomeActivity"
             android:exported="false" />
         <activity
-            android:name=".TransactionDetails"
+            android:name=".Activity.TransactionDetails"
             android:exported="false" />
         <activity
-            android:name=".AccountantClientTransactions"
+            android:name=".Activity.AccountantClientTransactions"
             android:exported="false" />
         <activity
-            android:name=".AllIncome"
+            android:name=".Activity.AllIncome"
             android:exported="false" />
         <activity
-            android:name=".AllExpenses"
+            android:name=".Activity.AllExpenses"
             android:exported="false" />
         <activity
-            android:name=".UserAllTransactions"
+            android:name=".Activity.UserAllTransactions"
             android:exported="false" />
         <activity
             android:name=".Activity.AdminUpdateUserActivity"
@@ -61,7 +61,7 @@
             android:name=".Activity.UserProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".StyleGuide"
+            android:name=".Activity.StyleGuide"
             android:exported="false" />
         <activity
             android:name=".Activity.MainActivity"

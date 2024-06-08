@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,11 +17,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -42,56 +45,38 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
-public class UserAddExpenseActivity extends AppCompatActivity {
+public class TransactionDetails extends AppCompatActivity {
 
     Button btnViewReceipt, btnChangeRecipt, btnSave;
     ImageButton btnReturn;
     ImageView imageView;
-    Spinner spinner;
-    EditText edt_date, edt_cost, edt_description;
+    EditText edt_date, edt_amount, edt_description;
+    TextView txt_category;
     NavigationBarView nav;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final int PICK_IMAGE_REQUEST = 1;
     String uid;
-
-
+    String transactionId;
+    StorageReference mStorageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_add_expense);
+        setContentView(R.layout.activity_transaction_details);
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        transactionId = getIntent().getStringExtra("transactionId");
+        mStorageRef = FirebaseStorage.getInstance("gs://group5-6aa2b.appspot.com").getReference(transactionId);
 
         init();
+        getTransactionDetails(transactionId);
         // Open the photo collections to select a photo
         btnViewReceipt.setOnClickListener(this::selectImage);
         // same as above
         btnChangeRecipt.setOnClickListener(this::selectImage);
-        // spinner for category
-        String[] options = {"Transportation", "Housing", "Dining", "Entertainment", "Others"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner, options);
-        adapter.setDropDownViewResource(R.layout.spinner);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = parent.getItemAtPosition(position).toString();
 
-                if (selectedItem.equals("Option 1")) {
-
-                } else if (selectedItem.equals("Option 2")) {
-
-                } else {
-
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
         // date picker
         edt_date.setOnClickListener(v -> showDatePickerDialog());
         // save new transaction
@@ -99,8 +84,7 @@ public class UserAddExpenseActivity extends AppCompatActivity {
 
             String dateSelected = edt_date.getText().toString();
             String description = edt_description.getText().toString();
-            String cost = edt_cost.getText().toString();
-            String category = spinner.getSelectedItem().toString();
+            String amount = edt_amount.getText().toString();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             Date date = null;
             // convert a String Type into a Date Type
@@ -111,26 +95,30 @@ public class UserAddExpenseActivity extends AppCompatActivity {
             }
             Date finalDate = date;
             // validate inout
-            if (date == null || description.isEmpty() || cost.isEmpty()) {
-                Toast.makeText(UserAddExpenseActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            if (date == null || description.isEmpty() || amount.isEmpty()) {
+                Toast.makeText(TransactionDetails.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
             // save to realtime database
-            DatabaseReference mRef = database.getReference("Users").child(uid);
+            DatabaseReference mRef = database.getReference("Users").child(uid).child("transactions").child(transactionId);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    User user = dataSnapshot.getValue(User.class);
-                    User.Transaction transaction = new User.Transaction("Expense", category, Double.parseDouble(cost), finalDate, description);
-                    String transactionKey = user.addNewTransaction(transaction);
-                    mRef.setValue(user);
-                    // save image to storage
-                    if (imageView.getDrawable() != null) {
-                        createAttachmentImage(transactionKey);
+                    User.Transaction transaction = dataSnapshot.getValue(User.Transaction.class);
+                    if (transaction != null) {
+                        transaction.setDate(finalDate);
+                        transaction.setDescription(description);
+                        transaction.setAmount(Double.parseDouble(amount));
+                        mRef.setValue(transaction);
+
+                        if (imageView.getDrawable() != null) {
+                            createAttachmentImage(transactionId);
+                        }
+
+                        Toast.makeText(TransactionDetails.this, "Transaction Saved", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
-                    Toast.makeText(UserAddExpenseActivity.this, "Transaction Saved", Toast.LENGTH_SHORT);
-                    finish();
                 }
 
                 @Override
@@ -150,22 +138,22 @@ public class UserAddExpenseActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.item_home) {
 
-                    Intent intent = new Intent(UserAddExpenseActivity.this, UserDashboardActivity_1.class);
+                    Intent intent = new Intent(TransactionDetails.this, UserDashboardActivity_1.class);
                     startActivity(intent);
                     return true;
                 } else if (item.getItemId() == R.id.item_income) {
 
-                    Intent intent = new Intent(UserAddExpenseActivity.this, UserIncomeDashboardActivity.class);
+                    Intent intent = new Intent(TransactionDetails.this, UserIncomeDashboardActivity.class);
                     startActivity(intent);
                     return true;
                 } else if (item.getItemId() == R.id.item_expenses) {
 
-                    Intent intent = new Intent(UserAddExpenseActivity.this, UserExpenseDashboardActivity.class);
+                    Intent intent = new Intent(TransactionDetails.this, UserExpenseDashboardActivity.class);
                     startActivity(intent);
                     return true;
                 } else if (item.getItemId() == R.id.item_profile) {
 
-                    Intent intent = new Intent(UserAddExpenseActivity.this, UserProfileActivity.class);
+                    Intent intent = new Intent(TransactionDetails.this, UserProfileActivity.class);
                     startActivity(intent);
                     return true;
                 } else return false;
@@ -175,18 +163,18 @@ public class UserAddExpenseActivity extends AppCompatActivity {
     }
 
     private void init() {
-        btnViewReceipt = findViewById(R.id.user_add_expense_view_receipt);
+        btnViewReceipt = findViewById(R.id.transaction_detail_btn_view_receipt);
         btnViewReceipt.setText(Html.fromHtml(getString(R.string.view_receipt), Html.FROM_HTML_MODE_LEGACY));
-        btnChangeRecipt = findViewById(R.id.user_add_expense_change_receipt);
+        btnChangeRecipt = findViewById(R.id.transaction_detail_btn_change_receipt);
         btnChangeRecipt.setText(Html.fromHtml(getString(R.string.change_receipt), Html.FROM_HTML_MODE_LEGACY));
-        btnReturn = findViewById(R.id.user_add_expense_btn_return);
-        btnSave = findViewById(R.id.user_add_expense_btn_save);
-        imageView = findViewById(R.id.user_add_expense_image);
-        spinner = findViewById(R.id.user_add_expense_spinner);
-        edt_date = findViewById(R.id.user_add_expense_edt_date);
-        edt_description = findViewById(R.id.user_add_expense_edt_description);
-        edt_cost = findViewById(R.id.user_add_expense_edt_cost);
+        btnReturn = findViewById(R.id.transaction_detail_btn_return);
+        btnSave = findViewById(R.id.transaction_detail_btn_save);
+        imageView = findViewById(R.id.transaction_detail_image);
+        edt_date = findViewById(R.id.transaction_detail_edt_date);
+        edt_description = findViewById(R.id.transaction_detail_edt_description);
+        edt_amount = findViewById(R.id.transaction_detail_edt_amount);
         nav = findViewById(R.id.bottom_navigation);
+        txt_category = findViewById(R.id.transaction_detail_txt_category);
     }
 
     public void selectImage(View view) {
@@ -212,7 +200,7 @@ public class UserAddExpenseActivity extends AppCompatActivity {
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(
-                UserAddExpenseActivity.this,
+                TransactionDetails.this,
                 (view, year1, month1, dayOfMonth) -> {
                     // month1 is 0-based, add 1 to get the actual month number
                     // thanks to GPT
@@ -226,8 +214,6 @@ public class UserAddExpenseActivity extends AppCompatActivity {
 
     private void createAttachmentImage(String transactionKey) {
 
-        FirebaseStorage storage = FirebaseStorage.getInstance("gs://group5-6aa2b.appspot.com");
-        StorageReference mStorageRef = storage.getReference(transactionKey);
         // Get the data from an ImageView as bytes
         imageView.setDrawingCacheEnabled(true);
         imageView.buildDrawingCache();
@@ -247,8 +233,34 @@ public class UserAddExpenseActivity extends AppCompatActivity {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                 // ...
-                Toast.makeText(UserAddExpenseActivity.this, "Receipt Upload Success", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TransactionDetails.this, "Receipt Upload Success", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+    private void getTransactionDetails(String transactionId) {
+        DatabaseReference mRef = database.getReference("Users").child(uid).child("transactions").child(transactionId);
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User.Transaction transaction = dataSnapshot.getValue(User.Transaction.class);
+                if (transaction != null) {
+                    edt_date.setText(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(transaction.getDate()));
+                    edt_description.setText(transaction.getDescription());
+                    edt_amount.setText(String.valueOf(transaction.getAmount()));
+                    txt_category.setText(transaction.getCategory());
+
+                    Glide.with(TransactionDetails.this)
+                            .load(mStorageRef)
+                            .into(imageView);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 }

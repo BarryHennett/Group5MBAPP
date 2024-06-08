@@ -1,4 +1,4 @@
-package com.example.iscg7427groupmobileapp;
+package com.example.iscg7427groupmobileapp.Activity;
 
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -6,6 +6,8 @@ import android.text.style.UnderlineSpan;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.iscg7427groupmobileapp.R;
 
 public class StyleGuide extends AppCompatActivity {
 

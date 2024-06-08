@@ -1,4 +1,4 @@
-package com.example.iscg7427groupmobileapp;
+package com.example.iscg7427groupmobileapp.Activity;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.iscg7427groupmobileapp.R;
 
 public class RecyclerAdapterTransaction extends RecyclerView.Adapter{
 
