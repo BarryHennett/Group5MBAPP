@@ -3,6 +3,7 @@ package com.example.iscg7427groupmobileapp.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.iscg7427groupmobileapp.Adapter.TransactionAdapter;
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -47,6 +49,7 @@ public class AllIncome extends AppCompatActivity {
     Spinner spinner;
     NavigationBarView nav;
     String uid;
+    private BottomNavigationView bottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class AllIncome extends AppCompatActivity {
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         init();
+
         retrieveUserData(new OnTransactionListener() {
             @Override
             public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
@@ -138,9 +142,45 @@ public class AllIncome extends AppCompatActivity {
         recyclerView = findViewById(R.id.all_income_recyclerView);
         btnReturn = findViewById(R.id.all_income_btn_return);
         spinner = findViewById(R.id.all_income_spinner);
-        nav = findViewById(R.id.all_income_nav);
+        bottomNavigation = findViewById(R.id.bottom_navigation);
     }
+    private void setupBottomNavigation() {
+        bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+                Log.d("BottomNav", "Selected Item ID: " + itemId);
 
+                if (itemId == R.id.item_home) {
+                    Log.d("BottomNav", "Home selected");
+                    startActivity(new Intent(AllIncome.this, UserDashboardActivity_1.class));
+                    return true;
+                } else if (itemId == R.id.item_income) {
+                    Log.d("BottomNav", "Income selected");
+                    return true;
+                } else if (itemId == R.id.item_expenses) {
+                    Log.d("BottomNav", "Expenses selected");
+                    startActivity(new Intent(AllIncome.this, UserExpenseDashboardActivity.class));
+                    return true;
+                } else if (itemId == R.id.item_profile) {
+                    Log.d("BottomNav", "Profile selected");
+                    startActivity(new Intent(AllIncome.this, UserProfileActivity.class));
+                    return true;
+                } else {
+                    Log.d("BottomNav", "Unknown item selected");
+                    return false;
+                }
+            }
+        });
+
+        // Set the selected item as item_profile
+        bottomNavigation.post(new Runnable() {
+            @Override
+            public void run() {
+                bottomNavigation.setSelectedItemId(R.id.item_income);
+            }
+        });
+    }
     private void retrieveUserData(OnTransactionListener listener) {
 
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
