@@ -1,6 +1,8 @@
 package com.example.iscg7427groupmobileapp.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -95,6 +97,38 @@ public class UserAllTransactions extends AppCompatActivity {
                 // Do nothing
             }
         });
+
+        NavigationBarView.OnItemSelectedListener listener = new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.item_home) {
+
+                    Intent intent = new Intent(UserAllTransactions.this, UserDashboardActivity_1.class);
+                    startActivity(intent);
+                    return true;
+                } else if (item.getItemId() == R.id.item_income) {
+
+                    Intent intent = new Intent(UserAllTransactions.this, UserIncomeDashboardActivity.class);
+                    startActivity(intent);
+
+                    return true;
+                } else if (item.getItemId() == R.id.item_expenses) {
+
+                    Intent intent = new Intent(UserAllTransactions.this, UserExpenseDashboardActivity.class);
+                    startActivity(intent);
+
+                    return true;
+                } else if (item.getItemId() == R.id.item_profile) {
+
+                    Intent intent = new Intent(UserAllTransactions.this, UserProfileActivity.class);
+                    startActivity(intent);
+                    return true;
+                } else return false;
+            }
+        };
+        nav.setOnItemSelectedListener(listener);
+
+
         btnReturn.setOnClickListener(v -> finish());
     }
 
@@ -158,4 +192,6 @@ public class UserAllTransactions extends AppCompatActivity {
         filteredList.sort(Comparator.comparing(o -> o.getValue().getDate(), Comparator.reverseOrder()));
         return filteredList;
     }
+
+
 }
