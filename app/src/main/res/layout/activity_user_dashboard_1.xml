@@ -52,12 +52,20 @@
 
                     <TextView
                         android:id="@+id/user_dashboard_txt_balance"
-                        style="@style/body_14_green_medium"
+                        style="@style/heading_22_white_bold"
+                        android:textColor="@color/green"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8sp"
+                        android:layout_marginBottom="4sp"
                         android:text="$ 4520"
-                        android:textSize="36sp" />
+                       />
+                    <TextView
+                        android:id="@+id/extraText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        style="@style/body_10_lightgray_medium"/>
 
                 </LinearLayout>
 
@@ -210,7 +218,10 @@
                 android:layout_marginTop="16sp"
                 android:background="@drawable/background_mdblack"
                 android:orientation="vertical"
-                android:padding="16sp">
+                android:paddingTop="16sp"
+                android:paddingLeft="16sp"
+                android:paddingRight="16sp"
+                android:layout_marginBottom="100sp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -251,16 +262,13 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="16sp"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:background="@color/darkGray"
-                    android:layout_height="1sp"/>
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/user_dashboard_rec"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16sp" />
+                   />
             </LinearLayout>
 
         </LinearLayout>

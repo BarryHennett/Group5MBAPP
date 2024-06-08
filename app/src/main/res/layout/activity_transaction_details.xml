@@ -212,35 +212,33 @@
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:layout_marginBottom="16sp" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <Button
+        android:id="@+id/transaction_detail_btn_save"
+        style="@style/primary_button"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_marginRight="8sp"
+        android:layout_height="wrap_content"
+        android:text="Update"
+     />
 
-                <Button
-                    android:id="@+id/transaction_detail_btn_save"
-                    style="@style/primary_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Update"
-                    android:layout_marginBottom="16sp" />
+    <Button
+        android:id="@+id/transaction_detail_btn_delete"
+        style="@style/black_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="Delete" />
+</LinearLayout>
 
-                <Button
-                    android:id="@+id/transaction_detail_btn_delete"
-                    style="@style/primary_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Delete" />
 
             </LinearLayout>
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:itemIconTint="@drawable/nav_item_colors"
-        app:itemTextColor="@drawable/nav_item_colors"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/navigation" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

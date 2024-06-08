@@ -9,6 +9,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -32,6 +36,7 @@ import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -52,7 +57,8 @@ import java.util.Locale;
 
 public class UserAddIncomeActivity extends AppCompatActivity {
 
-    Button btnViewReceipt, btnChangeRecipt, btnSave;
+    Button  btnSave;
+    TextView btnViewReceipt, btnChangeRecipt;
     ImageButton btnReturn;
     ImageView imageView;
     Spinner spinner;
@@ -60,6 +66,7 @@ public class UserAddIncomeActivity extends AppCompatActivity {
     NavigationBarView nav;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final int PICK_IMAGE_REQUEST = 1;
+    private BottomNavigationView bottomNavigation;
 
     String uid;
 
@@ -72,6 +79,11 @@ public class UserAddIncomeActivity extends AppCompatActivity {
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         init();
+        setupBottomNavigation();
+
+        updateUnderlinedTextView(btnViewReceipt, "Upload receipt");
+        updateUnderlinedTextView(btnChangeRecipt, "Change receipt");
+
         // Open the photo collections to select a photo
         btnViewReceipt.setOnClickListener(this::selectImage);
         // same as above
@@ -151,42 +163,13 @@ public class UserAddIncomeActivity extends AppCompatActivity {
             finish();
         });
 
-        // set bottom navigation bar
-        NavigationBarView.OnItemSelectedListener listener = new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.item_home) {
-                    Intent intent = new Intent(UserAddIncomeActivity.this, UserDashboardActivity_1.class);
-                    startActivity(intent);
-                    return true;
-                } else if (item.getItemId() == R.id.item_income) {
 
-                    Intent intent = new Intent(UserAddIncomeActivity.this, UserIncomeDashboardActivity.class);
-                    startActivity(intent);
-
-                    return true;
-                } else if (item.getItemId() == R.id.item_expenses) {
-
-                    Intent intent = new Intent(UserAddIncomeActivity.this, UserExpenseDashboardActivity.class);
-                    startActivity(intent);
-
-                    return true;
-                } else if (item.getItemId() == R.id.item_profile) {
-                    Intent intent = new Intent(UserAddIncomeActivity.this, UserProfileActivity.class);
-                    startActivity(intent);
-                    return true;
-                } else return false;
-            }
-        };
-        nav.setOnItemSelectedListener(listener);
     }
 
     private void init() {
 
         btnViewReceipt = findViewById(R.id.user_add_income_view_receipt);
-        btnViewReceipt.setText(Html.fromHtml(getString(R.string.view_receipt), Html.FROM_HTML_MODE_LEGACY));
         btnChangeRecipt = findViewById(R.id.user_add_income_change_receipt);
-        btnChangeRecipt.setText(Html.fromHtml(getString(R.string.change_receipt), Html.FROM_HTML_MODE_LEGACY));
         btnReturn = findViewById(R.id.user_add_income_btn_return);
         btnSave = findViewById(R.id.user_add_income_btn_save);
         imageView = findViewById(R.id.user_add_income_image);
@@ -194,7 +177,44 @@ public class UserAddIncomeActivity extends AppCompatActivity {
         edt_date = findViewById(R.id.user_add_income_edt_date);
         edt_description = findViewById(R.id.user_add_income_edt_description);
         edt_income = findViewById(R.id.user_add_income_edt_income);
-        nav = findViewById(R.id.bottom_navigation);
+        bottomNavigation = findViewById(R.id.bottom_navigation);
+    }
+    private void setupBottomNavigation() {
+        bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+                Log.d("BottomNav", "Selected Item ID: " + itemId);
+
+                if (itemId == R.id.item_home) {
+                    Log.d("BottomNav", "Home selected");
+                    startActivity(new Intent(UserAddIncomeActivity.this, UserDashboardActivity_1.class));
+                    return true;
+                } else if (itemId == R.id.item_income) {
+                    Log.d("BottomNav", "Income selected");
+                    return true;
+                } else if (itemId == R.id.item_expenses) {
+                    Log.d("BottomNav", "Expenses selected");
+                    startActivity(new Intent(UserAddIncomeActivity.this, UserExpenseDashboardActivity.class));
+                    return true;
+                } else if (itemId == R.id.item_profile) {
+                    Log.d("BottomNav", "Profile selected");
+                    startActivity(new Intent(UserAddIncomeActivity.this, UserProfileActivity.class));
+                    return true;
+                } else {
+                    Log.d("BottomNav", "Unknown item selected");
+                    return false;
+                }
+            }
+        });
+
+        // Set the selected item as item_profile
+        bottomNavigation.post(new Runnable() {
+            @Override
+            public void run() {
+                bottomNavigation.setSelectedItemId(R.id.item_income);
+            }
+        });
     }
 
     public void selectImage(View view) {
@@ -211,7 +231,16 @@ public class UserAddIncomeActivity extends AppCompatActivity {
             imageView.setImageURI(uri);
         }
     }
+    private void updateUnderlinedTextView(TextView textView, String targetText) {
+        String text = targetText;
+        SpannableString spannableString = new SpannableString(text);
 
+        // Apply UnderlineSpan to the entire text
+        spannableString.setSpan(new UnderlineSpan(), 0, text.length(), SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Set the modified SpannableString to the TextView
+        textView.setText(spannableString);
+    }
     private void showDatePickerDialog() {
         // Get current date
         final Calendar calendar = Calendar.getInstance();

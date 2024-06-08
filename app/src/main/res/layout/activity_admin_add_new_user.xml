@@ -68,12 +68,35 @@
             android:text="User type"
             style="@style/body_10_lightgray_medium"/>
 
-        <TextView
-            android:id="@+id/etUserType"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Accountant"
-            style="@style/body_12_white_regular"/>
+            android:orientation="horizontal"
+            android:layout_marginTop="8sp">
+
+            <TextView
+                android:id="@+id/tvAccount"
+                style="@style/body_10_white_regular"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8sp"
+                android:background="@drawable/button_border_green"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="Accountant"/>
+
+            <TextView
+                android:id="@+id/tvUser"
+                style="@style/body_10_white_regular"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_black"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="User"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"

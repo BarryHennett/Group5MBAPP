@@ -16,7 +16,9 @@ import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
 import com.example.iscg7427groupmobileapp.Activity.TransactionDetails;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.Map;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHolderTransaction> {
@@ -52,10 +54,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         double amount = transaction.getAmount();
         String date = new SimpleDateFormat("MM-dd").format(transaction.getDate());
         String type = transaction.getType();
-
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
         // Bind data to ViewHolder views
         holder.txtCategory.setText(category);
-        holder.txtAmount.setText(type.equals("Income") ? "$" + amount : "- $" + amount);
+        holder.txtAmount.setText(type.equals("Income") ? currencyFormat.format(amount) : "-" + currencyFormat.format(amount));
         holder.txtDate.setText(date);
         holder.txtAmount.setTextColor(context.getResources().getColor(type.equals("Income") ? R.color.blue : R.color.orange));
 
