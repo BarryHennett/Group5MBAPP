@@ -39,6 +39,10 @@
         <activity
             android:name=".Activity.AccountantClientTransactions"
             android:exported="false" />
+
+        <activity
+            android:name=".Activity.AccountantClientTransactionDetail"
+            android:exported="false" />
         <activity
             android:name=".Activity.AllIncome"
             android:exported="false" />

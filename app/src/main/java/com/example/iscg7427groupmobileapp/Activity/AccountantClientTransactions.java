@@ -19,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.iscg7427groupmobileapp.Adapter.AccountClientTransactionAdapter;
 import com.example.iscg7427groupmobileapp.Adapter.TransactionAdapter;
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
@@ -87,7 +88,7 @@ public class AccountantClientTransactions extends AppCompatActivity {
                             recentTransactions.put(entry.getKey(), entry.getValue());
                         }
                         recyclerView.setLayoutManager(new LinearLayoutManager(AccountantClientTransactions.this));
-                        recyclerView.setAdapter(new TransactionAdapter(recentTransactions, AccountantClientTransactions.this, uid));
+                        recyclerView.setAdapter(new AccountClientTransactionAdapter(recentTransactions, AccountantClientTransactions.this, uid));
                     }
                 });
             }
