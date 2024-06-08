@@ -64,56 +64,50 @@ public class AccountantAddNewClient extends AppCompatActivity {
                 Toast.makeText(this, "Please fill in the form", Toast.LENGTH_SHORT).show();
             } else {
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                mAuth.createUserWithEmailAndPassword(email, phoneNumber).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference usersRef = database.getReference().child("Users");
+
+                // Check if the email already exists
+                usersRef.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            String key = mAuth.getCurrentUser().getUid(); // Because we use createUserWithEmailAndPassword, the new user will be logged in
-                            FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            Toast.makeText(AccountantAddNewClient.this, "Account created successfully", Toast.LENGTH_SHORT).show();
-
-                            // Add the new user's key under the current accountant's users node
-                            DatabaseReference accountantRef = database.getReference().child("Accountant").child(uid);
-                            accountantRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            Toast.makeText(AccountantAddNewClient.this, "Email already exists", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Create a new user
+                            mAuth.createUserWithEmailAndPassword(email, phoneNumber).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    Accountant accountant = snapshot.getValue(Accountant.class);
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        String userKey = mAuth.getCurrentUser().getUid();
+                                        Toast.makeText(AccountantAddNewClient.this, "Account created successfully", Toast.LENGTH_SHORT).show();
 
-                                    if (accountant != null) {
-                                        if (accountant.getUsers() == null) {
-                                            accountant.setUsers(new HashMap<>());
-                                        }else {
-                                            accountant.getUsers().put(name, key); // Using name as value, you can adjust accordingly
-                                            accountantRef.setValue(accountant);
-                                        }
+                                        // Add the new user's key under the current accountant's users node
+                                        DatabaseReference accountantRef = database.getReference().child("Accountants").child(uid).child("users");
+                                        accountantRef.child(userKey).setValue(true);
+
+                                        // Create the new user object and save it
+                                        User user = new User(name, email, phoneNumber, "User", occupation, industry, true, new HashMap<>(), phoneNumber);
+                                        database.getReference().child("Users").child(userKey).setValue(user);
+
+                                        // Log the accountant back in
+                                        mAuth.signInWithEmailAndPassword(FirebaseAuth.getInstance().getCurrentUser().getEmail(), phoneNumber);
+
+                                        Toast.makeText(AccountantAddNewClient.this, "Invitation sent successfully", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    } else {
+                                        Toast.makeText(AccountantAddNewClient.this, "Failed to create account", Toast.LENGTH_SHORT).show();
                                     }
                                 }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-                                    // Handle possible errors
-                                }
                             });
-
-                            // Create the new user object and save it
-                            User user = new User();
-                            user.setName(name);
-                            user.setOccupation(occupation);
-                            user.setIndustry(industry);
-                            user.setEmail(email);
-                            user.setPhoneNumber(phoneNumber);
-                            database.getReference().child("Users").child(key).setValue(user);
-
-                            // Log the accountant back in
-                            mAuth.signInWithEmailAndPassword(FirebaseAuth.getInstance().getCurrentUser().getEmail(), phoneNumber);
-
-                        } else {
-                            Toast.makeText(AccountantAddNewClient.this, "Failed to create account", Toast.LENGTH_SHORT).show();
                         }
                     }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // Handle possible errors
+                    }
                 });
-                Toast.makeText(this, "Invitation sent successfully", Toast.LENGTH_SHORT).show();
-                finish();
             }
         });
     }
