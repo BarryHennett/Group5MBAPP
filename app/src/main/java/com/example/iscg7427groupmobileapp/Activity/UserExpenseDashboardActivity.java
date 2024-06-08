@@ -11,12 +11,8 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -109,7 +105,7 @@ public class UserExpenseDashboardActivity extends AppCompatActivity {
         // set spinner
         String[] options = {"Last 3 Month", "Last 6 Month", "Last Year"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner, options);
-        adapter.setDropDownViewResource(R.layout.spinner;
+        adapter.setDropDownViewResource(R.layout.spinner);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -195,7 +191,7 @@ public class UserExpenseDashboardActivity extends AppCompatActivity {
                 }
 
                 recyclerView.setLayoutManager(new LinearLayoutManager(UserExpenseDashboardActivity.this));
-                recyclerView.setAdapter(new TransactionAdapter(recentTransactions, UserExpenseDashboardActivity.this));
+                recyclerView.setAdapter(new TransactionAdapter(recentTransactions, UserExpenseDashboardActivity.this, uid));
 
 
             };

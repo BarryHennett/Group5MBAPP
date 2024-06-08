@@ -11,12 +11,8 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,11 +22,6 @@ import com.example.iscg7427groupmobileapp.R;
 import com.example.iscg7427groupmobileapp.UserAllTransactions;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -208,7 +199,7 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
                 }
 
                 recyclerView.setLayoutManager(new LinearLayoutManager(UserIncomeDashboardActivity.this));
-                recyclerView.setAdapter(new TransactionAdapter(recentTransactions, UserIncomeDashboardActivity.this));
+                recyclerView.setAdapter(new TransactionAdapter(recentTransactions, UserIncomeDashboardActivity.this, uid));
 
             }
         } );

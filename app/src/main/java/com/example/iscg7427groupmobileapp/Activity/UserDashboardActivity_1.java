@@ -100,7 +100,7 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
                     }
                 }
                 recyclerView.setLayoutManager(new LinearLayoutManager(UserDashboardActivity_1.this));
-                recyclerView.setAdapter(new TransactionAdapter(recentTransactions, UserDashboardActivity_1.this));
+                recyclerView.setAdapter(new TransactionAdapter(recentTransactions, UserDashboardActivity_1.this, uid));
             }
         });
 
