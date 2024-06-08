@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -70,9 +69,9 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
         });
 
         txtViewAll.setOnClickListener(v -> {
-
+            Intent intent = new Intent(UserIncomeDashboardActivity.this, AllIncome.class);
+            startActivity(intent);
         });
-
 
         // set spinner
         String[] options = {"Last 3 Month", "Last 6 Month", "Last Year"};
@@ -83,7 +82,6 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                 String selectedItem = parent.getItemAtPosition(position).toString();
 
                 if (selectedItem.equals("Last 3 Month")) {
@@ -150,14 +148,13 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                // Do nothing
             }
         });
 
         retrieveUserData(new OnTransactionListener() {
             @Override
             public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
-
                 // sort 10 recent transactions by date in recyclerview
                 List<Map.Entry<String, User.Transaction>> list = new ArrayList<>(transactions.entrySet());
                 list.sort(Comparator.comparing(o -> o.getValue().getDate(), Comparator.reverseOrder()));
@@ -173,18 +170,11 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
 
                 recyclerView.setLayoutManager(new LinearLayoutManager(UserIncomeDashboardActivity.this));
                 recyclerView.setAdapter(new TransactionAdapter(recentTransactions, UserIncomeDashboardActivity.this, uid));
-
             }
-        });
-
-        txtViewAll.setOnClickListener(v -> {
-            Intent intent = new Intent(UserIncomeDashboardActivity.this, AllIncome.class);
-            startActivity(intent);
         });
     }
 
     private void init() {
-
         btn_add = findViewById(R.id.user_income_dashboard_btn_add);
         spinner = findViewById(R.id.user_income_dashboard_spinner);
         txtViewAll = findViewById(R.id.user_income_dashboard_txt_view_all);
@@ -222,7 +212,7 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
             }
         });
 
-        // Set the selected item as item_profile
+        // Set the selected item as item_income
         bottomNavigation.post(new Runnable() {
             @Override
             public void run() {
@@ -232,12 +222,10 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
     }
 
     private void retrieveUserData(OnTransactionListener listener) {
-
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
-        mRef.addValueEventListener(new ValueEventListener() {
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 User user = dataSnapshot.getValue(User.class);
                 HashMap<String, User.Transaction> transactions = user.getTransactions();
                 HashMap<String, User.Transaction> incomeTransactions = new HashMap<>();
@@ -252,6 +240,7 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error
             }
         });
     }
@@ -264,99 +253,73 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
                                   double sixMonthSalary, double sixMonthBonus, double sixMonthInvestment, double sixMonthFreelance, double sixMonthOthers,
                                   double oneYearSalary, double oneYearBonus, double oneYearInvestment, double oneYearFreelance, double oneYearOthers) {
 
+        List<Integer> colors = new ArrayList<>();
+        colors.add(Color.parseColor("#5E7153"));
+        colors.add(Color.parseColor("#F2A943"));
+        colors.add(Color.parseColor("#F5BDA8"));
+        colors.add(Color.parseColor("#3551A4"));
+        colors.add(Color.parseColor("#CDBCDB"));
 
-        pieChart.setNoDataText("No data available");
-        pieChart.setNoDataTextColor(Color.parseColor("#EB5F2A"));
+        pieChart.setUsePercentValues(false);
+        pieChart.getDescription().setEnabled(false);
+        pieChart.setDrawEntryLabels(false);
+        pieChart.setDrawCenterText(true);
+        pieChart.setCenterText("Total Expense");
+        pieChart.setCenterTextColor(Color.WHITE);
+        pieChart.setCenterTextSize(20f);
+        pieChart.setHoleRadius(60f);
+        pieChart.setDrawHoleEnabled(true);
+        pieChart.setHoleColor(Color.TRANSPARENT);
+        pieChart.setTransparentCircleRadius(100f);
 
-        if ( pieChart.getData() == null ||  pieChart.getData().getEntryCount() == 0) {
-            pieChart.clear();
-        } else {
+        Legend legend = pieChart.getLegend();
+        legend.setEnabled(true);
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        legend.setDrawInside(false);
+        legend.setXEntrySpace(10f);
+        legend.setYEntrySpace(5f);
+        legend.setTextSize(10f);
+        legend.setTextColor(Color.WHITE);
+        legend.setWordWrapEnabled(true);
 
-            List<Integer> colors = new ArrayList<>();
-            colors.add(Color.parseColor("#5E7153"));
-            colors.add(Color.parseColor("#F2A943"));
-            colors.add(Color.parseColor("#F5BDA8"));
-            colors.add(Color.parseColor("#3551A4"));
-            colors.add(Color.parseColor("#CDBCDB"));
-
-            pieChart.setUsePercentValues(false);
-            pieChart.getDescription().setEnabled(false);
-            pieChart.setDrawEntryLabels(false);
-            pieChart.setDrawCenterText(true);
-            pieChart.setCenterText("Total Expense");
-            pieChart.setCenterTextColor(Color.WHITE);
-            pieChart.setCenterTextSize(20f);
-            pieChart.setHoleRadius(60f);
-            pieChart.setDrawHoleEnabled(true);
-            pieChart.setHoleColor(Color.TRANSPARENT);
-            pieChart.setTransparentCircleRadius(100f);
-
-// 设置图例
-            Legend legend = pieChart.getLegend();
-            legend.setEnabled(true); // 启用图例
-            legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM); // 设置图例位置在底部
-            legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER); // 设置图例水平居中
-            legend.setOrientation(Legend.LegendOrientation.HORIZONTAL); // 设置图例水平方向
-            legend.setDrawInside(false); // 图例绘制在外围
-            legend.setXEntrySpace(10f); // 设置图例条目之间的间距
-            legend.setYEntrySpace(5f);
-            legend.setTextSize(10f); // 设置图例文本大小
-            legend.setTextColor(Color.WHITE); // 设置图例文本颜色
-            legend.setWordWrapEnabled(true);
-
-            if (type.equals("Last 3 Month")) {
-
-                List<PieEntry> entries = new ArrayList<>();
-                entries.add(new PieEntry((float) threeMonthSalary, "Salary"));
-                entries.add(new PieEntry((float) threeMonthBonus, "Bonus"));
-                entries.add(new PieEntry((float) threeMonthInvestment, "Investment"));
-                entries.add(new PieEntry((float) threeMonthFreelance, "Freelance"));
-                entries.add(new PieEntry((float) threeMonthOthers, "Others"));
-                PieDataSet dataSet = new PieDataSet(entries, "");
-                PieData data = new PieData(dataSet);
-                dataSet.setColors(colors);
-                data.setDrawValues(false); // 不显示值
-                pieChart.setData(data);
-                pieChart.setCenterText(Double.toString(threeMonthSalary + threeMonthBonus + threeMonthInvestment +
-                        threeMonthFreelance + threeMonthOthers));
-                pieChart.invalidate();
-            } else if (type.equals("Last 6 Month")) {
-                List<PieEntry> entries = new ArrayList<>();
-                entries.add(new PieEntry((float) sixMonthSalary, "Salary"));
-                entries.add(new PieEntry((float) sixMonthBonus, "Bonus"));
-                entries.add(new PieEntry((float) sixMonthInvestment, "Investment"));
-                entries.add(new PieEntry((float) sixMonthFreelance, "Freelance"));
-                entries.add(new PieEntry((float) sixMonthOthers, "Others"));
-                PieDataSet dataSet = new PieDataSet(entries, "");
-                PieData data = new PieData(dataSet);
-                dataSet.setColors(colors);
-                data.setDrawValues(false); // 不显示值
-                pieChart.setData(data);
-                pieChart.setCenterText(Double.toString(sixMonthSalary + sixMonthBonus + sixMonthInvestment +
-                        sixMonthFreelance + sixMonthOthers));
-                pieChart.invalidate();
-            } else if (type.equals("Last Year")) {
-                List<PieEntry> entries = new ArrayList<>();
-                entries.add(new PieEntry((float) oneYearSalary, "Salary"));
-                entries.add(new PieEntry((float) oneYearBonus, "Bonus"));
-                entries.add(new PieEntry((float) oneYearInvestment, "Investment"));
-                entries.add(new PieEntry((float) oneYearFreelance, "Freelance"));
-                entries.add(new PieEntry((float) oneYearOthers, "Others"));
-                PieDataSet dataSet = new PieDataSet(entries, "");
-                PieData data = new PieData(dataSet);
-                dataSet.setColors(colors);
-                data.setDrawValues(false); // 不显示值
-                pieChart.setData(data);
-                pieChart.setCenterText(Double.toString(oneYearSalary + oneYearBonus + oneYearInvestment +
-                        oneYearFreelance + oneYearOthers));
-                pieChart.invalidate();
-
-            }
+        List<PieEntry> entries = new ArrayList<>();
+        if (type.equals("Last 3 Month")) {
+            entries.add(new PieEntry((float) threeMonthSalary, "Salary"));
+            entries.add(new PieEntry((float) threeMonthBonus, "Bonus"));
+            entries.add(new PieEntry((float) threeMonthInvestment, "Investment"));
+            entries.add(new PieEntry((float) threeMonthFreelance, "Freelance"));
+            entries.add(new PieEntry((float) threeMonthOthers, "Others"));
+            pieChart.setCenterText(Double.toString(threeMonthSalary + threeMonthBonus + threeMonthInvestment +
+                    threeMonthFreelance + threeMonthOthers));
+        } else if (type.equals("Last 6 Month")) {
+            entries.add(new PieEntry((float) sixMonthSalary, "Salary"));
+            entries.add(new PieEntry((float) sixMonthBonus, "Bonus"));
+            entries.add(new PieEntry((float) sixMonthInvestment, "Investment"));
+            entries.add(new PieEntry((float) sixMonthFreelance, "Freelance"));
+            entries.add(new PieEntry((float) sixMonthOthers, "Others"));
+            pieChart.setCenterText(Double.toString(sixMonthSalary + sixMonthBonus + sixMonthInvestment +
+                    sixMonthFreelance + sixMonthOthers));
+        } else if (type.equals("Last Year")) {
+            entries.add(new PieEntry((float) oneYearSalary, "Salary"));
+            entries.add(new PieEntry((float) oneYearBonus, "Bonus"));
+            entries.add(new PieEntry((float) oneYearInvestment, "Investment"));
+            entries.add(new PieEntry((float) oneYearFreelance, "Freelance"));
+            entries.add(new PieEntry((float) oneYearOthers, "Others"));
+            pieChart.setCenterText(Double.toString(oneYearSalary + oneYearBonus + oneYearInvestment +
+                    oneYearFreelance + oneYearOthers));
         }
+
+        PieDataSet dataSet = new PieDataSet(entries, "");
+        PieData data = new PieData(dataSet);
+        dataSet.setColors(colors);
+        data.setDrawValues(false); // Do not show values
+        pieChart.setData(data);
+        pieChart.invalidate();
     }
 
     private void calculateIncome(HashMap<String, User.Transaction> incomeTransactions, onIncomeCalculate listener) {
-
         Date currentDate = new Date();
         Date threeMonthAgo = getDateBeforeOrAfter(currentDate, Calendar.MONTH, -3);
         Date sixMonthAgo = getDateBeforeOrAfter(currentDate, Calendar.MONTH, -6);
@@ -380,9 +343,7 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
         double oneYearFreelance = 0;
         double oneYearOthers = 0;
 
-
         for (User.Transaction transaction : incomeTransactions.values()) {
-
             if (transaction.getDate().after(threeMonthAgo) && transaction.getDate().before(currentDate)) {
                 if (transaction.getCategory().equals("Salary")) {
                     threeMonthSalary += transaction.getAmount();
@@ -399,7 +360,6 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
         }
 
         for (User.Transaction transaction : incomeTransactions.values()) {
-
             if (transaction.getDate().after(sixMonthAgo) && transaction.getDate().before(currentDate)) {
                 if (transaction.getCategory().equals("Salary")) {
                     sixMonthSalary += transaction.getAmount();
@@ -416,7 +376,6 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
         }
 
         for (User.Transaction transaction : incomeTransactions.values()) {
-
             if (transaction.getDate().after(oneYearAgo) && transaction.getDate().before(currentDate)) {
                 if (transaction.getCategory().equals("Salary")) {
                     oneYearSalary += transaction.getAmount();
@@ -445,7 +404,6 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
     }
 
     public static Date getDateBeforeOrAfter(Date date, int field, int amount) {
-
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(field, amount);

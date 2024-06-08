@@ -2,21 +2,20 @@ package com.example.iscg7427groupmobileapp.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -46,8 +46,11 @@ public class UserAllTransactions extends AppCompatActivity {
     RecyclerView recyclerView;
     ImageButton btnReturn;
     Spinner spinner;
+    EditText searchEditText;
     private BottomNavigationView bottomNavigation;
     String uid;
+    TransactionAdapter transactionAdapter;
+    HashMap<String, User.Transaction> allTransactions = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,20 +64,21 @@ public class UserAllTransactions extends AppCompatActivity {
         retrieveUserData(new OnTransactionListener() {
             @Override
             public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
-
+                allTransactions = transactions;
                 List<Map.Entry<String, User.Transaction>> list = new ArrayList<>(transactions.entrySet());
                 list.sort(Comparator.comparing(o -> o.getValue().getDate(), Comparator.reverseOrder()));
                 LinkedHashMap<String, User.Transaction> recentTransactions = new LinkedHashMap<>();
                 for (Map.Entry<String, User.Transaction> entry : list) {
                     recentTransactions.put(entry.getKey(), entry.getValue());
                 }
+                transactionAdapter = new TransactionAdapter(recentTransactions, UserAllTransactions.this, uid);
                 recyclerView.setLayoutManager(new LinearLayoutManager(UserAllTransactions.this));
-                recyclerView.setAdapter(new TransactionAdapter(recentTransactions, UserAllTransactions.this, uid));
+                recyclerView.setAdapter(transactionAdapter);
             }
         });
 
         // set spinner
-        String[] options = {"Financial Year: 2023/24", "Financial Year: 2022/23", "Financial Year: 2021/22"};
+        String[] options = {"Current Tax Year", "Last 12 Months", "Financial Year: 2023/24"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner, options);
         adapter.setDropDownViewResource(R.layout.spinner);
         spinner.setAdapter(adapter);
@@ -90,8 +94,9 @@ public class UserAllTransactions extends AppCompatActivity {
                         for (Map.Entry<String, User.Transaction> entry : filteredList) {
                             recentTransactions.put(entry.getKey(), entry.getValue());
                         }
+                        transactionAdapter = new TransactionAdapter(recentTransactions, UserAllTransactions.this, uid);
                         recyclerView.setLayoutManager(new LinearLayoutManager(UserAllTransactions.this));
-                        recyclerView.setAdapter(new TransactionAdapter(recentTransactions, UserAllTransactions.this, uid));
+                        recyclerView.setAdapter(transactionAdapter);
                     }
                 });
             }
@@ -101,8 +106,22 @@ public class UserAllTransactions extends AppCompatActivity {
             }
         });
 
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                transactionAdapter.filter(s.toString());
+            }
 
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Do nothing
+            }
+        });
 
         btnReturn.setOnClickListener(v -> finish());
     }
@@ -111,8 +130,10 @@ public class UserAllTransactions extends AppCompatActivity {
         recyclerView = findViewById(R.id.user_all_transactions_recyclerView);
         btnReturn = findViewById(R.id.user_all_transactions_btn_return);
         spinner = findViewById(R.id.user_all_transactions_spinner);
+        searchEditText = findViewById(R.id.searchEditText);
         bottomNavigation = findViewById(R.id.bottom_navigation);
     }
+
     private void setupBottomNavigation() {
         bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -120,46 +141,37 @@ public class UserAllTransactions extends AppCompatActivity {
                 int itemId = item.getItemId();
                 Log.d("BottomNav", "Selected Item ID: " + itemId);
                 if (itemId == R.id.item_home) {
-                    Log.d("BottomNav", "Home selected");
+                    startActivity(new Intent(UserAllTransactions.this, UserDashboardActivity_1.class));
                     return true;
                 } else if (itemId == R.id.item_income) {
-                    Log.d("BottomNav", "Income selected");
                     startActivity(new Intent(UserAllTransactions.this, UserIncomeDashboardActivity.class));
                     return true;
                 } else if (itemId == R.id.item_expenses) {
-                    Log.d("BottomNav", "Expenses selected");
                     startActivity(new Intent(UserAllTransactions.this, UserExpenseDashboardActivity.class));
                     return true;
                 } else if (itemId == R.id.item_profile) {
-                    Log.d("BottomNav", "Profile selected");
                     startActivity(new Intent(UserAllTransactions.this, UserProfileActivity.class));
                     return true;
                 } else {
-                    Log.d("BottomNav", "Unknown item selected");
                     return false;
                 }
             }
         });
 
-        // Set the selected item as item_profile
-        bottomNavigation.post(new Runnable() {
-            @Override
-            public void run() {
-                bottomNavigation.setSelectedItemId(R.id.item_home);
-            }
-        });
+        // Set the selected item as item_home
+        bottomNavigation.post(() -> bottomNavigation.setSelectedItemId(R.id.item_home));
     }
-    private void retrieveUserData(OnTransactionListener listener) {
 
+    private void retrieveUserData(OnTransactionListener listener) {
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 User user = dataSnapshot.getValue(User.class);
                 HashMap<String, User.Transaction> transactions = user.getTransactions();
                 listener.onDateRetrieved(transactions);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
@@ -175,15 +187,24 @@ public class UserAllTransactions extends AppCompatActivity {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate, endDate;
         try {
-            if (selectedItem.equals("Financial Year: 2023/24")) {
+            if (selectedItem.equals("Current Tax Year")) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.MONTH, Calendar.APRIL);
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                startDate = calendar.getTime();
+                calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
+                calendar.set(Calendar.MONTH, Calendar.MARCH);
+                calendar.set(Calendar.DAY_OF_MONTH, 31);
+                endDate = calendar.getTime();
+            } else if (selectedItem.equals("Last 12 Months")) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date());
+                calendar.add(Calendar.YEAR, -1);
+                startDate = calendar.getTime();
+                endDate = new Date();
+            } else if (selectedItem.equals("Financial Year: 2023/24")) {
                 startDate = dateFormat.parse("2023-04-01");
                 endDate = dateFormat.parse("2024-03-31");
-            } else if (selectedItem.equals("Financial Year: 2022/23")) {
-                startDate = dateFormat.parse("2022-04-01");
-                endDate = dateFormat.parse("2023-03-31");
-            } else if (selectedItem.equals("Financial Year: 2021/22")) {
-                startDate = dateFormat.parse("2021-04-01");
-                endDate = dateFormat.parse("2022-03-31");
             } else {
                 return filteredList; // Return an empty list if invalid selection
             }
@@ -202,6 +223,4 @@ public class UserAllTransactions extends AppCompatActivity {
         filteredList.sort(Comparator.comparing(o -> o.getValue().getDate(), Comparator.reverseOrder()));
         return filteredList;
     }
-
-
 }

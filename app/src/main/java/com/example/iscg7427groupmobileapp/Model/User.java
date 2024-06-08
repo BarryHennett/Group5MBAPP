@@ -147,17 +147,21 @@ public class User {
         private double amount;
         private Date date;
         private String description;
+        private String receiptUrl;
+
 
         public Transaction() {
             // Required empty constructor for Firebase
         }
 
-        public Transaction(String type, String category, double amount, Date date, String description) {
+        public Transaction(String type, String category, double amount, Date date, String description, String receiptUrl) {
             this.type = type;
             this.category = category;
             this.amount = amount;
             this.date = date;
             this.description = description;
+            this.receiptUrl = "";
+
         }
 
         public String getType() {
@@ -198,6 +202,14 @@ public class User {
 
         public void setDescription(String description) {
             this.description = description;
+        }
+
+        public String getReceiptUrl() {
+            return receiptUrl;
+        }
+
+        public void setReceiptUrl(String receiptUrl) {
+            this.receiptUrl = receiptUrl;
         }
     }
 }

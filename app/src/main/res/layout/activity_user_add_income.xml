@@ -123,6 +123,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="Type income here"
+                        android:inputType="numberDecimal"
                         android:textColorHint="@color/white" />
                 </LinearLayout>
 
@@ -193,11 +194,8 @@
                                 android:layout_height="wrap_content"
                                 android:background="@android:color/transparent"
                                 android:textAllCaps="false"
-                                android:text="Upload receipt"/>
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="wrap_content"/>
+                                android:text="Upload receipt"
+                                android:layout_marginRight="16sp"/>
 
                             <TextView
                                 android:id="@+id/user_add_income_change_receipt"

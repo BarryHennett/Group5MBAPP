@@ -169,9 +169,7 @@ public class UserExpenseDashboardActivity extends AppCompatActivity {
                 recyclerView.setAdapter(new TransactionAdapter(recentTransactions, UserExpenseDashboardActivity.this, uid));
 
 
-            }
-
-            ;
+            };
         });
 
     }
@@ -185,7 +183,6 @@ public class UserExpenseDashboardActivity extends AppCompatActivity {
         bottomNavigation = findViewById(R.id.bottom_navigation);
         pieChart = findViewById(R.id.user_expense_dashboard_pie_chart);
     }
-
     private void setupBottomNavigation() {
         bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -227,7 +224,7 @@ public class UserExpenseDashboardActivity extends AppCompatActivity {
     private void retrieveUserData(OnTransactionListener listener) {
 
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
-        mRef.addValueEventListener(new ValueEventListener() {
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -257,95 +254,86 @@ public class UserExpenseDashboardActivity extends AppCompatActivity {
                                   double sixMonthTransportation, double sixMonthHousing, double sixMonthEntertainment, double sixMonthDining, double sixMonthOthers,
                                   double oneYearTransportation, double oneYearHousing, double oneYearEntertainment, double oneYearDining, double oneYearOthers) {
 
-        pieChart.setNoDataText("No data available");
-        pieChart.setNoDataTextColor(Color.parseColor("#EB5F2A"));
 
-        if (pieChart.getData() == null || pieChart.getData().getEntryCount() == 0) {
-            pieChart.clear();
-        } else {
+        List<Integer> colors = new ArrayList<>();
+        colors.add(Color.parseColor("#5E7153"));
+        colors.add(Color.parseColor("#F2A943"));
+        colors.add(Color.parseColor("#F5BDA8"));
+        colors.add(Color.parseColor("#3551A4"));
+        colors.add(Color.parseColor("#CDBCDB"));
 
-            List<Integer> colors = new ArrayList<>();
-            colors.add(Color.parseColor("#5E7153"));
-            colors.add(Color.parseColor("#F2A943"));
-            colors.add(Color.parseColor("#F5BDA8"));
-            colors.add(Color.parseColor("#3551A4"));
-            colors.add(Color.parseColor("#CDBCDB"));
-
-            pieChart.setNoDataText("No data available");
-            pieChart.setUsePercentValues(false);
-            pieChart.getDescription().setEnabled(false);
-            pieChart.setDrawEntryLabels(false);
-            pieChart.setDrawCenterText(true);
-            pieChart.setCenterText("Total Expense");
-            pieChart.setCenterTextColor(Color.WHITE);
-            pieChart.setCenterTextSize(20f);
-            pieChart.setHoleRadius(60f);
-            pieChart.setDrawHoleEnabled(true);
-            pieChart.setHoleColor(Color.TRANSPARENT);
-            pieChart.setTransparentCircleRadius(100f);
-
+        pieChart.setUsePercentValues(false);
+        pieChart.getDescription().setEnabled(false);
+        pieChart.setDrawEntryLabels(false);
+        pieChart.setDrawCenterText(true);
+        pieChart.setCenterText("Total Expense");
+        pieChart.setCenterTextColor(Color.WHITE);
+        pieChart.setCenterTextSize(20f);
+        pieChart.setHoleRadius(60f);
+        pieChart.setDrawHoleEnabled(true);
+        pieChart.setHoleColor(Color.TRANSPARENT);
+        pieChart.setTransparentCircleRadius(100f);
 
 // 设置图例
-            Legend legend = pieChart.getLegend();
-            legend.setEnabled(true); // 启用图例
-            legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM); // 设置图例位置在底部
-            legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER); // 设置图例水平居中
-            legend.setOrientation(Legend.LegendOrientation.HORIZONTAL); // 设置图例水平方向
-            legend.setDrawInside(false); // 图例绘制在外围
-            legend.setXEntrySpace(10f); // 设置图例条目之间的间距
-            legend.setYEntrySpace(5f);
-            legend.setTextSize(10f); // 设置图例文本大小
-            legend.setTextColor(Color.WHITE); // 设置图例文本颜色
-            legend.setWordWrapEnabled(true);
+        Legend legend = pieChart.getLegend();
+        legend.setEnabled(true); // 启用图例
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM); // 设置图例位置在底部
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER); // 设置图例水平居中
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL); // 设置图例水平方向
+        legend.setDrawInside(false); // 图例绘制在外围
+        legend.setXEntrySpace(10f); // 设置图例条目之间的间距
+        legend.setYEntrySpace(5f);
+        legend.setTextSize(10f); // 设置图例文本大小
+        legend.setTextColor(Color.WHITE); // 设置图例文本颜色
+        legend.setWordWrapEnabled(true);
 
-            if (type.equals("Last 3 Month")) {
+        if (type.equals("Last 3 Month")) {
 
-                List<PieEntry> entries = new ArrayList<>();
+            List<PieEntry> entries = new ArrayList<>();
 
-                entries.add(new PieEntry((float) threeMonthTransportation, "Transportation"));
-                entries.add(new PieEntry((float) threeMonthHousing, "Housing"));
-                entries.add(new PieEntry((float) threeMonthDining, "Dining"));
-                entries.add(new PieEntry((float) threeMonthEntertainment, "Entertainment"));
-                entries.add(new PieEntry((float) threeMonthOthers, "Others"));
-                PieDataSet dataSet = new PieDataSet(entries, "");
-                PieData data = new PieData(dataSet);
-                dataSet.setColors(colors);
-                data.setDrawValues(false); // 不显示值
-                pieChart.setData(data);
-                pieChart.setCenterText(Double.toString(threeMonthDining + threeMonthEntertainment + threeMonthHousing +
-                        threeMonthOthers + threeMonthTransportation));
-                pieChart.invalidate();
-            } else if (type.equals("Last 6 Month")) {
-                List<PieEntry> entries = new ArrayList<>();
-                entries.add(new PieEntry((float) sixMonthTransportation, "Transportation"));
-                entries.add(new PieEntry((float) sixMonthHousing, "Housing"));
-                entries.add(new PieEntry((float) sixMonthDining, "Dining"));
-                entries.add(new PieEntry((float) sixMonthEntertainment, "Entertainment"));
-                entries.add(new PieEntry((float) sixMonthOthers, "Others"));
-                PieDataSet dataSet = new PieDataSet(entries, "");
-                PieData data = new PieData(dataSet);
-                dataSet.setColors(colors);
-                data.setDrawValues(false); // 不显示值
-                pieChart.setData(data);
-                pieChart.setCenterText(Double.toString(sixMonthDining + sixMonthEntertainment + sixMonthHousing +
-                        sixMonthOthers + sixMonthTransportation));
-                pieChart.invalidate();
-            } else if (type.equals("Last Year")) {
-                List<PieEntry> entries = new ArrayList<>();
-                entries.add(new PieEntry((float) oneYearTransportation, "Transportation"));
-                entries.add(new PieEntry((float) oneYearHousing, "Housing"));
-                entries.add(new PieEntry((float) oneYearDining, "Dining"));
-                entries.add(new PieEntry((float) oneYearEntertainment, "Entertainment"));
-                entries.add(new PieEntry((float) oneYearOthers, "Others"));
-                PieDataSet dataSet = new PieDataSet(entries, "");
-                PieData data = new PieData(dataSet);
-                dataSet.setColors(colors);
-                data.setDrawValues(false); // 不显示值
-                pieChart.setData(data);
-                pieChart.setCenterText(Double.toString(oneYearDining + oneYearEntertainment + oneYearHousing +
-                        oneYearOthers + oneYearTransportation));
-                pieChart.invalidate();
-            }
+            entries.add(new PieEntry((float) threeMonthTransportation, "Transportation"));
+            entries.add(new PieEntry((float) threeMonthHousing, "Housing"));
+            entries.add(new PieEntry((float) threeMonthDining, "Dining"));
+            entries.add(new PieEntry((float) threeMonthEntertainment, "Entertainment"));
+            entries.add(new PieEntry((float) threeMonthOthers, "Others"));
+            PieDataSet dataSet = new PieDataSet(entries, "");
+            PieData data = new PieData(dataSet);
+            dataSet.setColors(colors);
+            data.setDrawValues(false); // 不显示值
+            pieChart.setData(data);
+            pieChart.setCenterText( Double.toString(threeMonthDining + threeMonthEntertainment + threeMonthHousing +
+                    threeMonthOthers + threeMonthTransportation));
+            pieChart.invalidate();
+        } else if (type.equals("Last 6 Month")) {
+            List<PieEntry> entries = new ArrayList<>();
+            entries.add(new PieEntry((float) sixMonthTransportation, "Transportation"));
+            entries.add(new PieEntry((float) sixMonthHousing, "Housing"));
+            entries.add(new PieEntry((float) sixMonthDining, "Dining"));
+            entries.add(new PieEntry((float) sixMonthEntertainment, "Entertainment"));
+            entries.add(new PieEntry((float) sixMonthOthers, "Others"));
+            PieDataSet dataSet = new PieDataSet(entries, "");
+            PieData data = new PieData(dataSet);
+            dataSet.setColors(colors);
+            data.setDrawValues(false); // 不显示值
+            pieChart.setData(data);
+            pieChart.setCenterText( Double.toString(sixMonthDining + sixMonthEntertainment + sixMonthHousing +
+                    sixMonthOthers + sixMonthTransportation));
+            pieChart.invalidate();
+        } else if (type.equals("Last Year")) {
+            List<PieEntry> entries = new ArrayList<>();
+            entries.add(new PieEntry((float) oneYearTransportation, "Transportation"));
+            entries.add(new PieEntry((float) oneYearHousing, "Housing"));
+            entries.add(new PieEntry((float) oneYearDining, "Dining"));
+            entries.add(new PieEntry((float) oneYearEntertainment, "Entertainment"));
+            entries.add(new PieEntry((float) oneYearOthers, "Others"));
+            PieDataSet dataSet = new PieDataSet(entries, "");
+            PieData data = new PieData(dataSet);
+            dataSet.setColors(colors);
+            data.setDrawValues(false); // 不显示值
+            pieChart.setData(data);
+            pieChart.setCenterText( Double.toString(oneYearDining + oneYearEntertainment + oneYearHousing +
+                    oneYearOthers + oneYearTransportation));
+            pieChart.invalidate();
 
         }
     }

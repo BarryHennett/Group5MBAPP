@@ -1,10 +1,8 @@
 package com.example.iscg7427groupmobileapp.Activity;
 
 import android.app.DatePickerDialog;
-import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,13 +22,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
@@ -57,8 +50,8 @@ import java.util.Locale;
 
 public class UserAddIncomeActivity extends AppCompatActivity {
 
-    Button  btnSave;
-    TextView btnViewReceipt, btnChangeRecipt;
+    Button btnSave;
+    TextView btnViewReceipt, btnChangeReceipt;
     ImageButton btnReturn;
     ImageView imageView;
     Spinner spinner;
@@ -72,7 +65,6 @@ public class UserAddIncomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_add_income);
 
@@ -82,12 +74,12 @@ public class UserAddIncomeActivity extends AppCompatActivity {
         setupBottomNavigation();
 
         updateUnderlinedTextView(btnViewReceipt, "Upload receipt");
-        updateUnderlinedTextView(btnChangeRecipt, "Change receipt");
+        updateUnderlinedTextView(btnChangeReceipt, "Change receipt");
 
         // Open the photo collections to select a photo
         btnViewReceipt.setOnClickListener(this::selectImage);
         // same as above
-        btnChangeRecipt.setOnClickListener(this::selectImage);
+        btnChangeReceipt.setOnClickListener(this::selectImage);
         // spinner for category
         String[] options = {"Salary", "Bonus", "Investment", "Freelance", "Others"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner, options);
@@ -96,23 +88,25 @@ public class UserAddIncomeActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                 String selectedItem = parent.getItemAtPosition(position).toString();
                 if (selectedItem.equals("Last 3 Month")) {
-
+                    // Handle option
                 } else if (selectedItem.equals("Last 6 Month")) {
-
+                    // Handle option
                 } else {
-
+                    // Handle other options
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                // Handle nothing selected
             }
         });
+
         // date picker
         edt_date.setOnClickListener(v -> showDatePickerDialog());
+
         // save new transaction
         btnSave.setOnClickListener(v -> {
 
@@ -129,7 +123,7 @@ public class UserAddIncomeActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             Date finalDate = date;
-            // validate inout
+            // validate input
             if (date == null || description.isEmpty() || income.isEmpty()) {
                 Toast.makeText(UserAddIncomeActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                 return;
@@ -139,37 +133,32 @@ public class UserAddIncomeActivity extends AppCompatActivity {
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
                     User user = dataSnapshot.getValue(User.class);
-                    User.Transaction transaction = new User.Transaction("Income", category, Double.parseDouble(income), finalDate, description);
+                    User.Transaction transaction = new User.Transaction("Income", category, Double.parseDouble(income), finalDate, description, "");
                     String transactionKey = user.addNewTransaction(transaction);
                     mRef.setValue(user);
                     // save image to storage
                     if (imageView.getDrawable() != null) {
-                        createAttachmentImage(transactionKey);
+                        createAttachmentImage(transactionKey, transaction);
+                    } else {
+                        Toast.makeText(UserAddIncomeActivity.this, "Income Added", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
-                    Toast.makeText(UserAddIncomeActivity.this, "Income Added", Toast.LENGTH_SHORT).show();
-                    finish();
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
+                    // Handle error
                 }
             });
         });
 
-        btnReturn.setOnClickListener(v -> {
-            finish();
-        });
-
-
+        btnReturn.setOnClickListener(v -> finish());
     }
 
     private void init() {
-
         btnViewReceipt = findViewById(R.id.user_add_income_view_receipt);
-        btnChangeRecipt = findViewById(R.id.user_add_income_change_receipt);
+        btnChangeReceipt = findViewById(R.id.user_add_income_change_receipt);
         btnReturn = findViewById(R.id.user_add_income_btn_return);
         btnSave = findViewById(R.id.user_add_income_btn_save);
         imageView = findViewById(R.id.user_add_income_image);
@@ -179,6 +168,7 @@ public class UserAddIncomeActivity extends AppCompatActivity {
         edt_income = findViewById(R.id.user_add_income_edt_income);
         bottomNavigation = findViewById(R.id.bottom_navigation);
     }
+
     private void setupBottomNavigation() {
         bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -231,6 +221,7 @@ public class UserAddIncomeActivity extends AppCompatActivity {
             imageView.setImageURI(uri);
         }
     }
+
     private void updateUnderlinedTextView(TextView textView, String targetText) {
         String text = targetText;
         SpannableString spannableString = new SpannableString(text);
@@ -241,6 +232,7 @@ public class UserAddIncomeActivity extends AppCompatActivity {
         // Set the modified SpannableString to the TextView
         textView.setText(spannableString);
     }
+
     private void showDatePickerDialog() {
         // Get current date
         final Calendar calendar = Calendar.getInstance();
@@ -252,7 +244,6 @@ public class UserAddIncomeActivity extends AppCompatActivity {
                 UserAddIncomeActivity.this,
                 (view, year1, month1, dayOfMonth) -> {
                     // month1 is 0-based, add 1 to get the actual month number
-                    // thanks to GPT
                     String selectedDate = dayOfMonth + "/" + (month1 + 1) + "/" + year1;
                     edt_date.setText(selectedDate);
                 },
@@ -261,10 +252,10 @@ public class UserAddIncomeActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void createAttachmentImage(String transactionKey) {
+    private void createAttachmentImage(String transactionKey, User.Transaction transaction) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference mStorageRef = storage.getReference().child("receipts/" + transactionKey + ".png");
 
-        FirebaseStorage storage = FirebaseStorage.getInstance("gs://group5-6aa2b.appspot.com");
-        StorageReference mStorageRef = storage.getReference(transactionKey);
         // Get the data from an ImageView as bytes
         imageView.setDrawingCacheEnabled(true);
         imageView.buildDrawingCache();
@@ -272,19 +263,28 @@ public class UserAddIncomeActivity extends AppCompatActivity {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] data = baos.toByteArray();
-        // start upload process
+
         UploadTask uploadTask = mStorageRef.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
+                Toast.makeText(UserAddIncomeActivity.this, "Receipt Upload Failed", Toast.LENGTH_SHORT).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
-                Toast.makeText(UserAddIncomeActivity.this, "Receipt Upload Success", Toast.LENGTH_SHORT).show();
+                mStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String downloadUrl = uri.toString();
+                        // Update the transaction with the receipt URL
+                        transaction.setReceiptUrl(downloadUrl);
+                        DatabaseReference mRef = database.getReference("Users").child(uid).child("transactions").child(transactionKey);
+                        mRef.setValue(transaction);
+                        Toast.makeText(UserAddIncomeActivity.this, "Income Added", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
             }
         });
     }

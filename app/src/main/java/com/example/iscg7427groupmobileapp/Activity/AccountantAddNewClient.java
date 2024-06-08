@@ -60,6 +60,8 @@ public class AccountantAddNewClient extends AppCompatActivity {
             String industry = etIndustry.getText().toString();
             String email = etEmailAddress.getText().toString();
             String phoneNumber = etPhoneNumber.getText().toString();
+            clearEditTextFields();
+
             if (name.isEmpty() || occupation.isEmpty() || industry.isEmpty() || email.isEmpty() || phoneNumber.isEmpty()) {
                 Toast.makeText(this, "Please fill in the form", Toast.LENGTH_SHORT).show();
             } else {
@@ -110,5 +112,12 @@ public class AccountantAddNewClient extends AppCompatActivity {
                 });
             }
         });
+    }
+    private void clearEditTextFields() {
+        etUserName.setText("");
+        etOccupation.setText("");
+        etIndustry.setText("");
+        etEmailAddress.setText("");
+        etPhoneNumber.setText("");
     }
 }

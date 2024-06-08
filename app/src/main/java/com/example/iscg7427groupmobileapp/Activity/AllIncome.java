@@ -1,23 +1,21 @@
-
 package com.example.iscg7427groupmobileapp.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,36 +46,40 @@ public class AllIncome extends AppCompatActivity {
     RecyclerView recyclerView;
     ImageButton btnReturn;
     Spinner spinner;
+    EditText searchEditText;
     NavigationBarView nav;
     String uid;
     private BottomNavigationView bottomNavigation;
+    TransactionAdapter transactionAdapter;
+    HashMap<String, User.Transaction> allTransactions = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_income);
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         init();
+        setupBottomNavigation();
 
         retrieveUserData(new OnTransactionListener() {
             @Override
             public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
-
+                allTransactions = transactions;
                 List<Map.Entry<String, User.Transaction>> list = new ArrayList<>(transactions.entrySet());
                 list.sort(Comparator.comparing(o -> o.getValue().getDate(), Comparator.reverseOrder()));
                 LinkedHashMap<String, User.Transaction> recentTransactions = new LinkedHashMap<>();
                 for (Map.Entry<String, User.Transaction> entry : list) {
                     recentTransactions.put(entry.getKey(), entry.getValue());
                 }
+                transactionAdapter = new TransactionAdapter(recentTransactions, AllIncome.this, uid);
                 recyclerView.setLayoutManager(new LinearLayoutManager(AllIncome.this));
-                recyclerView.setAdapter(new TransactionAdapter(recentTransactions, AllIncome.this, uid));
+                recyclerView.setAdapter(transactionAdapter);
             }
         });
 
-        // set spinner
-        String[] options = {"Financial Year: 2023/24", "Financial Year: 2022/23", "Financial Year: 2021/22"};
+        // Set spinner
+        String[] options = {"Current Tax Year", "Last 12 Months", "Financial Year: 2023/24"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner, options);
         adapter.setDropDownViewResource(R.layout.spinner);
         spinner.setAdapter(adapter);
@@ -84,18 +87,14 @@ public class AllIncome extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
-                retrieveUserData(new OnTransactionListener() {
-                    @Override
-                    public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
-                        List<Map.Entry<String, User.Transaction>> filteredList = filterTransactions(selectedItem, transactions);
-                        LinkedHashMap<String, User.Transaction> recentTransactions = new LinkedHashMap<>();
-                        for (Map.Entry<String, User.Transaction> entry : filteredList) {
-                            recentTransactions.put(entry.getKey(), entry.getValue());
-                        }
-                        recyclerView.setLayoutManager(new LinearLayoutManager(AllIncome.this));
-                        recyclerView.setAdapter(new TransactionAdapter(recentTransactions, AllIncome.this, uid));
-                    }
-                });
+                List<Map.Entry<String, User.Transaction>> filteredList = filterTransactions(selectedItem, allTransactions);
+                LinkedHashMap<String, User.Transaction> recentTransactions = new LinkedHashMap<>();
+                for (Map.Entry<String, User.Transaction> entry : filteredList) {
+                    recentTransactions.put(entry.getKey(), entry.getValue());
+                }
+                transactionAdapter = new TransactionAdapter(recentTransactions, AllIncome.this, uid);
+                recyclerView.setLayoutManager(new LinearLayoutManager(AllIncome.this));
+                recyclerView.setAdapter(transactionAdapter);
             }
 
             @Override
@@ -104,36 +103,24 @@ public class AllIncome extends AppCompatActivity {
             }
         });
 
-        NavigationBarView.OnItemSelectedListener listener = new NavigationBarView.OnItemSelectedListener() {
+        searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.item_home) {
-
-                    Intent intent = new Intent(AllIncome.this, UserDashboardActivity_1.class);
-                    startActivity(intent);
-                    return true;
-                } else if (item.getItemId() == R.id.item_income) {
-
-                    Intent intent = new Intent(AllIncome.this, UserIncomeDashboardActivity.class);
-                    startActivity(intent);
-
-                    return true;
-                } else if (item.getItemId() == R.id.item_expenses) {
-
-                    Intent intent = new Intent(AllIncome.this, UserExpenseDashboardActivity.class);
-                    startActivity(intent);
-
-                    return true;
-                } else if (item.getItemId() == R.id.item_profile) {
-
-                    Intent intent = new Intent(AllIncome.this, UserProfileActivity.class);
-                    startActivity(intent);
-                    return true;
-                } else return false;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
             }
-        };
-        nav.setOnItemSelectedListener(listener);
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (transactionAdapter != null) {
+                    transactionAdapter.filter(s.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Do nothing
+            }
+        });
 
         btnReturn.setOnClickListener(v -> finish());
     }
@@ -142,8 +129,10 @@ public class AllIncome extends AppCompatActivity {
         recyclerView = findViewById(R.id.all_income_recyclerView);
         btnReturn = findViewById(R.id.all_income_btn_return);
         spinner = findViewById(R.id.all_income_spinner);
+        searchEditText = findViewById(R.id.searchEditText);
         bottomNavigation = findViewById(R.id.bottom_navigation);
     }
+
     private void setupBottomNavigation() {
         bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -173,7 +162,7 @@ public class AllIncome extends AppCompatActivity {
             }
         });
 
-        // Set the selected item as item_profile
+        // Set the selected item as item_income
         bottomNavigation.post(new Runnable() {
             @Override
             public void run() {
@@ -181,27 +170,29 @@ public class AllIncome extends AppCompatActivity {
             }
         });
     }
-    private void retrieveUserData(OnTransactionListener listener) {
 
+    private void retrieveUserData(OnTransactionListener listener) {
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 User user = dataSnapshot.getValue(User.class);
-                HashMap<String, User.Transaction> transactions = user.getTransactions();
-                HashMap<String, User.Transaction> incomeTransactions = new HashMap<>();
-                for (Map.Entry<String, User.Transaction> entry : transactions.entrySet()) {
-                    User.Transaction transaction = entry.getValue();
-                    if (transaction.getType().equals("Income")) {
-                        incomeTransactions.put(entry.getKey(), transaction);
+                if (user != null) {
+                    HashMap<String, User.Transaction> transactions = user.getTransactions();
+                    HashMap<String, User.Transaction> incomeTransactions = new HashMap<>();
+                    for (Map.Entry<String, User.Transaction> entry : transactions.entrySet()) {
+                        User.Transaction transaction = entry.getValue();
+                        if (transaction.getType().equals("Income")) {
+                            incomeTransactions.put(entry.getKey(), transaction);
+                        }
                     }
+                    listener.onDateRetrieved(incomeTransactions);
                 }
-                listener.onDateRetrieved(incomeTransactions);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                // Handle possible errors
             }
         });
     }
@@ -213,17 +204,25 @@ public class AllIncome extends AppCompatActivity {
     private List<Map.Entry<String, User.Transaction>> filterTransactions(String selectedItem, HashMap<String, User.Transaction> transactions) {
         List<Map.Entry<String, User.Transaction>> filteredList = new ArrayList<>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate, endDate;
+        Date startDate = null, endDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+
         try {
-            if (selectedItem.equals("Financial Year: 2023/24")) {
+            if (selectedItem.equals("Current Tax Year")) {
+                calendar.set(Calendar.MONTH, Calendar.APRIL);
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                startDate = calendar.getTime();
+                calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
+                calendar.set(Calendar.MONTH, Calendar.MARCH);
+                calendar.set(Calendar.DAY_OF_MONTH, 31);
+                endDate = calendar.getTime();
+            } else if (selectedItem.equals("Last 12 Months")) {
+                calendar.setTime(new Date());
+                calendar.add(Calendar.YEAR, -1);
+                startDate = calendar.getTime();
+            } else if (selectedItem.equals("Financial Year: 2023/24")) {
                 startDate = dateFormat.parse("2023-04-01");
                 endDate = dateFormat.parse("2024-03-31");
-            } else if (selectedItem.equals("Financial Year: 2022/23")) {
-                startDate = dateFormat.parse("2022-04-01");
-                endDate = dateFormat.parse("2023-03-31");
-            } else if (selectedItem.equals("Financial Year: 2021/22")) {
-                startDate = dateFormat.parse("2021-04-01");
-                endDate = dateFormat.parse("2022-03-31");
             } else {
                 return filteredList; // Return an empty list if invalid selection
             }
@@ -242,5 +241,4 @@ public class AllIncome extends AppCompatActivity {
         filteredList.sort(Comparator.comparing(o -> o.getValue().getDate(), Comparator.reverseOrder()));
         return filteredList;
     }
-
 }

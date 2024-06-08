@@ -18,17 +18,21 @@ import com.example.iscg7427groupmobileapp.Activity.TransactionDetails;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHolderTransaction> {
 
-    private final Map<String, User.Transaction> transactionMap;
+    private final List<Map.Entry<String, User.Transaction>> originalTransactionList;
+    private final List<Map.Entry<String, User.Transaction>> filteredTransactionList;
     private final Context context;
     private final String uid;
 
     public TransactionAdapter(Map<String, User.Transaction> transactionMap, Context context, String uid) {
-        this.transactionMap = transactionMap;
+        this.originalTransactionList = new ArrayList<>(transactionMap.entrySet());
+        this.filteredTransactionList = new ArrayList<>(transactionMap.entrySet());
         this.context = context;
         this.uid = uid;
     }
@@ -43,18 +47,18 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderTransaction holder, int position) {
-        // Get the transaction ID at the current position
-        String transactionId = transactionMap.keySet().toArray()[position].toString();
-
-        // Get the transaction object using the transaction ID
-        User.Transaction transaction = transactionMap.get(transactionId);
+        // Get the transaction at the current position
+        Map.Entry<String, User.Transaction> entry = filteredTransactionList.get(position);
+        String transactionId = entry.getKey();
+        User.Transaction transaction = entry.getValue();
 
         // Extract relevant information from the transaction
         String category = transaction.getCategory();
         double amount = transaction.getAmount();
-        String date = new SimpleDateFormat("MM-dd").format(transaction.getDate());
+        String date = new SimpleDateFormat("MM-dd", Locale.US).format(transaction.getDate());
         String type = transaction.getType();
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+
         // Bind data to ViewHolder views
         holder.txtCategory.setText(category);
         holder.txtAmount.setText(type.equals("Income") ? currencyFormat.format(amount) : "-" + currencyFormat.format(amount));
@@ -80,8 +84,23 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     @Override
     public int getItemCount() {
-        // Return the size of your dataset (invoked by the layout manager)
-        return transactionMap.size();
+        // Return the size of the filtered dataset
+        return filteredTransactionList.size();
+    }
+
+    public void filter(String text) {
+        filteredTransactionList.clear();
+        if (text.isEmpty()) {
+            filteredTransactionList.addAll(originalTransactionList);
+        } else {
+            text = text.toLowerCase();
+            for (Map.Entry<String, User.Transaction> entry : originalTransactionList) {
+                if (entry.getValue().getCategory().toLowerCase().contains(text)) {
+                    filteredTransactionList.add(entry);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     public static class ViewHolderTransaction extends RecyclerView.ViewHolder {

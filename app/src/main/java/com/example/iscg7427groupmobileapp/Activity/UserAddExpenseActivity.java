@@ -7,6 +7,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -47,7 +50,7 @@ import java.util.Locale;
 
 public class UserAddExpenseActivity extends AppCompatActivity {
 
-    Button btnViewReceipt, btnChangeRecipt, btnSave;
+    Button  btnSave;
     ImageButton btnReturn;
     ImageView imageView;
     Spinner spinner;
@@ -56,9 +59,9 @@ public class UserAddExpenseActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static final int PICK_IMAGE_REQUEST = 1;
     String uid;
+    TextView btnViewReceipt, btnChangeReceipt;
 
     private BottomNavigationView bottomNavigation;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +72,13 @@ public class UserAddExpenseActivity extends AppCompatActivity {
 
         init();
         setupBottomNavigation();
+
+        updateUnderlinedTextView(btnViewReceipt, "Upload receipt");
+        updateUnderlinedTextView(btnChangeReceipt, "Change receipt");
         // Open the photo collections to select a photo
         btnViewReceipt.setOnClickListener(this::selectImage);
         // same as above
-        btnChangeRecipt.setOnClickListener(this::selectImage);
+        btnChangeReceipt.setOnClickListener(this::selectImage);
         // spinner for category
         String[] options = {"Transportation", "Housing", "Dining", "Entertainment", "Others"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner, options);
@@ -84,16 +90,17 @@ public class UserAddExpenseActivity extends AppCompatActivity {
                 String selectedItem = parent.getItemAtPosition(position).toString();
 
                 if (selectedItem.equals("Option 1")) {
-
+                    // Handle option 1
                 } else if (selectedItem.equals("Option 2")) {
-
+                    // Handle option 2
                 } else {
-
+                    // Handle other options
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                // Handle nothing selected
             }
         });
         // date picker
@@ -114,7 +121,7 @@ public class UserAddExpenseActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             Date finalDate = date;
-            // validate inout
+            // validate input
             if (date == null || description.isEmpty() || cost.isEmpty()) {
                 Toast.makeText(UserAddExpenseActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                 return;
@@ -124,38 +131,32 @@ public class UserAddExpenseActivity extends AppCompatActivity {
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
                     User user = dataSnapshot.getValue(User.class);
-                    User.Transaction transaction = new User.Transaction("Expense", category, Double.parseDouble(cost), finalDate, description);
+                    User.Transaction transaction = new User.Transaction("Expense", category, Double.parseDouble(cost), finalDate, description, "");
                     String transactionKey = user.addNewTransaction(transaction);
                     mRef.setValue(user);
                     // save image to storage
                     if (imageView.getDrawable() != null) {
-                        createAttachmentImage(transactionKey);
+                        createAttachmentImage(transactionKey, transaction);
+                    } else {
+                        Toast.makeText(UserAddExpenseActivity.this, "Transaction Saved", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
-                    Toast.makeText(UserAddExpenseActivity.this, "Transaction Saved", Toast.LENGTH_SHORT);
-                    finish();
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
+                    // Handle error
                 }
             });
         });
 
-        btnReturn.setOnClickListener(v -> {
-            finish();
-        });
-
-
+        btnReturn.setOnClickListener(v -> finish());
     }
 
     private void init() {
         btnViewReceipt = findViewById(R.id.user_add_expense_view_receipt);
-        btnViewReceipt.setText(Html.fromHtml(getString(R.string.view_receipt), Html.FROM_HTML_MODE_LEGACY));
-        btnChangeRecipt = findViewById(R.id.user_add_expense_change_receipt);
-        btnChangeRecipt.setText(Html.fromHtml(getString(R.string.change_receipt), Html.FROM_HTML_MODE_LEGACY));
+        btnChangeReceipt = findViewById(R.id.user_add_expense_change_receipt);
         btnReturn = findViewById(R.id.user_add_expense_btn_return);
         btnSave = findViewById(R.id.user_add_expense_btn_save);
         imageView = findViewById(R.id.user_add_expense_image);
@@ -164,6 +165,17 @@ public class UserAddExpenseActivity extends AppCompatActivity {
         edt_description = findViewById(R.id.user_add_expense_edt_description);
         edt_cost = findViewById(R.id.user_add_expense_edt_cost);
         bottomNavigation = findViewById(R.id.bottom_navigation);
+    }
+
+    private void updateUnderlinedTextView(TextView textView, String targetText) {
+        String text = targetText;
+        SpannableString spannableString = new SpannableString(text);
+
+        // Apply UnderlineSpan to the entire text
+        spannableString.setSpan(new UnderlineSpan(), 0, text.length(), SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Set the modified SpannableString to the TextView
+        textView.setText(spannableString);
     }
     private void setupBottomNavigation() {
         bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -219,7 +231,6 @@ public class UserAddExpenseActivity extends AppCompatActivity {
     }
 
     private void showDatePickerDialog() {
-        // Get current date
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -228,8 +239,6 @@ public class UserAddExpenseActivity extends AppCompatActivity {
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 UserAddExpenseActivity.this,
                 (view, year1, month1, dayOfMonth) -> {
-                    // month1 is 0-based, add 1 to get the actual month number
-                    // thanks to GPT
                     String selectedDate = dayOfMonth + "/" + (month1 + 1) + "/" + year1;
                     edt_date.setText(selectedDate);
                 },
@@ -238,30 +247,38 @@ public class UserAddExpenseActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void createAttachmentImage(String transactionKey) {
+    private void createAttachmentImage(String transactionKey, User.Transaction transaction) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference mStorageRef = storage.getReference().child("receipts/" + transactionKey + ".png");
 
-        FirebaseStorage storage = FirebaseStorage.getInstance("gs://group5-6aa2b.appspot.com");
-        StorageReference mStorageRef = storage.getReference(transactionKey);
-        // Get the data from an ImageView as bytes
         imageView.setDrawingCacheEnabled(true);
         imageView.buildDrawingCache();
         Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] data = baos.toByteArray();
-        // start upload process
+
         UploadTask uploadTask = mStorageRef.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
+                Toast.makeText(UserAddExpenseActivity.this, "Receipt Upload Failed", Toast.LENGTH_SHORT).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
-                Toast.makeText(UserAddExpenseActivity.this, "Receipt Upload Success", Toast.LENGTH_SHORT).show();
+                mStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String downloadUrl = uri.toString();
+                        // Update the transaction with the receipt URL
+                        transaction.setReceiptUrl(downloadUrl);
+                        DatabaseReference mRef = database.getReference("Users").child(uid).child("transactions").child(transactionKey);
+                        mRef.setValue(transaction);
+                        Toast.makeText(UserAddExpenseActivity.this, "Transaction and Receipt Saved", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
             }
         });
     }

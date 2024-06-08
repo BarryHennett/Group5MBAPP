@@ -10,21 +10,15 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.iscg7427groupmobileapp.Adapter.AccountClientTransactionAdapter;
-import com.example.iscg7427groupmobileapp.Adapter.TransactionAdapter;
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -46,7 +41,6 @@ public class AccountantClientTransactions extends AppCompatActivity {
     ImageButton btnReturn;
     Spinner spinner;
     String uid;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +60,12 @@ public class AccountantClientTransactions extends AppCompatActivity {
                     recentTransactions.put(entry.getKey(), entry.getValue());
                 }
                 recyclerView.setLayoutManager(new LinearLayoutManager(AccountantClientTransactions.this));
-                recyclerView.setAdapter(new TransactionAdapter(recentTransactions, AccountantClientTransactions.this, uid));
+                recyclerView.setAdapter(new AccountClientTransactionAdapter(recentTransactions, AccountantClientTransactions.this, uid));
             }
         });
 
-        // set spinner
-        String[] options = {"Financial Year: 2023/24", "Financial Year: 2022/23", "Financial Year: 2021/22"};
+        // Set spinner
+        String[] options = {"Current Tax Year", "Last 12 Months", "Financial Year: 2023/24"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner, options);
         adapter.setDropDownViewResource(R.layout.spinner);
         spinner.setAdapter(adapter);
@@ -108,12 +102,10 @@ public class AccountantClientTransactions extends AppCompatActivity {
     }
 
     private void retrieveUserData(OnTransactionListener listener) {
-
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 User user = dataSnapshot.getValue(User.class);
                 HashMap<String, User.Transaction> transactions = user.getTransactions();
                 listener.onDateRetrieved(transactions);
@@ -131,17 +123,25 @@ public class AccountantClientTransactions extends AppCompatActivity {
     private List<Map.Entry<String, User.Transaction>> filterTransactions(String selectedItem, HashMap<String, User.Transaction> transactions) {
         List<Map.Entry<String, User.Transaction>> filteredList = new ArrayList<>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate, endDate;
+        Date startDate = null, endDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+
         try {
-            if (selectedItem.equals("Financial Year: 2023/24")) {
+            if (selectedItem.equals("Current Tax Year")) {
+                calendar.set(Calendar.MONTH, Calendar.APRIL);
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                startDate = calendar.getTime();
+                calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
+                calendar.set(Calendar.MONTH, Calendar.MARCH);
+                calendar.set(Calendar.DAY_OF_MONTH, 31);
+                endDate = calendar.getTime();
+            } else if (selectedItem.equals("Last 12 Months")) {
+                calendar.setTime(new Date());
+                calendar.add(Calendar.YEAR, -1);
+                startDate = calendar.getTime();
+            } else if (selectedItem.equals("Financial Year: 2023/24")) {
                 startDate = dateFormat.parse("2023-04-01");
                 endDate = dateFormat.parse("2024-03-31");
-            } else if (selectedItem.equals("Financial Year: 2022/23")) {
-                startDate = dateFormat.parse("2022-04-01");
-                endDate = dateFormat.parse("2023-03-31");
-            } else if (selectedItem.equals("Financial Year: 2021/22")) {
-                startDate = dateFormat.parse("2021-04-01");
-                endDate = dateFormat.parse("2022-03-31");
             } else {
                 return filteredList; // Return an empty list if invalid selection
             }
@@ -160,5 +160,4 @@ public class AccountantClientTransactions extends AppCompatActivity {
         filteredList.sort(Comparator.comparing(o -> o.getValue().getDate(), Comparator.reverseOrder()));
         return filteredList;
     }
-
 }

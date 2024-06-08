@@ -183,19 +183,20 @@
                             android:text="pdf" />-->
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
-                            <Button
+                            <TextView
                                 android:id="@+id/transaction_detail_btn_view_receipt"
                                 style="@style/body_10_white_regular"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:background="@android:color/transparent"
-                                android:textAllCaps="false" />
+                                android:textAllCaps="false"
+                                android:layout_marginRight="16sp"/>
 
-                            <Button
+                            <TextView
                                 android:id="@+id/transaction_detail_btn_change_receipt"
                                 style="@style/body_10_white_regular"
                                 android:layout_width="wrap_content"
@@ -206,7 +207,9 @@
                     </LinearLayout>
 
                 </LinearLayout>
-
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="16sp" />
                 <ImageView
                     android:id="@+id/transaction_detail_image"
                     android:layout_width="match_parent"

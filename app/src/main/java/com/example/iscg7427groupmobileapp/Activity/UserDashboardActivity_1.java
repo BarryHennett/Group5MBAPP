@@ -2,7 +2,6 @@ package com.example.iscg7427groupmobileapp.Activity;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.icu.text.NumberFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -28,14 +27,15 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -70,7 +70,7 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
         // initialize page
         retrieveUserData(new OnTransactionListener() {
             @Override
-            public void onDateRetrieved(HashMap<String, User.Transaction> transactions, String name) {
+            public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
                 // calculate income, expense and balance
                 double income = 0;
                 double expense = 0;
@@ -86,8 +86,6 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
                 txtIncome.setText(String.valueOf(currencyFormat.format(income)));
                 txtExpense.setText(String.valueOf(currencyFormat.format(expense)));
                 txtBalance.setText(String.valueOf(currencyFormat.format(net)));
-                txtName.setText("Hi " + name);
-
                 if (income > expense) {
                     extraText.setText("Great job, keep it up!");
                 } else {
@@ -125,7 +123,7 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
                 if (selectedItem.equals("Last 3 Month")) {
                     retrieveUserData(new OnTransactionListener() {
                         @Override
-                        public void onDateRetrieved(HashMap<String, User.Transaction> transactions, String name) {
+                        public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
                             calculateIncomeAndExpense(transactions, new onIncomeAndExpenseCalculate() {
                                 @Override
                                 public void getIncomeAndExpense(double oneMonthIncome, double oneMonthExpense, double twoMonthIncome, double twoMonthExpense, double threeMonthIncome, double threeMonthExpense, double fourMonthIncome, double fourMonthExpense, double fiveMonthIncome, double fiveMonthExpense, double sixMonthIncome, double sixMonthExpense, double nineMonthIncome, double nineMonthExpense, double oneYearIncome, double oneYearExpense) {
@@ -142,7 +140,7 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
                 } else if (selectedItem.equals("Last 6 Month")) {
                     retrieveUserData(new OnTransactionListener() {
                         @Override
-                        public void onDateRetrieved(HashMap<String, User.Transaction> transactions, String name) {
+                        public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
                             calculateIncomeAndExpense(transactions, new onIncomeAndExpenseCalculate() {
                                 @Override
                                 public void getIncomeAndExpense(double oneMonthIncome, double oneMonthExpense, double twoMonthIncome, double twoMonthExpense, double threeMonthIncome, double threeMonthExpense, double fourMonthIncome, double fourMonthExpense, double fiveMonthIncome, double fiveMonthExpense, double sixMonthIncome, double sixMonthExpense, double nineMonthIncome, double nineMonthExpense, double oneYearIncome, double oneYearExpense) {
@@ -158,7 +156,7 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
                 } else {
                     retrieveUserData(new OnTransactionListener() {
                         @Override
-                        public void onDateRetrieved(HashMap<String, User.Transaction> transactions, String name) {
+                        public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
                             calculateIncomeAndExpense(transactions, new onIncomeAndExpenseCalculate() {
                                 @Override
                                 public void getIncomeAndExpense(double oneMonthIncome, double oneMonthExpense, double twoMonthIncome, double twoMonthExpense, double threeMonthIncome, double threeMonthExpense, double fourMonthIncome, double fourMonthExpense, double fiveMonthIncome, double fiveMonthExpense, double sixMonthIncome, double sixMonthExpense, double nineMonthIncome, double nineMonthExpense, double oneYearIncome, double oneYearExpense) {
@@ -179,13 +177,11 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
             }
         });
 
-
         btnIncome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(UserDashboardActivity_1.this, UserIncomeDashboardActivity.class);
                 startActivity(intent);
-
             }
         });
 
@@ -207,7 +203,6 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
     }
 
     private void init() {
-
         btnIncome = findViewById(R.id.user_dashboard_btn_income);
         btnExpense = findViewById(R.id.user_dashboard_btn_expense);
         txtName = findViewById(R.id.user_dashboard_txt_name);
@@ -251,7 +246,7 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
             }
         });
 
-        // Set the selected item as item_profile
+        // Set the selected item as item_home
         bottomNavigation.post(new Runnable() {
             @Override
             public void run() {
@@ -261,16 +256,15 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
     }
 
     private void retrieveUserData(OnTransactionListener listener) {
-
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
-        mRef.addValueEventListener(new ValueEventListener() {
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 User user = dataSnapshot.getValue(User.class);
-                String name = user.getName();
-                HashMap<String, User.Transaction> transactions = user.getTransactions();
-                listener.onDateRetrieved(transactions, name);
+                if (user != null) {
+                    HashMap<String, User.Transaction> transactions = user.getTransactions();
+                    listener.onDateRetrieved(transactions);
+                }
             }
 
             @Override
@@ -280,7 +274,7 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
     }
 
     public interface OnTransactionListener {
-        void onDateRetrieved(HashMap<String, User.Transaction> transactions, String name);
+        void onDateRetrieved(HashMap<String, User.Transaction> transactions);
     }
 
     private void populateBarchart(String type, double oneMonthIncomeGap, double oneMonthExpenseGap, double twoMonthIncomeGap,
@@ -290,98 +284,91 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
                                   double nineMonthIncomeGap, double nineMonthExpenseGap, double oneYearIncomeGap,
                                   double oneYearExpenseGap) {
 
-        barChart.setNoDataText("No data available");
-        barChart.setNoDataTextColor(Color.parseColor("#EB5F2A"));
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setDrawAxisLine(true);
+        xAxis.setAxisLineWidth(1f);
+        xAxis.setAxisLineColor(Color.WHITE);
+        xAxis.setDrawLabels(false);
 
-        if (barChart.getData() == null || barChart.getData().getEntryCount() == 0) {
-            barChart.clear();
-        } else {
-            XAxis xAxis = barChart.getXAxis();
-            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-            xAxis.setDrawGridLines(false);
-            xAxis.setDrawAxisLine(true);
-            xAxis.setAxisLineWidth(1f);
-            xAxis.setAxisLineColor(Color.WHITE);
-            xAxis.setDrawLabels(false);
+        YAxis leftAxis = barChart.getAxisLeft();
+        leftAxis.setDrawGridLines(false);
+        leftAxis.setDrawAxisLine(false);
+        leftAxis.setAxisMinimum(0f);
+        leftAxis.setEnabled(false);
+        YAxis rightAxis = barChart.getAxisRight();
+        rightAxis.setEnabled(false);
 
-            YAxis leftAxis = barChart.getAxisLeft();
-            leftAxis.setDrawGridLines(false);
-            leftAxis.setDrawAxisLine(false);
-            leftAxis.setAxisMinimum(0f);
-            leftAxis.setEnabled(false);
-            YAxis rightAxis = barChart.getAxisRight();
-            rightAxis.setEnabled(false);
+        List<BarEntry> entriesGroup1 = new ArrayList<>();
+        List<BarEntry> entriesGroup2 = new ArrayList<>();
 
-            List<BarEntry> entriesGroup1 = new ArrayList<>();
-            List<BarEntry> entriesGroup2 = new ArrayList<>();
+        float barWidth = 0.20f;
 
-            float barWidth = 0.20f;
+        if (type.equals("Last 3 Month")) {
 
-            if (type.equals("Last 3 Month")) {
+            entriesGroup1.add(new BarEntry(0f, (float) oneMonthIncomeGap));
+            entriesGroup1.add(new BarEntry(1f, (float) twoMonthIncomeGap));
+            entriesGroup1.add(new BarEntry(2f, (float) threeMonthIncomeGap));
 
-                entriesGroup1.add(new BarEntry(0f, (float) oneMonthIncomeGap));
-                entriesGroup1.add(new BarEntry(1f, (float) twoMonthIncomeGap));
-                entriesGroup1.add(new BarEntry(2f, (float) threeMonthIncomeGap));
+            entriesGroup2.add(new BarEntry(0f, (float) oneMonthExpenseGap));
+            entriesGroup2.add(new BarEntry(1f, (float) twoMonthExpenseGap));
+            entriesGroup2.add(new BarEntry(2f, (float) threeMonthExpenseGap));
 
-                entriesGroup2.add(new BarEntry(0f, (float) oneMonthExpenseGap));
-                entriesGroup2.add(new BarEntry(1f, (float) twoMonthExpenseGap));
-                entriesGroup2.add(new BarEntry(2f, (float) threeMonthExpenseGap));
+        } else if (type.equals("Last 6 Month")) {
 
-            } else if (type.equals("Last 6 Month")) {
+            entriesGroup1.add(new BarEntry(0f, (float) oneMonthIncomeGap));
+            entriesGroup1.add(new BarEntry(1f, (float) twoMonthIncomeGap));
+            entriesGroup1.add(new BarEntry(2f, (float) threeMonthIncomeGap));
+            entriesGroup1.add(new BarEntry(3f, (float) fourMonthIncomeGap));
+            entriesGroup1.add(new BarEntry(4f, (float) fiveMonthIncomeGap));
+            entriesGroup1.add(new BarEntry(5f, (float) sixMonthIncomeGap));
 
-                entriesGroup1.add(new BarEntry(0f, (float) oneMonthIncomeGap));
-                entriesGroup1.add(new BarEntry(1f, (float) twoMonthIncomeGap));
-                entriesGroup1.add(new BarEntry(2f, (float) threeMonthIncomeGap));
-                entriesGroup1.add(new BarEntry(3f, (float) fourMonthIncomeGap));
-                entriesGroup1.add(new BarEntry(4f, (float) fiveMonthIncomeGap));
-                entriesGroup1.add(new BarEntry(5f, (float) sixMonthIncomeGap));
+            entriesGroup2.add(new BarEntry(0f, (float) oneMonthExpenseGap));
+            entriesGroup2.add(new BarEntry(1f, (float) twoMonthExpenseGap));
+            entriesGroup2.add(new BarEntry(2f, (float) threeMonthExpenseGap));
+            entriesGroup2.add(new BarEntry(3f, (float) fourMonthExpenseGap));
+            entriesGroup2.add(new BarEntry(4f, (float) fiveMonthExpenseGap));
+            entriesGroup2.add(new BarEntry(5f, (float) sixMonthExpenseGap));
 
-                entriesGroup2.add(new BarEntry(0f, (float) oneMonthExpenseGap));
-                entriesGroup2.add(new BarEntry(1f, (float) twoMonthExpenseGap));
-                entriesGroup2.add(new BarEntry(2f, (float) threeMonthExpenseGap));
-                entriesGroup2.add(new BarEntry(3f, (float) fourMonthExpenseGap));
-                entriesGroup2.add(new BarEntry(4f, (float) fiveMonthExpenseGap));
-                entriesGroup2.add(new BarEntry(5f, (float) sixMonthExpenseGap));
+            barWidth = 0.30f;
 
-                barWidth = 0.30f;
+        } else if (type.equals("Last Year")) {
 
-            } else if (type.equals("Last Year")) {
+            float incomeOneSeasonGp = (float) (oneMonthIncomeGap + twoMonthIncomeGap + threeMonthIncomeGap);
+            float incomeTwoSeasonGp = (float) (fourMonthIncomeGap + fiveMonthIncomeGap + sixMonthIncomeGap);
+            float expenseOneSeasonGp = (float) (oneMonthExpenseGap + twoMonthExpenseGap + threeMonthExpenseGap);
+            float expenseTwoSeasonGp = (float) (fourMonthExpenseGap + fiveMonthExpenseGap + sixMonthExpenseGap);
 
-                float incomeOneSeasonGp = (float) (oneMonthIncomeGap + twoMonthIncomeGap + threeMonthIncomeGap);
-                float incomeTwoSeasonGp = (float) (fourMonthIncomeGap + fiveMonthIncomeGap + sixMonthIncomeGap);
-                float expenseOneSeasonGp = (float) (oneMonthExpenseGap + twoMonthExpenseGap + threeMonthExpenseGap);
-                float expenseTwoSeasonGp = (float) (fourMonthExpenseGap + fiveMonthExpenseGap + sixMonthExpenseGap);
+            entriesGroup1.add(new BarEntry(0f, incomeOneSeasonGp));
+            entriesGroup1.add(new BarEntry(1f, incomeTwoSeasonGp));
+            entriesGroup1.add(new BarEntry(2f, (float) nineMonthIncomeGap));
+            entriesGroup1.add(new BarEntry(3f, (float) oneYearIncomeGap));
+            entriesGroup2.add(new BarEntry(0f, expenseOneSeasonGp));
+            entriesGroup2.add(new BarEntry(1f, expenseTwoSeasonGp));
+            entriesGroup2.add(new BarEntry(2f, (float) nineMonthExpenseGap));
+            entriesGroup2.add(new BarEntry(3f, (float) oneYearExpenseGap));
 
-                entriesGroup1.add(new BarEntry(0f, incomeOneSeasonGp));
-                entriesGroup1.add(new BarEntry(1f, incomeTwoSeasonGp));
-                entriesGroup1.add(new BarEntry(2f, (float) nineMonthIncomeGap));
-                entriesGroup1.add(new BarEntry(3f, (float) oneYearIncomeGap));
-                entriesGroup2.add(new BarEntry(0f, expenseOneSeasonGp));
-                entriesGroup2.add(new BarEntry(1f, expenseTwoSeasonGp));
-                entriesGroup2.add(new BarEntry(2f, (float) nineMonthExpenseGap));
-                entriesGroup2.add(new BarEntry(3f, (float) oneYearExpenseGap));
-
-                barWidth = 0.30f;
-            }
-
-            float groupSpace = 0.3f;
-            float barSpace = 0.05f;
-            float startValue = 0f - (barWidth + barSpace + groupSpace) / 2f;
-
-            BarDataSet set1 = new BarDataSet(entriesGroup1, "Group 1");
-            BarDataSet set2 = new BarDataSet(entriesGroup2, "Group 2");
-            set1.setColor(Color.parseColor("#88BBD8"));
-            set2.setColor(Color.parseColor("#EB5F2A"));
-            set1.setDrawValues(false);
-            set2.setDrawValues(false);
-            barChart.setDescription(null);
-            BarData data = new BarData(set1, set2);
-            data.setBarWidth(barWidth);
-            barChart.getLegend().setEnabled(false);
-            barChart.setData(data);
-            barChart.groupBars(startValue, groupSpace, barSpace);
-            barChart.invalidate();
+            barWidth = 0.30f;
         }
+
+        float groupSpace = 0.3f;
+        float barSpace = 0.05f;
+        float startValue = 0f - (barWidth + barSpace + groupSpace) / 2f;
+
+        BarDataSet set1 = new BarDataSet(entriesGroup1, "Group 1");
+        BarDataSet set2 = new BarDataSet(entriesGroup2, "Group 2");
+        set1.setColor(Color.parseColor("#88BBD8"));
+        set2.setColor(Color.parseColor("#EB5F2A"));
+        set1.setDrawValues(false);
+        set2.setDrawValues(false);
+        barChart.setDescription(null);
+        BarData data = new BarData(set1, set2);
+        data.setBarWidth(barWidth);
+        barChart.getLegend().setEnabled(false);
+        barChart.setData(data);
+        barChart.groupBars(startValue, groupSpace, barSpace);
+        barChart.invalidate();
     }
 
     private void calculateIncomeAndExpense(HashMap<String, User.Transaction> transactions, onIncomeAndExpenseCalculate listener) {
@@ -508,5 +495,3 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
         return cal.getTime();
     }
 }
-
-
