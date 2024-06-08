@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private EditText searchEditText;
     private LinearLayout toAddUser;
+    private ImageView toProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
         toAddUser = findViewById(R.id.toAddUser);
         toAddUser.setOnClickListener(v -> {
             Intent intent = new Intent(AdminDashboardActivity.this, AdminAddNewUser.class);
+            startActivity(intent);
+        });
+
+        toProfile = findViewById(R.id.toProfile);
+        toProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminDashboardActivity.this, UserProfileActivity.class);
             startActivity(intent);
         });
 
@@ -74,11 +82,11 @@ public class AdminDashboardActivity extends AppCompatActivity {
     }
 
     private void fetchUsersAndAccountants() {
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<HashMap<String, String>> userAndAccountantList = new ArrayList<>();
-
+                userAndAccountantList.clear();
                 for (DataSnapshot ds : snapshot.child("Accountants").getChildren()) {
                     Boolean isActive = ds.child("active").getValue(Boolean.class);
                     if (isActive != null) {

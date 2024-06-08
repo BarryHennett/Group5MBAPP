@@ -33,7 +33,7 @@
             android:paddingLeft="16sp"
             android:paddingTop="32sp"
             android:paddingRight="16sp"
-            android:paddingBottom="32sp">
+            android:paddingBottom="50sp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -143,80 +143,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24sp"
-                android:layout_marginBottom="24sp"
+                android:layout_marginBottom="16sp"
                 style="@style/primary_button"
                 android:text="Sign Up"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_marginBottom="24sp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"
-                    android:background="@color/lightGray" />
-
-                <TextView
-                    style="@style/body_10_lightgray_medium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="16sp"
-                    android:paddingEnd="16sp"
-                    android:text="Or Sign up with" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"
-                    android:background="@color/lightGray" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="24sp">
-
-                <com.google.android.gms.common.SignInButton
-                    android:id="@+id/btnGoogle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_black"
-                    android:paddingLeft="40dp"
-                    android:paddingTop="10dp"
-                    android:paddingRight="40dp"
-                    android:paddingBottom="10dp"
-                    android:src="@drawable/facebook_icon"/>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_black"
-                    android:paddingLeft="40dp"
-                    android:paddingTop="10dp"
-                    android:paddingRight="40dp"
-                    android:paddingBottom="10dp"
-                    android:src="@drawable/twitter_icon"/>
-
-            </LinearLayout>
 
 
             <LinearLayout

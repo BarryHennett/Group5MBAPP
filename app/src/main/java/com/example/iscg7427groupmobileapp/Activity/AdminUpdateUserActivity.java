@@ -103,6 +103,7 @@ public class AdminUpdateUserActivity extends AppCompatActivity {
                     databaseReference.setValue(user)
                             .addOnSuccessListener(aVoid -> Toast.makeText(AdminUpdateUserActivity.this, "User details updated successfully", Toast.LENGTH_SHORT).show())
                             .addOnFailureListener(e -> Toast.makeText(AdminUpdateUserActivity.this, "Failed to update user", Toast.LENGTH_SHORT).show());
+                    finish();
                 }
             }
 

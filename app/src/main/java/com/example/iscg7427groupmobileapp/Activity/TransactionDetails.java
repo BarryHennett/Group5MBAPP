@@ -163,34 +163,6 @@ public class TransactionDetails extends AppCompatActivity {
             finish();
         });
 
-        // set bottom navigation bar
-        NavigationBarView.OnItemSelectedListener listener = new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.item_home) {
-
-                    Intent intent = new Intent(TransactionDetails.this, UserDashboardActivity_1.class);
-                    startActivity(intent);
-                    return true;
-                } else if (item.getItemId() == R.id.item_income) {
-
-                    Intent intent = new Intent(TransactionDetails.this, UserIncomeDashboardActivity.class);
-                    startActivity(intent);
-                    return true;
-                } else if (item.getItemId() == R.id.item_expenses) {
-
-                    Intent intent = new Intent(TransactionDetails.this, UserExpenseDashboardActivity.class);
-                    startActivity(intent);
-                    return true;
-                } else if (item.getItemId() == R.id.item_profile) {
-
-                    Intent intent = new Intent(TransactionDetails.this, UserProfileActivity.class);
-                    startActivity(intent);
-                    return true;
-                } else return false;
-            }
-        };
-        nav.setOnItemSelectedListener(listener);
     }
 
     private void init() {
@@ -205,7 +177,6 @@ public class TransactionDetails extends AppCompatActivity {
         edt_date = findViewById(R.id.transaction_detail_edt_date);
         edt_description = findViewById(R.id.transaction_detail_edt_description);
         edt_amount = findViewById(R.id.transaction_detail_edt_amount);
-        nav = findViewById(R.id.bottom_navigation);
         txt_category = findViewById(R.id.transaction_detail_txt_category);
     }
 

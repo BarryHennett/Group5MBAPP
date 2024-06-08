@@ -62,7 +62,8 @@
                 android:layout_marginTop="16sp"
                 android:background="@drawable/background_mdblack"
                 android:orientation="vertical"
-                android:padding="16sp">
+                android:padding="16sp"
+                android:layout_marginBottom="100sp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -223,7 +224,7 @@
                     style="@style/primary_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Add new income" />
+                    android:text="Add new expense" />
 
             </LinearLayout>
 

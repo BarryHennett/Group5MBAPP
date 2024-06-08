@@ -4,7 +4,10 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@color/mediumBlack">
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/darkGray"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +19,7 @@
         <TextView
             android:id="@+id/rv_transaction_category"
             style="@style/body_12_white_regular"
-            android:layout_width="wrap_content"
+            android:layout_width="100sp"
             android:layout_height="wrap_content"
             android:text="Subscription" />
         <LinearLayout
@@ -38,14 +41,12 @@
         <TextView
             android:id="@+id/rv_transaction_amount"
             style="@style/body_12_orange_regular"
-            android:layout_width="wrap_content"
+            android:layout_width="100sp"
+            android:gravity="right"
             android:layout_height="wrap_content"
             android:text="$ 12.00" />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1sp"
-        android:background="@color/darkGray"/>
+
 </LinearLayout>
