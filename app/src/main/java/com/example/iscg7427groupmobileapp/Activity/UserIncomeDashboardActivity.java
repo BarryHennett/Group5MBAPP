@@ -204,7 +204,7 @@ public class UserIncomeDashboardActivity extends AppCompatActivity {
         } );
 
         txtViewAll.setOnClickListener(v -> {
-            Intent intent = new Intent(UserIncomeDashboardActivity.this, UserAllTransactions.class);
+            Intent intent = new Intent(UserIncomeDashboardActivity.this, AllIncome.class);
             startActivity(intent);
         });
     }

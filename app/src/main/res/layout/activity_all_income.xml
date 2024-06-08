@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/black"
     android:orientation="vertical"
-    tools:context=".Activity.UserAllTransactions">
+    tools:context=".Activity.AllIncome">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -31,7 +30,7 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/user_all_income_btn_return"
+                    android:id="@+id/all_income_btn_return"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8sp"
@@ -97,7 +96,7 @@
                     android:orientation="horizontal">
 
                     <Spinner
-                        android:id="@+id/user_all_income_spinner"
+                        android:id="@+id/all_income_spinner"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/white" />
@@ -114,7 +113,7 @@
                     android:background="@color/darkGray" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/user_all_income_recyclerView"
+                    android:id="@+id/all_income_recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -123,9 +122,8 @@
 
     </androidx.core.widget.NestedScrollView>
 
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+        android:id="@+id/all_income__nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
