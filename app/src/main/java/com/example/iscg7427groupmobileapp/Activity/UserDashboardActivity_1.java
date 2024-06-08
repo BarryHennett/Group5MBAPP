@@ -240,7 +240,7 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
     private void retrieveUserData(OnTransactionListener listener) {
 
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
