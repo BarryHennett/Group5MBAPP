@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.iscg7427groupmobileapp.Activity.AccountantClientTransactions;
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
 import com.example.iscg7427groupmobileapp.Activity.UserAllTransactions;
@@ -78,7 +79,7 @@ public class AccountantClientAdapter extends RecyclerView.Adapter<AccountantClie
             @Override
             public void onClick(View v) {
                 if (client != null) {
-                    Intent intent = new Intent(context, UserAllTransactions.class);
+                    Intent intent = new Intent(context, AccountantClientTransactions.class);
                     intent.putExtra("uid", userKey); // Use the actual user ID
                     context.startActivity(intent);
                 } else {
