@@ -218,7 +218,15 @@
                     style="@style/primary_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Update" />
+                    android:text="Update"
+                    android:layout_marginBottom="16sp" />
+
+                <Button
+                    android:id="@+id/transaction_detail_btn_delete"
+                    style="@style/primary_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Delete" />
 
             </LinearLayout>
         </LinearLayout>

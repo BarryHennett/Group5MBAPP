@@ -1,6 +1,8 @@
 package com.example.iscg7427groupmobileapp.Activity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -28,6 +30,7 @@ import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -49,7 +52,7 @@ import java.util.Map;
 
 public class TransactionDetails extends AppCompatActivity {
 
-    Button btnViewReceipt, btnChangeRecipt, btnSave;
+    Button btnViewReceipt, btnChangeRecipt, btnSave, btnDelete;
     ImageButton btnReturn;
     ImageView imageView;
     EditText edt_date, edt_amount, edt_description;
@@ -128,6 +131,34 @@ public class TransactionDetails extends AppCompatActivity {
             });
         });
 
+        btnDelete.setOnClickListener(v -> {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Confirm Deletion");
+            builder.setMessage("Are you sure you want to delete this transaction?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    DatabaseReference mRef = database.getReference("Users").child(uid).child("transactions").child(transactionId);
+                    mRef.removeValue();
+                    if(mStorageRef != null){
+                        mStorageRef.delete();
+                    }
+                    Toast.makeText(TransactionDetails.this, "Transaction Deleted", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    dialog.dismiss();
+                }
+            });
+            builder.create().show();
+        });
+
         btnReturn.setOnClickListener(v -> {
             finish();
         });
@@ -169,6 +200,7 @@ public class TransactionDetails extends AppCompatActivity {
         btnChangeRecipt.setText(Html.fromHtml(getString(R.string.change_receipt), Html.FROM_HTML_MODE_LEGACY));
         btnReturn = findViewById(R.id.transaction_detail_btn_return);
         btnSave = findViewById(R.id.transaction_detail_btn_save);
+        btnDelete = findViewById(R.id.transaction_detail_btn_delete);
         imageView = findViewById(R.id.transaction_detail_image);
         edt_date = findViewById(R.id.transaction_detail_edt_date);
         edt_description = findViewById(R.id.transaction_detail_edt_description);
@@ -255,12 +287,10 @@ public class TransactionDetails extends AppCompatActivity {
                             .into(imageView);
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
     }
-
 }
