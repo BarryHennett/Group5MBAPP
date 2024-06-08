@@ -46,7 +46,7 @@
                     style="@style/heading_22_white_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="All transactions" />
+                    android:text="All Income" />
             </LinearLayout>
 
             <LinearLayout
@@ -123,7 +123,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/all_income__nav"
+        android:id="@+id/all_income_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"

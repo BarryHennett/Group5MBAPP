@@ -66,7 +66,7 @@ public class UserExpenseDashboardActivity extends AppCompatActivity {
 
         txtViewAll.setOnClickListener(v -> {
 
-            Intent intent = new Intent(UserExpenseDashboardActivity.this, UserAllTransactions.class);
+            Intent intent = new Intent(UserExpenseDashboardActivity.this, AllExpenses.class);
             startActivity(intent);
 
         });

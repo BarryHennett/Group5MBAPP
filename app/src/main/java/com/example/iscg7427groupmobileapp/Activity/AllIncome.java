@@ -138,7 +138,7 @@ public class AllIncome extends AppCompatActivity {
         recyclerView = findViewById(R.id.all_income_recyclerView);
         btnReturn = findViewById(R.id.all_income_btn_return);
         spinner = findViewById(R.id.all_income_spinner);
-        nav = findViewById(R.id.all_income__nav);
+        nav = findViewById(R.id.all_income_nav);
     }
 
     private void retrieveUserData(OnTransactionListener listener) {
