@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
-import com.example.iscg7427groupmobileapp.TransactionDetails;
+import com.example.iscg7427groupmobileapp.Activity.TransactionDetails;
 
 import java.text.SimpleDateFormat;
 import java.util.Map;

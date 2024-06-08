@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
-import com.example.iscg7427groupmobileapp.UserAllTransactions;
+import com.example.iscg7427groupmobileapp.Activity.UserAllTransactions;
 
 import java.text.NumberFormat;
 import java.util.HashMap;
