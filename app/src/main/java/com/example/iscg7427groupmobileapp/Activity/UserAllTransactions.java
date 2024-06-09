@@ -71,6 +71,7 @@ public class UserAllTransactions extends AppCompatActivity {
                 for (Map.Entry<String, User.Transaction> entry : list) {
                     recentTransactions.put(entry.getKey(), entry.getValue());
                 }
+
                 transactionAdapter = new TransactionAdapter(recentTransactions, UserAllTransactions.this, uid);
                 recyclerView.setLayoutManager(new LinearLayoutManager(UserAllTransactions.this));
                 recyclerView.setAdapter(transactionAdapter);
@@ -86,6 +87,7 @@ public class UserAllTransactions extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
+
                 retrieveUserData(new OnTransactionListener() {
                     @Override
                     public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
@@ -94,11 +96,13 @@ public class UserAllTransactions extends AppCompatActivity {
                         for (Map.Entry<String, User.Transaction> entry : filteredList) {
                             recentTransactions.put(entry.getKey(), entry.getValue());
                         }
+
                         transactionAdapter = new TransactionAdapter(recentTransactions, UserAllTransactions.this, uid);
                         recyclerView.setLayoutManager(new LinearLayoutManager(UserAllTransactions.this));
                         recyclerView.setAdapter(transactionAdapter);
                     }
                 });
+
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -158,6 +162,7 @@ public class UserAllTransactions extends AppCompatActivity {
             }
         });
 
+
         // Set the selected item as item_home
         bottomNavigation.post(() -> bottomNavigation.setSelectedItemId(R.id.item_home));
     }
@@ -168,8 +173,10 @@ public class UserAllTransactions extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
+
                 HashMap<String, User.Transaction> transactions = user.getTransactions();
                 listener.onDateRetrieved(transactions);
+
             }
 
             @Override
@@ -186,8 +193,10 @@ public class UserAllTransactions extends AppCompatActivity {
         List<Map.Entry<String, User.Transaction>> filteredList = new ArrayList<>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate, endDate;
+
         try {
             if (selectedItem.equals("Current Tax Year")) {
+
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.MONTH, Calendar.APRIL);
                 calendar.set(Calendar.DAY_OF_MONTH, 1);
@@ -196,12 +205,16 @@ public class UserAllTransactions extends AppCompatActivity {
                 calendar.set(Calendar.MONTH, Calendar.MARCH);
                 calendar.set(Calendar.DAY_OF_MONTH, 31);
                 endDate = calendar.getTime();
+
+
             } else if (selectedItem.equals("Last 12 Months")) {
+
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(new Date());
                 calendar.add(Calendar.YEAR, -1);
                 startDate = calendar.getTime();
                 endDate = new Date();
+
             } else if (selectedItem.equals("Financial Year: 2023/24")) {
                 startDate = dateFormat.parse("2023-04-01");
                 endDate = dateFormat.parse("2024-03-31");

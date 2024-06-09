@@ -92,6 +92,8 @@ public class AllIncome extends AppCompatActivity {
                 for (Map.Entry<String, User.Transaction> entry : filteredList) {
                     recentTransactions.put(entry.getKey(), entry.getValue());
                 }
+
+
                 transactionAdapter = new TransactionAdapter(recentTransactions, AllIncome.this, uid);
                 recyclerView.setLayoutManager(new LinearLayoutManager(AllIncome.this));
                 recyclerView.setAdapter(transactionAdapter);

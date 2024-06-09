@@ -39,6 +39,7 @@ public class AccountantAddNewClient extends AppCompatActivity {
             Intent intent = new Intent(AccountantAddNewClient.this, AccountantDashboardActivity.class);
             startActivity(intent);
         });
+
         setUpAttributes();
         clickBtnInvite();
     }

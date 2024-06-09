@@ -56,7 +56,7 @@
             android:id="@+id/etUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tony Seddon"
+            android:text=""
             style="@style/body_12_white_regular"/>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -71,7 +71,7 @@
             android:id="@+id/etOccupation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bookkeeper"
+            android:text=""
             style="@style/body_12_white_regular"/>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -86,7 +86,7 @@
             android:id="@+id/etIndustry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bar &amp; Restaurant"
+            android:text=""
             style="@style/body_12_white_regular"/>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -101,7 +101,7 @@
             android:id="@+id/etEmailAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="tony.sed@gmail.com"
+            android:text=""
             style="@style/body_12_white_regular"/>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -116,7 +116,7 @@
             android:id="@+id/etPhoneNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="021 222 342"
+            android:text=""
             style="@style/body_12_white_regular"/>
         <LinearLayout
             android:layout_width="wrap_content"

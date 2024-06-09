@@ -86,6 +86,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     public int getItemCount() {
         // Return the size of the filtered dataset
         return filteredTransactionList.size();
+
     }
 
     public void filter(String text) {

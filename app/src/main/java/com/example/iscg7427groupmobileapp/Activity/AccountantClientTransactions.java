@@ -2,10 +2,13 @@ package com.example.iscg7427groupmobileapp.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -16,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.iscg7427groupmobileapp.Adapter.AccountClientTransactionAdapter;
+import com.example.iscg7427groupmobileapp.Adapter.TransactionAdapter;
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
 import com.google.android.material.navigation.NavigationBarView;
@@ -41,6 +45,10 @@ public class AccountantClientTransactions extends AppCompatActivity {
     ImageButton btnReturn;
     Spinner spinner;
     String uid;
+    EditText searchEditText;
+    AccountClientTransactionAdapter transactionAdapter;
+    HashMap<String, User.Transaction> allTransactions = new HashMap<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +60,8 @@ public class AccountantClientTransactions extends AppCompatActivity {
         retrieveUserData(new OnTransactionListener() {
             @Override
             public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
+//
+                allTransactions = transactions;
 
                 List<Map.Entry<String, User.Transaction>> list = new ArrayList<>(transactions.entrySet());
                 list.sort(Comparator.comparing(o -> o.getValue().getDate(), Comparator.reverseOrder()));
@@ -59,8 +69,13 @@ public class AccountantClientTransactions extends AppCompatActivity {
                 for (Map.Entry<String, User.Transaction> entry : list) {
                     recentTransactions.put(entry.getKey(), entry.getValue());
                 }
+
+       transactionAdapter = new AccountClientTransactionAdapter(recentTransactions, AccountantClientTransactions.this, uid);
                 recyclerView.setLayoutManager(new LinearLayoutManager(AccountantClientTransactions.this));
-                recyclerView.setAdapter(new AccountClientTransactionAdapter(recentTransactions, AccountantClientTransactions.this, uid));
+                recyclerView.setAdapter(transactionAdapter);
+/*
+                recyclerView.setLayoutManager(new LinearLayoutManager(AccountantClientTransactions.this));
+                recyclerView.setAdapter(new AccountClientTransactionAdapter(recentTransactions, AccountantClientTransactions.this, uid));*/
             }
         });
 
@@ -76,18 +91,44 @@ public class AccountantClientTransactions extends AppCompatActivity {
                 retrieveUserData(new OnTransactionListener() {
                     @Override
                     public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
+
                         List<Map.Entry<String, User.Transaction>> filteredList = filterTransactions(selectedItem, transactions);
                         LinkedHashMap<String, User.Transaction> recentTransactions = new LinkedHashMap<>();
                         for (Map.Entry<String, User.Transaction> entry : filteredList) {
                             recentTransactions.put(entry.getKey(), entry.getValue());
                         }
+
+                        transactionAdapter = new AccountClientTransactionAdapter(recentTransactions, AccountantClientTransactions.this, uid);
                         recyclerView.setLayoutManager(new LinearLayoutManager(AccountantClientTransactions.this));
-                        recyclerView.setAdapter(new AccountClientTransactionAdapter(recentTransactions, AccountantClientTransactions.this, uid));
+                        recyclerView.setAdapter(transactionAdapter);
+                        /*
+                        recyclerView.setLayoutManager(new LinearLayoutManager(AccountantClientTransactions.this));
+                        recyclerView.setAdapter(new AccountClientTransactionAdapter(recentTransactions, AccountantClientTransactions.this, uid));*/
                     }
                 });
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (transactionAdapter != null) {
+                    transactionAdapter.filter(s.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
                 // Do nothing
             }
         });
@@ -99,6 +140,7 @@ public class AccountantClientTransactions extends AppCompatActivity {
         recyclerView = findViewById(R.id.accountant_client_transactions_recyclerView);
         btnReturn = findViewById(R.id.accountant_client_transactions_btn_return);
         spinner = findViewById(R.id.accountant_client_transactions_spinner);
+        searchEditText = findViewById(R.id.searchEditText);
     }
 
     private void retrieveUserData(OnTransactionListener listener) {
@@ -160,4 +202,5 @@ public class AccountantClientTransactions extends AppCompatActivity {
         filteredList.sort(Comparator.comparing(o -> o.getValue().getDate(), Comparator.reverseOrder()));
         return filteredList;
     }
+
 }

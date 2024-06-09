@@ -70,7 +70,7 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
         // initialize page
         retrieveUserData(new OnTransactionListener() {
             @Override
-            public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
+            public void onDateRetrieved(HashMap<String, User.Transaction> transactions, String name) {
                 // calculate income, expense and balance
                 double income = 0;
                 double expense = 0;
@@ -86,6 +86,7 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
                 txtIncome.setText(String.valueOf(currencyFormat.format(income)));
                 txtExpense.setText(String.valueOf(currencyFormat.format(expense)));
                 txtBalance.setText(String.valueOf(currencyFormat.format(net)));
+                txtName.setText("Hi " + name);
                 if (income > expense) {
                     extraText.setText("Great job, keep it up!");
                 } else {
@@ -123,7 +124,7 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
                 if (selectedItem.equals("Last 3 Month")) {
                     retrieveUserData(new OnTransactionListener() {
                         @Override
-                        public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
+                        public void onDateRetrieved(HashMap<String, User.Transaction> transactions, String name) {
                             calculateIncomeAndExpense(transactions, new onIncomeAndExpenseCalculate() {
                                 @Override
                                 public void getIncomeAndExpense(double oneMonthIncome, double oneMonthExpense, double twoMonthIncome, double twoMonthExpense, double threeMonthIncome, double threeMonthExpense, double fourMonthIncome, double fourMonthExpense, double fiveMonthIncome, double fiveMonthExpense, double sixMonthIncome, double sixMonthExpense, double nineMonthIncome, double nineMonthExpense, double oneYearIncome, double oneYearExpense) {
@@ -140,7 +141,7 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
                 } else if (selectedItem.equals("Last 6 Month")) {
                     retrieveUserData(new OnTransactionListener() {
                         @Override
-                        public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
+                        public void onDateRetrieved(HashMap<String, User.Transaction> transactions, String name) {
                             calculateIncomeAndExpense(transactions, new onIncomeAndExpenseCalculate() {
                                 @Override
                                 public void getIncomeAndExpense(double oneMonthIncome, double oneMonthExpense, double twoMonthIncome, double twoMonthExpense, double threeMonthIncome, double threeMonthExpense, double fourMonthIncome, double fourMonthExpense, double fiveMonthIncome, double fiveMonthExpense, double sixMonthIncome, double sixMonthExpense, double nineMonthIncome, double nineMonthExpense, double oneYearIncome, double oneYearExpense) {
@@ -156,7 +157,7 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
                 } else {
                     retrieveUserData(new OnTransactionListener() {
                         @Override
-                        public void onDateRetrieved(HashMap<String, User.Transaction> transactions) {
+                        public void onDateRetrieved(HashMap<String, User.Transaction> transactions, String name) {
                             calculateIncomeAndExpense(transactions, new onIncomeAndExpenseCalculate() {
                                 @Override
                                 public void getIncomeAndExpense(double oneMonthIncome, double oneMonthExpense, double twoMonthIncome, double twoMonthExpense, double threeMonthIncome, double threeMonthExpense, double fourMonthIncome, double fourMonthExpense, double fiveMonthIncome, double fiveMonthExpense, double sixMonthIncome, double sixMonthExpense, double nineMonthIncome, double nineMonthExpense, double oneYearIncome, double oneYearExpense) {
@@ -257,13 +258,15 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
 
     private void retrieveUserData(OnTransactionListener listener) {
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
+
                 if (user != null) {
                     HashMap<String, User.Transaction> transactions = user.getTransactions();
-                    listener.onDateRetrieved(transactions);
+                    String name = user.getName();
+                    listener.onDateRetrieved(transactions, name);
                 }
             }
 
@@ -274,7 +277,7 @@ public class UserDashboardActivity_1 extends AppCompatActivity {
     }
 
     public interface OnTransactionListener {
-        void onDateRetrieved(HashMap<String, User.Transaction> transactions);
+        void onDateRetrieved(HashMap<String, User.Transaction> transactions, String name);
     }
 
     private void populateBarchart(String type, double oneMonthIncomeGap, double oneMonthExpenseGap, double twoMonthIncomeGap,
