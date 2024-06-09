@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +23,7 @@ import com.example.iscg7427groupmobileapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -56,9 +59,9 @@ public class UserProfileActivity extends AppCompatActivity {
         signOutButton = findViewById(R.id.toSignOut);
         bottomNavigation = findViewById(R.id.bottom_navigation);
         userProfile = findViewById(R.id.userProfile);
+        setupBottomNavigation();
         auth = FirebaseAuth.getInstance();
-        bottomNavigation.setVisibility(View.GONE);
-        userProfile.setVisibility(View.GONE);
+
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
             String userId = currentUser.getUid();
@@ -128,14 +131,49 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
     }
+    private void setupBottomNavigation() {
+        bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+                Log.d("BottomNav", "Selected Item ID: " + itemId);
 
+                if (itemId == R.id.item_home) {
+                    Log.d("BottomNav", "Home selected");
+                    startActivity(new Intent(UserProfileActivity.this, UserDashboardActivity_1.class));
+                    return true;
+                } else if (itemId == R.id.item_income) {
+                    Log.d("BottomNav", "Income selected");
+                    startActivity(new Intent(UserProfileActivity.this, UserIncomeDashboardActivity.class));
+                    return true;
+                } else if (itemId == R.id.item_expenses) {
+                    Log.d("BottomNav", "Expenses selected");
+                    startActivity(new Intent(UserProfileActivity.this, UserExpenseDashboardActivity.class));
+                    return true;
+                } else if (itemId == R.id.item_profile) {
+                    Log.d("BottomNav", "Profile selected");
+                    // Current activity
+                    return true;
+                } else {
+                    Log.d("BottomNav", "Unknown item selected");
+                    return false;
+                }
+            }
+        });
+
+        // Set the selected item as item_profile
+        bottomNavigation.post(new Runnable() {
+            @Override
+            public void run() {
+                bottomNavigation.setSelectedItemId(R.id.item_profile);
+            }
+        });
+    }
     private void updateUIForUser(User user) {
         editTextUserName.setText(user.getName());
         editTextEmail.setText(user.getEmail());
         editTextPassword.setText(user.getPassword());
         editTextPhone.setText(user.getPhoneNumber());
-        bottomNavigation.setVisibility(View.VISIBLE);
-        userProfile.setVisibility(View.VISIBLE);
     }
 
     private void updateUserDetails() {
