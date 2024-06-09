@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.iscg7427groupmobileapp.Adapter.AdminUserAdapter;
 import com.example.iscg7427groupmobileapp.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,18 +29,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AdminDashboardActivity extends AppCompatActivity {
-
+    private FirebaseAuth auth;
     private RecyclerView recyclerView;
     private AdminUserAdapter adapter;
     private DatabaseReference databaseReference;
     private EditText searchEditText;
     private LinearLayout toAddUser;
-    private ImageView toProfile;
+    private ImageView toLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
+        auth = FirebaseAuth.getInstance();
 
         toAddUser = findViewById(R.id.toAddUser);
         toAddUser.setOnClickListener(v -> {
@@ -46,10 +49,9 @@ public class AdminDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        toProfile = findViewById(R.id.toProfile);
-        toProfile.setOnClickListener(v -> {
-            Intent intent = new Intent(AdminDashboardActivity.this, UserProfileActivity.class);
-            startActivity(intent);
+        toLogout = findViewById(R.id.toLogout);
+        toLogout.setOnClickListener(v -> {
+            signOut();
         });
 
         searchEditText = findViewById(R.id.searchEditText);
@@ -130,4 +132,13 @@ public class AdminDashboardActivity extends AppCompatActivity {
         }
         return "";
     }
+
+    private void signOut() {
+        auth.signOut();
+        Toast.makeText(AdminDashboardActivity.this, "Signed out successfully", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(AdminDashboardActivity.this, SplashPage.class);
+        startActivity(intent);
+        finish();
+    }
+
 }

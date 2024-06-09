@@ -10,13 +10,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.iscg7427groupmobileapp.Model.Accountant;
 import com.example.iscg7427groupmobileapp.Model.User;
 import com.example.iscg7427groupmobileapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +30,9 @@ public class AccountantAddNewClient extends AppCompatActivity {
     Button btnInvite;
     String uid;
     private LinearLayout toAccountant;
+    private String currentEmail;
+    private String currentPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +55,15 @@ public class AccountantAddNewClient extends AppCompatActivity {
         etPhoneNumber = findViewById(R.id.etPhoneNumber);
         btnInvite = findViewById(R.id.btnInvite);
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        currentEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+        // Retrieve the accountant's password from the database
+        retrieveCurrentUserPassword(new PasswordCallback() {
+            @Override
+            public void onCallback(String password) {
+                currentPassword = password;
+            }
+        });
     }
 
     public void clickBtnInvite() {
@@ -60,8 +72,7 @@ public class AccountantAddNewClient extends AppCompatActivity {
             String occupation = etOccupation.getText().toString();
             String industry = etIndustry.getText().toString();
             String email = etEmailAddress.getText().toString();
-            String phoneNumber = etPhoneNumber.getText().toString();
-            clearEditTextFields();
+            String phoneNumber = etPhoneNumber.getText().toString().replace(" ", ""); // Remove spaces from phone number
 
             if (name.isEmpty() || occupation.isEmpty() || industry.isEmpty() || email.isEmpty() || phoneNumber.isEmpty()) {
                 Toast.makeText(this, "Please fill in the form", Toast.LENGTH_SHORT).show();
@@ -77,6 +88,9 @@ public class AccountantAddNewClient extends AppCompatActivity {
                         if (snapshot.exists()) {
                             Toast.makeText(AccountantAddNewClient.this, "Email already exists", Toast.LENGTH_SHORT).show();
                         } else {
+                            // Temporarily store the current user
+                            FirebaseUser currentUser = mAuth.getCurrentUser();
+
                             // Create a new user
                             mAuth.createUserWithEmailAndPassword(email, phoneNumber).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -93,11 +107,19 @@ public class AccountantAddNewClient extends AppCompatActivity {
                                         User user = new User(name, email, phoneNumber, "User", occupation, industry, true, new HashMap<>(), phoneNumber);
                                         database.getReference().child("Users").child(userKey).setValue(user);
 
-                                        // Log the accountant back in
-                                        mAuth.signInWithEmailAndPassword(FirebaseAuth.getInstance().getCurrentUser().getEmail(), phoneNumber);
-
-                                        Toast.makeText(AccountantAddNewClient.this, "Invitation sent successfully", Toast.LENGTH_SHORT).show();
-                                        finish();
+                                        // Sign back in as the original user
+                                        mAuth.signOut(); // Sign out the new user
+                                        mAuth.signInWithEmailAndPassword(currentEmail, currentPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(AccountantAddNewClient.this, "Reauthenticated as original user", Toast.LENGTH_SHORT).show();
+                                                    finish(); // Close the activity to prevent showing the newly created user details
+                                                } else {
+                                                    Toast.makeText(AccountantAddNewClient.this, "Failed to reauthenticate as original user: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                     } else {
                                         Toast.makeText(AccountantAddNewClient.this, "Failed to create account", Toast.LENGTH_SHORT).show();
                                     }
@@ -114,11 +136,34 @@ public class AccountantAddNewClient extends AppCompatActivity {
             }
         });
     }
-    private void clearEditTextFields() {
-        etUserName.setText("");
-        etOccupation.setText("");
-        etIndustry.setText("");
-        etEmailAddress.setText("");
-        etPhoneNumber.setText("");
+
+
+
+    private void retrieveCurrentUserPassword(PasswordCallback callback) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    User user = snapshot.getValue(User.class);
+                    if (user != null) {
+                        callback.onCallback(user.getPassword());
+                    } else {
+                        callback.onCallback(null);
+                    }
+                } else {
+                    callback.onCallback(null);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onCallback(null);
+            }
+        });
+    }
+
+    private interface PasswordCallback {
+        void onCallback(String password);
     }
 }

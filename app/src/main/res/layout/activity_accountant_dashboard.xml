@@ -73,11 +73,11 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/toProfile"
+                android:id="@+id/toLogout"
                 android:layout_marginLeft="8sp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/accountant_profile"
+                android:src="@drawable/signout"
             />
         </LinearLayout>
     </LinearLayout>

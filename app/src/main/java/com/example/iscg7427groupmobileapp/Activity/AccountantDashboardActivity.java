@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,12 +39,14 @@ public class AccountantDashboardActivity extends AppCompatActivity {
     private TextView accountClientNumber;
     private EditText searchEditText;
     private LinearLayout toAccountantAddNewClient;
-     private ImageView toProfile;
+     private ImageView toLogout;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accountant_dashboard);
+        auth = FirebaseAuth.getInstance();
 
         toAccountantAddNewClient = findViewById(R.id.toAccountantAddNewClient);
         toAccountantAddNewClient.setOnClickListener(v -> {
@@ -51,10 +54,10 @@ public class AccountantDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        toProfile = findViewById(R.id.toProfile);
-        toProfile.setOnClickListener(v -> {
-            Intent intent = new Intent(AccountantDashboardActivity.this, UserProfileActivity.class);
-            startActivity(intent);
+        toLogout = findViewById(R.id.toLogout);
+        toLogout.setOnClickListener(v -> {
+            signOut();
+
         });
         clientRv = findViewById(R.id.AccountantClientListRv);
         clientRv.setLayoutManager(new LinearLayoutManager(this));
@@ -138,5 +141,12 @@ public class AccountantDashboardActivity extends AppCompatActivity {
                 Log.e("AccountantDashboard", "Error fetching user data", error.toException());
             }
         });
+    }
+    private void signOut() {
+        auth.signOut();
+        Toast.makeText(AccountantDashboardActivity.this, "Signed out successfully", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(AccountantDashboardActivity.this, SplashPage.class);
+        startActivity(intent);
+        finish();
     }
 }

@@ -145,28 +145,35 @@ public class UserAllTransactions extends AppCompatActivity {
                 int itemId = item.getItemId();
                 Log.d("BottomNav", "Selected Item ID: " + itemId);
                 if (itemId == R.id.item_home) {
-                    startActivity(new Intent(UserAllTransactions.this, UserDashboardActivity_1.class));
+                    Log.d("BottomNav", "Home selected");
                     return true;
                 } else if (itemId == R.id.item_income) {
+                    Log.d("BottomNav", "Income selected");
                     startActivity(new Intent(UserAllTransactions.this, UserIncomeDashboardActivity.class));
                     return true;
                 } else if (itemId == R.id.item_expenses) {
+                    Log.d("BottomNav", "Expenses selected");
                     startActivity(new Intent(UserAllTransactions.this, UserExpenseDashboardActivity.class));
                     return true;
                 } else if (itemId == R.id.item_profile) {
+                    Log.d("BottomNav", "Profile selected");
                     startActivity(new Intent(UserAllTransactions.this, UserProfileActivity.class));
                     return true;
                 } else {
+                    Log.d("BottomNav", "Unknown item selected");
                     return false;
                 }
             }
         });
 
-
-        // Set the selected item as item_home
-        bottomNavigation.post(() -> bottomNavigation.setSelectedItemId(R.id.item_home));
+        // Set the selected item as item_profile
+        bottomNavigation.post(new Runnable() {
+            @Override
+            public void run() {
+                bottomNavigation.setSelectedItemId(R.id.item_home);
+            }
+        });
     }
-
     private void retrieveUserData(OnTransactionListener listener) {
         DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
         mRef.addValueEventListener(new ValueEventListener() {

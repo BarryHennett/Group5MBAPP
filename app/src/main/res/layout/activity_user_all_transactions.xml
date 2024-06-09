@@ -104,14 +104,6 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="16sp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1sp"
-                    android:background="@color/darkGray" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/user_all_transactions_recyclerView"

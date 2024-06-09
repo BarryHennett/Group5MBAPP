@@ -19,6 +19,7 @@ import com.example.iscg7427groupmobileapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -80,7 +81,7 @@ public class AdminAddNewUser extends AppCompatActivity {
             }
         });
     }
-//    public void clickInvitation() {
+    //    public void clickInvitation() {
 //        btnInvitation.setOnClickListener(v -> {
 //            String userName = etUserName.getText().toString();
 //            String userType = etUserType.getText().toString();
@@ -116,68 +117,73 @@ public class AdminAddNewUser extends AppCompatActivity {
 //            }
 //        });
 //    }
-public void clickInvitation() {
-    btnInvitation.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            String name = etUserName.getText().toString();
-            String email = etEmailAddress.getText().toString();
-            String phoneNumber = etPhoneNumber.getText().toString();
-            if (name.isEmpty() || email.isEmpty() || phoneNumber.isEmpty()) {
-                Toast.makeText(AdminAddNewUser.this, "Please fill in the form", Toast.LENGTH_SHORT).show();
-            } else {
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                mAuth.createUserWithEmailAndPassword(email, phoneNumber).addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            if (user != null) {
-                                String uid = user.getUid();
-                                if (chooseRole == 0) {
-                                    Accountant accountant = new Accountant();
-                                    accountant.setName(name);
-                                    accountant.setEmail(email);
-                                    accountant.setPhoneNumber(phoneNumber);
-                                    String phone = phoneNumber.replace(" ","");
-                                    accountant.setPassword(phone);
-                                    database.getReference("Accountants").child(uid).setValue(accountant);
-                                    Toast.makeText(AdminAddNewUser.this, "Accountant created successfully", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                } else {
-                                    User newUser = new User();
-                                    newUser.setName(name);
-                                    newUser.setEmail(email);
-                                    newUser.setPhoneNumber(phoneNumber);
-                                    String phone = phoneNumber.replace(" ","");
-                                    newUser.setPassword(phone);
-                                    database.getReference().child("Users").child(uid).setValue(newUser);
-                                    Toast.makeText(AdminAddNewUser.this, "User created successfully", Toast.LENGTH_SHORT).show();
-                                    finish();
+    public void clickInvitation() {
+        btnInvitation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = etUserName.getText().toString();
+                String email = etEmailAddress.getText().toString();
+                String phoneNumber = etPhoneNumber.getText().toString();
+                String password = phoneNumber.replace(" ", ""); // Use phone number without spaces as the password
+
+                if (name.isEmpty() || email.isEmpty() || phoneNumber.isEmpty()) {
+                    Toast.makeText(AdminAddNewUser.this, "Please fill in the form", Toast.LENGTH_SHORT).show();
+                } else {
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                if (user != null) {
+                                    String uid = user.getUid();
+                                    if (chooseRole == 0) {
+                                        Accountant accountant = new Accountant();
+                                        accountant.setName(name);
+                                        accountant.setEmail(email);
+                                        accountant.setPhoneNumber(phoneNumber);
+                                        accountant.setPassword(password);
+                                        database.getReference("Accountants").child(uid).setValue(accountant).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(AdminAddNewUser.this, "Accountant created successfully", Toast.LENGTH_SHORT).show();
+                                                    finish();
+                                                } else {
+                                                    Toast.makeText(AdminAddNewUser.this, "Failed to create accountant in database", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        User newUser = new User();
+                                        newUser.setName(name);
+                                        newUser.setEmail(email);
+                                        newUser.setPhoneNumber(phoneNumber);
+                                        newUser.setPassword(password);
+                                        database.getReference("Users").child(uid).setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(AdminAddNewUser.this, "User created successfully", Toast.LENGTH_SHORT).show();
+                                                    finish();
+                                                } else {
+                                                    Toast.makeText(AdminAddNewUser.this, "Failed to create user in database", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                    }
                                 }
-                                //Intent intent = new Intent(AdminAddNewUser.this, AdminDashboardActivity.class);
-                                //startActivity(intent);
+                            } else {
+                                Toast.makeText(AdminAddNewUser.this, "Failed to create user", Toast.LENGTH_SHORT).show();
                             }
-                        } else {
-                            Toast.makeText(AdminAddNewUser.this, "Failed to create user", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
-            }
-        }
-    });
-}
-
-
-    private void reauthenticateAdmin(FirebaseAuth mAuth) {
-        AuthCredential credential = EmailAuthProvider.getCredential(currentEmail, currentPassword);
-        mAuth.signInWithCredential(credential).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Toast.makeText(this, "Reauthenticated as admin", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Failed to reauthenticate as admin: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+                }
             }
         });
     }
+
+
+
 }

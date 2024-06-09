@@ -216,22 +216,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:layout_marginBottom="16sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/accountant_client_transaction_detail_btn_save"
                     style="@style/primary_button"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginRight="8sp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16sp"
                     android:text="Update" />
 
                 <Button
                     android:id="@+id/accountant_client_transaction_detail_btn_delete"
-                    style="@style/primary_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    style="@style/black_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="Delete" />
-
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
