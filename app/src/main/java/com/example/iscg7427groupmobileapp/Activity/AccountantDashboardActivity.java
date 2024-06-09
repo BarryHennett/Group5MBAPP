@@ -96,7 +96,7 @@ public class AccountantDashboardActivity extends AppCompatActivity {
     }
 
     private void fetchAccountantData(String uid) {
-        databaseReference.child("Accountants").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("Accountants").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Accountant accountant = snapshot.getValue(Accountant.class);
@@ -115,7 +115,7 @@ public class AccountantDashboardActivity extends AppCompatActivity {
     }
 
     private void fetchUserInfo(ArrayList<String> uidList) {
-        databaseReference.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("Users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 HashMap<String, User> userMap = new HashMap<>();

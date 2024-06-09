@@ -87,7 +87,7 @@ public class AccountantAddNewClient extends AppCompatActivity {
 
                                         // Add the new user's key under the current accountant's users node
                                         DatabaseReference accountantRef = database.getReference().child("Accountants").child(uid).child("users");
-                                        accountantRef.child(userKey).setValue(true);
+                                        accountantRef.child(userKey).setValue(userKey);
 
                                         // Create the new user object and save it
                                         User user = new User(name, email, phoneNumber, "User", occupation, industry, true, new HashMap<>(), phoneNumber);
